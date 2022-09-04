@@ -1,0 +1,13 @@
+.color-span {  
+    background: linear-gradient( 
+      98.83deg,
+      #ff7c01 7.13%,
+      #ff007b 48.99%,
+      #a819eb 84.14%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    z-index:-1
+  }
+  

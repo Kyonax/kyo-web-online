@@ -1,0 +1,9 @@
+.text-title {
+  font-family: "Akira Expanded" !important;
+}
+
+.resize-image img {
+  height: 100%;  
+  max-height: 11rem;
+  object-fit: cover;
+}
