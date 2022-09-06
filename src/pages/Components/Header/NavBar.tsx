@@ -17,7 +17,7 @@ function getWindowSize() {
 const data: { [index: string]: any } = {
     acerca_de: { height: '125px', title: <span className='flex'>Acerca De <div className='ml-1 mt-[.1rem]'><IoCaretForwardOutline /></div> </span>, description: <span className='tracking-tighter'>¿Quien o Qué es Kyonax? Conoce a fondo la historia, y misión de la marca.</span> },
     dependencias: { height: '175px', title: <span className='flex'>Dependencias <div className='ml-1 mt-[.1rem]'><IoCaretForwardOutline /></div> </span>, description: <span className='tracking-tighter'>Kyonax se compone de tres principales dependencias con diferentes enfoques y objetivos, adentrate para saber más! <p className='mt-2 md:mt-1 text-end text-[#ff007b]'>Muy Pronto (TBA)...</p></span> },
-    universo: { height: '150px', title: <span className='flex'>Universo <div className='ml-1 mt-[.1rem]'><IoCaretForwardOutline /></div> </span>, description: <span className='tracking-tighter'>Conoce el Lore de Kyonax, atravez de historias y viajes por todo el Multiverso.<p className='mt-2 md:mt-1 text-end text-[#ff007b]'>Muy Pronto (TBA)...</p></span> }
+    universo: { height: '150px', title: <span className='flex'>Universo <div className='ml-1 mt-[.1rem]'><IoCaretForwardOutline /></div> </span>, description: <span className='tracking-tighter'>Explora y Experimenta la Tecnología Digital por medio del Universo Kyonax.<p className='mt-2 md:mt-1 text-end text-[#ff007b]'>Muy Pronto (TBA)...</p></span> }
 }
 
 const navigator: { [index: string]: any } = {
@@ -64,7 +64,7 @@ const NavBar: React.FC<NavBarProps> = ({ }) => {
 
     const variant_navigator_animation = {
         display: {
-            height: (windowSize.innerWidth >= 768) ? '280px' : (windowSize.innerWidth >= 640 && windowSize.innerWidth < 768) ? '480px' : windowSize.innerHeight + 'px'
+            height: (windowSize.innerWidth >= 768) ? '290px' : (windowSize.innerWidth >= 640 && windowSize.innerWidth < 768) ? '480px' : windowSize.innerHeight + 'px'
         },
         hide: {
             height: '0px'
@@ -106,7 +106,7 @@ const NavBar: React.FC<NavBarProps> = ({ }) => {
             </ul>
 
 
-            <div className='relative z-40 flex place-content-center pr-6 pl-6'>
+            <div className='relative z-40 flex place-content-center pt-4 pb-4 pr-6 pl-6'>
                 <div className='max-w-[2500px] grid grid-cols-10 pt-5 pb-5'>
                     <div className='col-span-2 md:col-span-1 flex items-start'>
                         <div className={`${animation} flex flex-wrap hover:cursor-pointer text-[12px] text-white`} onClick={() => handleNavigatorClick()} onMouseLeave={() => { set_color_logo(`white`); set_style_arrow_nav(`text-white`) }} onMouseOver={() => { set_color_logo(`color_dotkyo`); set_style_arrow_nav('text-[#ff7c01]'); }}>

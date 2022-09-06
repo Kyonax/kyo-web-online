@@ -10,7 +10,7 @@ const Footer: React.FC<FooterProps> = ({ }) => {
     return (
         <React.Fragment>
             <motion.div transition={{ duration: 1 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className='font-thin text-[8px] md:text-[10px] fixed bottom-0 w-full h-[6rem] flex flex-wrap items-center text-white'>
+                className='font-thin text-[8px] md:text-[10px] fixed bottom-0 w-full h-[6.5rem] md:h-[8rem] flex flex-wrap items-center text-white'>
                 <div className='flex place-content-start lg:place-content-center pl-3 w-2/3 text-center lg:w-1/3 '>
                     <div className='text-start tracking-widest'>
                         <a href='https://twitter.com/kyonax_on' target="_blank"><p>HECHO CON ❤️ © 2022 KYONAX<br />DOT KYO DEVELOPMENT</p></a>
