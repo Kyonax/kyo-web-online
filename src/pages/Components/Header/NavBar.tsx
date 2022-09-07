@@ -85,8 +85,8 @@ const NavBar: React.FC<NavBarProps> = ({ }) => {
 
     return (
         <motion.div className='fixed w-full place-content-center' transition={{ duration: 1 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            
             {/* Mobile Menu */}
-
             <ul className={!nav ? 'hidden' : 'md:hidden absolute top-[0px] left-0 w-full h-screen flex flex-col justify-center items-center font-thin text-sm z-40'}>
                 <motion.div animate={nav === true ? 'display' : 'hide'} variants={variant_navigator_animation} className='absolute top-[0px] left-0 bg-[#080808] bg-opacity-95 w-full grid place-items-center'>
                     <div className='w-full grid place-items-center'>

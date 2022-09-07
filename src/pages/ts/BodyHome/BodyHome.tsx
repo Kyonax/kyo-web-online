@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'; import './BodyHome.css'
-import { Animator, ScrollContainer, ScrollPage, Sticky, Fade, FadeOut, batch, Move, MoveOut } from 'react-scroll-motion';
+import { Animator, ScrollContainer, ScrollPage, Sticky, Fade, FadeOut, batch, Move, MoveOut, FadeIn, Zoom, ZoomOut } from 'react-scroll-motion';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { motion } from 'framer-motion';
 
@@ -92,11 +92,11 @@ const Body: React.FC<BodyProps> = ({ }) => {
         return () => window.removeEventListener('scroll', updateAnimation);
     }, [scroll])
 
-    requestAnimationFrame(() => skewScrolling())       
+    requestAnimationFrame(() => skewScrolling())
 
     return (
         <motion.div className='container-bg' transition={{ duration: 2.5 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <ScrollContainer snap='none'>
+            <ScrollContainer snap='mandatory'>
                 <ScrollPage page={0}>
 
                     <div className='image-bg h-full w-full absolute opacity-[6%]'>
@@ -113,17 +113,19 @@ const Body: React.FC<BodyProps> = ({ }) => {
 
                 <ScrollPage page={1}>
                     <div className='h-screen w-full flex place-content-center'>
-                        <div className='relative max-w-[1224px]'>
-                            <div className='h-full absolute right-0 opacity-[100%]'>
-                                <LazyLoadImage className='h-full object-contain' loading="lazy" width={"100%"} height={"100%"} src={'https://ik.imagekit.io/kyonax/IMAGE_V_1_XljIxh21i.png'} alt={`Image Dot Kyo Page`} />
-                            </div>
-
-                            <Animator animation={batch(MoveOut(0, -700))}>
-                                <div ref={scrollContainer} className='z-1 relative h-screen w-full grid place-content-center'>
-                                    <DotKyo />
+                        <Animator animation={batch(Fade())}>
+                            <div className='relative max-w-[1224px]'>
+                                <div className='h-full absolute right-0 opacity-[100%]'>
+                                    <LazyLoadImage className='h-full object-contain' loading="lazy" width={"100%"} height={"100%"} src={'https://ik.imagekit.io/kyonax/IMAGE_V_1_XljIxh21i.png'} alt={`Image Dot Kyo Page`} />
                                 </div>
-                            </Animator>
-                        </div>
+
+                                <Animator animation={batch(MoveOut(0, -700))}>
+                                    <div ref={scrollContainer} className='z-1 relative h-screen w-full grid place-content-center'>
+                                        <DotKyo />
+                                    </div>
+                                </Animator>
+                            </div>
+                        </Animator>
                     </div>
                 </ScrollPage>
 
