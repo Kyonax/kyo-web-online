@@ -165,16 +165,16 @@ const NavBar: React.FC<NavBarProps> = ({ }) => {
                                         <li onMouseOver={() => set_navigator_dependencie("dotkyo")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><Link to='/dotkyo_desarrollador_web'>DESARROLLADOR FULL-STACK</Link></span></li>
                                         <li onMouseOver={() => set_navigator_dependencie("dotkyo")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><Link to='/dotkyo_portafolio_web_developer'>PORTAFOLIO WEB-DEVELOPER</Link></span></li>
                                         <li className='text-center bg-[#ebebeb] font-semibold rounded-sm p-1 m-1'><span>KYONAX</span></li>
-                                        <li onMouseOver={() => set_navigator_dependencie("kyonax")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><Link to='/kyonax_editor_multimedia'>EDITOR MULTIMEDIA</Link></span></li>
+                                        <li onMouseOver={() => set_navigator_dependencie("kyonax")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><Link to='/kyonax_publicidad_digital'>PUBLICIDAD DIGITAL</Link></span></li>
                                     </ul>
                                 </div>
                                 <div className='col-span-1'>
                                     <ul>
                                         <li className='text-center bg-[#ebebeb] font-semibold rounded-sm p-1 m-1'><span>KYO NFT</span></li>
-                                        <li onMouseOver={() => set_navigator_dependencie("kyonft")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><Link to='/kyonft_desarrollador_web3'>DESARROLLADOR WEB 3.0</Link></span></li>
-                                        <li onMouseOver={() => set_navigator_dependencie("kyonft")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><Link to='/kyonft_creador_de_contenido'>NFTs &amp; CREACIÓN DE CONTENIDO</Link></span></li>
-                                        <li onMouseOver={() => set_navigator_dependencie("rottenville")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><a target={`_blank`} href='https://rottenville.io'>PROYECTO ROTTEN VILLE</a></span></li>
-                                        <li onMouseOver={() => set_navigator_dependencie("therottensdao")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span><a target={`_blank`} href="https://therottensdao.com">THE ROTTENS DAO</a></span></li>
+                                        <li onMouseOver={() => set_navigator_dependencie("kyonft")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span className={`${animation} hover:cursor-not-allowed before:content-['DESARROLLADOR_WEB_3.0'] hover:text-[#fe0f7a] hover:before:content-['Pronto...']`}><Link to='/kyonft_desarrollador_web3'></Link></span></li>
+                                        <li onMouseOver={() => set_navigator_dependencie("kyonft")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span className={`${animation} hover:cursor-not-allowed before:content-['NFTs_&_CREACIÓN_DE_CONTENIDO'] hover:text-[#fe0f7a] hover:before:content-['Pronto...']`}><Link to='/kyonft_creador_de_contenido'></Link></span></li>
+                                        <li onMouseOver={() => set_navigator_dependencie("rottenville")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span className={`${animation} hover:cursor-not-allowed before:content-['PROYECTO_ROTTEN_VILLE'] hover:text-[#fe0f7a] hover:before:content-['Pronto...']`}><a target={`_blank`} href='https://rottenville.io'></a></span></li>
+                                        <li onMouseOver={() => set_navigator_dependencie("therottensdao")} className='text-center hover:bg-[#ebebeb] p-1 m-1'><span className={`${animation} hover:cursor-not-allowed before:content-['THE_ROTTENS_DAO'] hover:text-[#fe0f7a] hover:before:content-['Pronto...']`}><a target={`_blank`} href="https://therottensdao.com"></a></span></li>
                                     </ul>
                                 </div>
                                 <div className='col-span-1 sm:col-span-2 row-span-4 sm:row-span-3 md:col-span-1 md:row-span-1 p-1'>

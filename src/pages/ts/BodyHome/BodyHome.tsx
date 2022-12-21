@@ -8,6 +8,8 @@ import useWindowScroll from '../../../hooks/useWindowScroll';
 
 import Introduction from '../../Components/HomeScroll/Introduction';
 import DotKyo from '../../Components/HomeScroll/DotKyo';
+import Kyonax from '../../Components/HomeScroll/Kyonax';
+import KyoNFT from '../../Components/HomeScroll/KyoNFT';
 
 {/** Important Functions */ }
 
@@ -56,7 +58,8 @@ const Body: React.FC<BodyProps> = ({ }) => {
     const difference = skewConfigs.current - skewConfigs.rounded,
         acceleration = difference / size.width, velocity = +acceleration, skew = velocity * 20.5;
 
-    useEffect(() => {
+   /**
+    *  useEffect(() => {
         function updateAnimation() {
             if (scrollContainer.current) {
                 scrollContainer.current.style.transform = `skewY(${skew}deg)`;
@@ -93,6 +96,8 @@ const Body: React.FC<BodyProps> = ({ }) => {
     }, [scroll])
 
     requestAnimationFrame(() => skewScrolling())
+    * 
+    */
 
     return (
         <motion.div className='container-bg' transition={{ duration: 2.5 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -134,12 +139,12 @@ const Body: React.FC<BodyProps> = ({ }) => {
                     <div className='h-screen w-full flex place-content-center'>
                         <div className='relative max-w-[1224px]'>
                             <div className='h-full absolute right-0 opacity-[100%]'>
-                                <LazyLoadImage className='h-full object-contain' loading="lazy" width={"100%"} height={"100%"} src={'https://ik.imagekit.io/kyonax/IMAGE_V_3_0E1TESBMr.png'} alt={`Image Dot Kyo Page`} />
+                                <LazyLoadImage className='h-full object-contain' loading="lazy" width={"100%"} height={"100%"} src={'https://ik.imagekit.io/kyonax/IMAGE_V_3_0E1TESBMr.png'} alt={`Image Kyonax Page`} />
                             </div>
 
                             <Animator animation={batch(MoveOut(0, -700))}>
                                 <div ref={scrollContainer_1} className='z-1 relative h-screen w-full grid place-content-center'>
-                                    <DotKyo />
+                                    <Kyonax />
                                 </div>
                             </Animator>
                         </div>
@@ -150,12 +155,12 @@ const Body: React.FC<BodyProps> = ({ }) => {
                     <div className='h-screen w-full flex place-content-center'>
                         <div className='relative max-w-[1224px]'>
                             <div className='h-full absolute right-0 opacity-[100%]'>
-                                <LazyLoadImage className='h-full object-contain' loading="lazy" width={"100%"} height={"100%"} src={'https://ik.imagekit.io/kyonax/IMAGE_V_2_QwZqBMGoO.png'} alt={`Image Dot Kyo Page`} />
+                                <LazyLoadImage className='h-full object-contain' loading="lazy" width={"100%"} height={"100%"} src={'https://ik.imagekit.io/kyonax/IMAGE_V_2_QwZqBMGoO.png'} alt={`Image KyoNFT Page`} />
                             </div>
 
                             <Animator animation={batch(MoveOut(0, -700))}>
                                 <div ref={scrollContainer_2} className='z-1 relative h-screen w-full grid place-content-center'>
-                                    <DotKyo />
+                                    <KyoNFT />
                                 </div>
                             </Animator>
                         </div>
