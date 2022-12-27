@@ -23,6 +23,7 @@ interface BodyProps { }
 const Body: React.FC<BodyProps> = ({ }) => {
     {/** Page Effects */ }
     const [windowSize, setWindowSize] = useState(getWindowSize());
+    const [scrollState, setScrollState] = useState('none');
     {/** Image and Backgrounds */ }
     const background_image = {
         image: (windowSize.innerWidth >= 1324) ? 'https://ik.imagekit.io/kyonax/ImagenSet_Photos_2_Q-F1x-upg.png' :
@@ -58,50 +59,54 @@ const Body: React.FC<BodyProps> = ({ }) => {
     const difference = skewConfigs.current - skewConfigs.rounded,
         acceleration = difference / size.width, velocity = +acceleration, skew = velocity * 20.5;
 
-   /**
-    *  useEffect(() => {
-        function updateAnimation() {
-            if (scrollContainer.current) {
-                scrollContainer.current.style.transform = `skewY(${skew}deg)`;
-            }
+    /**
+     *  useEffect(() => {
+         function updateAnimation() {
+             if (scrollContainer.current) {
+                 scrollContainer.current.style.transform = `skewY(${skew}deg)`;
+             }
+ 
+             if (scrollContainer_1.current) {
+                 scrollContainer_1.current.style.transform = `skewY(${skew}deg)`;
+             }
+ 
+             if (scrollContainer_2.current) {
+                 scrollContainer_2.current.style.transform = `skewY(${skew}deg)`;
+             }
+         }
+ 
+         window.addEventListener('scroll', updateAnimation);
+         updateAnimation()
+ 
+         return () => window.removeEventListener('scroll', updateAnimation);
+     }, [scroll])
+ 
+     useEffect(() => {
+         if (scrollContainer.current) { document.body.style.height = `${scrollContainer.current.getBoundingClientRect().height}px` }
+         if (scrollContainer_1.current) { document.body.style.height = `${scrollContainer_1.current.getBoundingClientRect().height}px` }
+         if (scrollContainer_2.current) { document.body.style.height = `${scrollContainer_2.current.getBoundingClientRect().height}px` }
+     }, [size.height])
+ 
+     useEffect(() => {
+         function updateAnimation() {
+             requestAnimationFrame(() => skewScrolling());
+         }
+ 
+         window.addEventListener('scroll', updateAnimation); updateAnimation();
+         return () => window.removeEventListener('scroll', updateAnimation);
+     }, [scroll])
+ 
+     requestAnimationFrame(() => skewScrolling())
+     * 
+     */
 
-            if (scrollContainer_1.current) {
-                scrollContainer_1.current.style.transform = `skewY(${skew}deg)`;
-            }
-
-            if (scrollContainer_2.current) {
-                scrollContainer_2.current.style.transform = `skewY(${skew}deg)`;
-            }
-        }
-
-        window.addEventListener('scroll', updateAnimation);
-        updateAnimation()
-
-        return () => window.removeEventListener('scroll', updateAnimation);
-    }, [scroll])
-
-    useEffect(() => {
-        if (scrollContainer.current) { document.body.style.height = `${scrollContainer.current.getBoundingClientRect().height}px` }
-        if (scrollContainer_1.current) { document.body.style.height = `${scrollContainer_1.current.getBoundingClientRect().height}px` }
-        if (scrollContainer_2.current) { document.body.style.height = `${scrollContainer_2.current.getBoundingClientRect().height}px` }
-    }, [size.height])
-
-    useEffect(() => {
-        function updateAnimation() {
-            requestAnimationFrame(() => skewScrolling());
-        }
-
-        window.addEventListener('scroll', updateAnimation); updateAnimation();
-        return () => window.removeEventListener('scroll', updateAnimation);
-    }, [scroll])
-
-    requestAnimationFrame(() => skewScrolling())
-    * 
-    */
+    useEffect(() => {        
+        if (windowSize.innerWidth > 1024) { return setScrollState('mandatory') } else { return setScrollState('none') }
+    })
 
     return (
-        <motion.div className='container-bg' transition={{ duration: 2.5 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <ScrollContainer snap='mandatory'>
+        <motion.div className='' transition={{ duration: 2.5 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <ScrollContainer snap={scrollState as "none"}>
                 <ScrollPage page={0}>
 
                     <div className='image-bg h-full w-full absolute opacity-[6%]'>
