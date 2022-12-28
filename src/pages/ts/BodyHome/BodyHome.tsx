@@ -106,7 +106,7 @@ const Body: React.FC<BodyProps> = ({ }) => {
 
     return (
         <motion.div className='' transition={{ duration: 2.5 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <ScrollContainer snap={scrollState as "none"}>
+            <ScrollContainer snap={"none"}>
                 <ScrollPage page={0}>
 
                     <div className='image-bg h-full w-full absolute opacity-[6%]'>

@@ -16,8 +16,8 @@ const Home: React.FC<HomeProps> = ({ }) => {
     return (
         <div className='grid'>
             <div className='z-40'> <NavBar /> </div>
-            <div className='z-1 flex lg:hidden'> <BodySmall /> </div>
-            <div className='z-1 hidden lg:flex'> <BodyLarge /> </div>
+            <div className='z-1 block lg:hidden'> <BodySmall /> </div>
+            <div className='z-1 hidden lg:block'> <BodyLarge /> </div>
             <div><FooterHome /></div>
         </div >
     )
