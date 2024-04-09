@@ -21,16 +21,6 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src",
-    "./src/**/*.ts",
-    "./src/**/*.js",
-    "./src/**/*.svg",
-    "**/*.ts",
-    "**/*.js",
-    "**/*.tsx",
-    "images.d.ts",
-    "next-env.d.ts",
-    "additional.d.ts",
-    "custom.d.ts"
+    "src"
   ]
 }
