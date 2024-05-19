@@ -27,6 +27,6 @@ jobs:
         env:
           REPO: self
           BRANCH: build-dev
-          FOLDER: build-dev
+          FOLDER: build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build in Dev Environment: ({sha}) {msg}"
