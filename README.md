@@ -11,8 +11,8 @@
 <p align="left">
   <a id="cover" href="#cover">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="github/dark.png">
-      <img style="white-space:pre-wrap" alt="Example" src="github/light.png">
+      <source media="(prefers-color-scheme: dark)" srcset=".github/readme/dark.png">
+      <img style="white-space:pre-wrap" alt="Example" src=".github/readme/light.png">
     </picture>
   </a>
 </p>

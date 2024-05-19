@@ -1,0 +1,32 @@
+name: kyo-web-online pipeline - dev-environment
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Push
+    steps:
+      - name: git-checkout
+        uses: actions/checkout@v4
+
+      - name: bun-installation
+        uses: oven-sh/setup-bun@v1
+
+      - name: bun-install all dependencies
+        run: bun install
+
+      - name: bun build react-app kyo-website
+        run: bun run build
+
+      - name: push to buil-dev
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: build-dev
+          FOLDER: build-dev
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build in Dev Environment: ({sha}) {msg}"
