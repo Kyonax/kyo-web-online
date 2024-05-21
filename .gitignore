@@ -1,6 +1,9 @@
 # dependencies
 /node_modules
 
+#react-app build
+/build
+
 # misc
 npm-debug.log*
 yarn-debug.log*
