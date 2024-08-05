@@ -1,4 +1,4 @@
-name: kyo-web-online pipeline - dev-environment
+name: kyo-web-online pipeline - go-htmx
 
 on:
   push:
@@ -6,23 +6,46 @@ on:
       - develop
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Build and Push
+  linter:
+    name: golangcli-lint
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go-version: [stable, oldstable]
+        os: [ubuntu-latest]
+    env:
+      CGO_ENABLED: 0
     steps:
-      - name: git-checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Check and Get Dependencies
+        run: |
 
-      - name: bun-installation
-        uses: oven-sh/setup-bun@v1
+      - name: Install Plugins (plugin-linter)
+        run: |
+          git clone https://github.com/golangci/example-plugin-linter.git
+          cd example-plugin-linter
+          go build -o '${{ github.workspace }}/.plugins/example.so' -buildmode=plugin plugin/example.go
+        working-directory: ${{ runner.temp }}
+        env:
+          CGO_ENABLED: 1
 
-      - name: bun-install all dependencies
-        run: bun install
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.59.1
+          install-mode: goinstall
+          args: --timeout=10m
 
-      - name: bun build react-app kyo-website
-        run: bun run build
+      - name: Running All Tests
+        run: go test -v -cover ./...
 
-      - name: push to buil-dev
+      - name: Build App
+        run: go build -v -ldflags "-s -w" -trimpath
+
+      - name: Adding new Changes in build-dev
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
