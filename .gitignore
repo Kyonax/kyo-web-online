@@ -1,5 +1,5 @@
-# go-project build
-/build
-
 # environment variables
 .env
+
+# JS
+./node_modules

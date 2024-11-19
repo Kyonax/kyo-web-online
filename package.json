@@ -1,0 +1,31 @@
+{
+  "name": "kyo-web-online",
+  "version": "1.0.0",
+  "description": "Kyo's Personal Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kyonax/kyo-web-online.git"
+  },
+  "keywords": [
+    "Kyonax"
+  ],
+  "author": "Cristian Moreno - Kyonax",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kyonax/kyo-web-online/issues"
+  },
+  "homepage": "https://github.com/Kyonax/kyo-web-online#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "cssnano": "^7.0.6",
+    "gulp": "^5.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-postcss": "^10.0.0",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.81.0"
+  }
+}
