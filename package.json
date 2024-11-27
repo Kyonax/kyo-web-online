@@ -4,28 +4,49 @@
   "description": "Kyo's Personal Website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --mode development"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kyonax/kyo-web-online.git"
   },
   "keywords": [
-    "Kyonax"
+    "Kyonax",
+    "kyo",
+    "kyonax_on_tech",
+    "kyo-wtf",
+    "KYO-T",
+    "京"
   ],
-  "author": "Cristian Moreno - Kyonax",
-  "license": "ISC",
+  "author": "Cristian Moreno (Kyonax)",
+  "license": "GPL-2.0-only",
   "bugs": {
     "url": "https://github.com/Kyonax/kyo-web-online/issues"
   },
   "homepage": "https://github.com/Kyonax/kyo-web-online#readme",
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "autoprefixer": "^10.4.20",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
     "cssnano": "^7.0.6",
-    "gulp": "^5.0.0",
-    "gulp-babel": "^8.0.0",
-    "gulp-postcss": "^10.0.0",
-    "gulp-sass": "^5.1.0",
-    "sass": "^1.81.0"
+    "favicons-webpack-plugin": "^6.0.1",
+    "html-webpack-plugin": "^5.6.3",
+    "image-minimizer-webpack-plugin": "^4.1.1",
+    "image-webpack-loader": "^8.1.0",
+    "imagemin-webp": "^8.0.0",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.81.0",
+    "sass-loader": "^16.0.3",
+    "style-loader": "^4.0.0",
+    "svgo-loader": "^4.0.0",
+    "webpack": "^5.96.1",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0",
+    "webpack-manifest-plugin": "^5.0.0"
   }
 }

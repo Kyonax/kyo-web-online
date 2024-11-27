@@ -1,5 +1,6 @@
 # environment variables
 .env
 
-# JS
-./node_modules
+# Proyect Folders
+node_modules/
+dist/
