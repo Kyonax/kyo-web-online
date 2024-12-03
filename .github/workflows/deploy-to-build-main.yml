@@ -1,4 +1,4 @@
-name: Build and Deploy to build-main
+name: kyo-web-online - Build and Deploy to build-main
 
 on:
   push:
@@ -6,34 +6,34 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
+    name: Build and Push
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js environment
+      # Install Node.js and npm
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Update if your project requires a different version
+          node-version: 20 # Use the version of Node.js your project requires
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: npm ci
+      # Install all dependencies
+      - name: Install Dependencies
+        run: npm install
 
-      # Step 4: Run the build script
-      - name: Build project
+      # Build the project
+      - name: Build App
         run: npm run build
 
-      # Step 5: Deploy to build-main branch
-      - name: Deploy to build-main
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B build-main
-          git add dist -f
-          git commit -m "Deploy build to build-main branch"
-          git push -u origin build-main --force
+      # Push the built folder to build-main branch
+      - name: Push to build-main
+        uses: s0/git-publish-subdir-action@main
+        env:
+          REPO: self
+          BRANCH: build-main
+          FOLDER: dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build in Main Environment: ({sha}) {msg}"
