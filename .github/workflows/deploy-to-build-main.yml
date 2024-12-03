@@ -30,7 +30,7 @@ jobs:
 
       # Push the built folder to build-main branch
       - name: Push to build-main
-        uses: s0/git-publish-subdir-action@main
+        uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
           BRANCH: build-main
