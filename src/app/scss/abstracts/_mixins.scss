@@ -1,3 +1,20 @@
+/**
+ * _mixins.scss - Reusable Mixins for Styling
+ *
+ * @description
+ * This file defines reusable mixins for styling throughout the application.
+ * It includes a `font-face` mixin to simplify the inclusion of custom fonts
+ * by generating the appropriate `@font-face` rules.
+ *
+ * @author
+ * Cristian Moreno (Kyonax)
+ * Email: iamkyo@kyo.wtf
+ *
+ * @note
+ * Import this file wherever mixins are needed, such as in typography or global
+ * stylesheets, to take advantage of reusable code and maintain consistency.
+ */
+
 @mixin font-face($name, $path, $weight: normal, $style: normal) {
     @font-face {
         font-family: "#{$name}";

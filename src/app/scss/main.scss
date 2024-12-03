@@ -1,16 +1,19 @@
 /**
- * styles.scss - Main Stylesheet for Application
+ * main.scss - Central Stylesheet for the Application
  *
  * @description
- * This file contains the core styling for the application, including global settings,
- * component-specific styles, and layout configurations. The styling follows the best
- * practices for maintainability and scalability.
+ * This file serves as the primary stylesheet for the application, consolidating
+ * global styles, utility classes, and foundational design settings. It imports
+ * essential partials such as base styles, typography, and layout configurations
+ * to ensure consistency across the application. The structure of this file
+ * facilitates scalability and ease of maintenance as the application grows.
  *
  * @author
  * Cristian Moreno (Kyonax)
  * Email: iamkyo@kyo.wtf
  *
  * @note
- * Ensure this file is imported into the main entry point of the application (e.g., `index.js`).
+ * Make sure this file is included in the main entry point of the application
+ * (e.g., `index.js`) to apply global styles throughout the project.
  */
 @use "base";
