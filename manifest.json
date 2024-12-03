@@ -1,5 +1,5 @@
 {
-  "main.js": "auto/app/js/bundle-bec377870e0ae657325e.js",
+  "main.js": "auto/app/js/bundle-2ba5c1fab05d64ee1969.js",
   "assets/fonts/SpaceMonoNerdFont-Italic.ttf": "auto/assets/fonts/SpaceMonoNerdFont-Italic.ttf",
   "assets/fonts/SpaceMonoNerdFont-BoldItalic.ttf": "auto/assets/fonts/SpaceMonoNerdFont-BoldItalic.ttf",
   "assets/fonts/SpaceMonoNerdFont-Regular.ttf": "auto/assets/fonts/SpaceMonoNerdFont-Regular.ttf",
@@ -78,5 +78,5 @@
   "assets/favicon/android-chrome-36x36.png": "auto/assets/favicon/android-chrome-36x36.webp",
   "assets/favicon/browserconfig.xml": "auto/assets/favicon/browserconfig.xml",
   "assets/favicon/favicon-16x16.png": "auto/assets/favicon/favicon-16x16.webp",
-  "bundle-js.map": "auto/app/js/bundle-bec377870e0ae657325e.js.map"
+  "bundle-js.map": "auto/app/js/bundle-2ba5c1fab05d64ee1969.js.map"
 }
