@@ -12,6 +12,10 @@
  * Email: iamkyo@kyo.wtf
  */
 
+// TODO: SOLVE THE FAVICON WEBP FORMAT
+// Is necessary to solve the way to create the favicon manifest
+// if webpack is still creating it like webp, consider migrate
+// the issue to gulp or grunt
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
@@ -138,9 +142,9 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
         generator: {
-          filename: 'assets/fonts/[name][ext][query]'
+          filename: "assets/fonts/[name][ext][query]",
         },
       },
     ],
@@ -238,7 +242,7 @@ module.exports = {
    */
   resolve: {
     alias: {
-      '@app': path.resolve(__dirname, 'src/app/'),
+      "@app": path.resolve(__dirname, "src/app/"),
       "@components": path.resolve(__dirname, "src/app/components"),
       "@constants": path.resolve(__dirname, "src/app/constants"),
       "@fonts": path.resolve(__dirname, "src/app/fonts"),
