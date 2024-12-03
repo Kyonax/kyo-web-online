@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <!-- #    # #     # #######       #     # ####### ###### -->
+  <!-- #   #   #   #  #     #       #  #  # #       #     # -->
+  <!-- #  #     # #   #     #       #  #  # #       #     # -->
+  <!-- ###       #    #     # ##### #  #  # #####   ###### -->
+  <!-- #  #      #    #     #       #  #  # #       #     # -->
+  <!-- #   #     #    #     #       #  #  # #       #     # -->
+  <!-- #    #    #    #######        ## ##  ####### ###### -->
+  <!--      MY NAME IS KYONAX, BUT JUST CALL ME KYO 京      -->
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="<%= htmlWebpackPlugin.options.description %>"
+    />
+    <meta name="keywords" content="<%= htmlWebpackPlugin.options.keywords %>" />
+    <meta name="author" content="<%= htmlWebpackPlugin.options.author %>" />
+
+    <!-- Favicons Injected by favicons-webpack-plugin -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/icons/apple-icon-180x180.webp"
+    />
+    <link
+      rel="icon"
+      type="image/webp"
+      sizes="32x32"
+      href="assets/icons/favicon-32x32.webp"
+    />
+    <link
+      rel="icon"
+      type="image/webp"
+      sizes="16x16"
+      href="assets/icons/favicon-16x16.webp"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <meta
+      name="msapplication-TileColor"
+      content="<%= htmlWebpackPlugin.options.msapplication_tile_color %>"
+    />
+    <meta
+      name="msapplication-TileImage"
+      content="assets/icons/ms-icon-144x144.webp"
+    />
+    <meta
+      name="theme-color"
+      content="<%= htmlWebpackPlugin.options.theme_color %>"
+    />
+
+    <!-- Open Graph Meta Tags (for social media sharing) -->
+    <meta
+      property="og:title"
+      content="<%= htmlWebpackPlugin.options.og_title %>"
+    />
+    <meta
+      property="og:description"
+      content="<%= htmlWebpackPlugin.options.description %>"
+    />
+    <meta
+      property="og:image"
+      content="<%= htmlWebpackPlugin.options.website_banner %>"
+    />
+    <meta
+      property="og:url"
+      content="<%= htmlWebpackPlugin.options.website_url %>"
+    />
+    <meta property="og:type" content="universe" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="<%= htmlWebpackPlugin.options.twitter_title %>"
+    />
+    <meta
+      name="twitter:description"
+      content="<%= htmlWebpackPlugin.options.description %>"
+    />
+    <meta
+      name="twitter:image"
+      content="<%= htmlWebpackPlugin.options.website_banner %>"
+    />
+    <meta
+      name="twitter:url"
+      content="<%= htmlWebpackPlugin.options.website_url %>"
+    />
+
+    <!-- Web Configurations -->
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+
+  <body>
+    <div id="main-container">
+      <!--
+           Left Section
+
+           @description
+           All the necessary information for
+           people to know what I do!
+      -->
+      <div id="left-section">
+        <div class="container-block">
+          <blast-images
+            class=""
+            img="kyonax_multiverse_characters"></blast-images>
+        </div>
+
+        <div class="container-block">
+          <h1>THIS IS A TITLE</h1>
+          <h2>THIS IS A TITLE</h2>
+          <h3>THIS IS A TITLE</h3>
+          <h4>THIS IS A TITLE</h4>
+          <h5>THIS IS A TITLE</h5>
+        </div>
+      </div>
+
+      <!--
+           Main Section
+
+           @description
+           All the juicy content that I want
+           to show.
+      -->
+      <div id="main-section">
+        <div class="container-block container-content">
+          <h1>THIS IS THE MAIN CONTENT</h1>
+          <blast-image img="kyonax_multiverse_characters"></blast-image>
+
+          <h1>THIS IS A TITLE</h1>
+          <h2>THIS IS A TITLE</h2>
+          <h3>THIS IS A TITLE</h3>
+          <h4>THIS IS A TITLE</h4>
+          <h5>THIS IS A TITLE</h5>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

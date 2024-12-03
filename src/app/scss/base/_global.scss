@@ -1,0 +1,51 @@
+/**
+ * Body Styles
+ *
+ * @description
+ * Defines the default background color and text color for the entire application.
+ * These styles ensure a high-contrast design for accessibility.
+ *
+ * @properties
+ * - `background-color`: Sets the background to black.
+ * - `color`: Sets the text color to yellow.
+ */
+@use '../abstracts/variables' as *;
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $border-color;
+}
+
+body {
+    background-color: $body-bg-color; /* Application-wide background color */
+    color: $foreground-color;
+    overflow: hidden;
+    height: 100vh;
+
+    #main-container {
+        height: 93%;
+        display: grid;
+        grid-template-columns: 25% 74.4%; // Define the widths for the two sections
+        column-gap: 0.5rem;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    #left-section,
+    #main-section {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .container-block {
+        border: 1px solid $border-color;
+        padding: 0.36rem;
+    }
+
+    .container-content {
+        overflow-y: auto;
+        height: 93vh;
+    }
+}

@@ -1,84 +1,53 @@
 {
   "name": "kyo-web-online",
-  "homepage": ".",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@toruslabs/eccrypto": "^1.1.8",
-    "@types/bs58": "^4.0.1",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.56",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "@types/styled-components": "^5.1.25",
-    "axios": "^0.27.2",
-    "console-browserify": "^1.2.0",
-    "flowbite": "^1.5.2",
-    "flowbite-react": "^0.1.10",
-    "framer-motion": "7.2.1",
-    "fs": "^0.0.1-security",
-    "path": "^0.12.7",
-    "path-browserify": "^1.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-fast-marquee": "^1.3.5",
-    "react-icons": "^4.4.0",
-    "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
-    "react-scroll-motion": "^0.3.0",
-    "source-map-loader": "^4.0.0",
-    "stream": "^0.0.2",
-    "styled-components": "^5.3.5",
-    "typescript": "^4.8.2",
-    "typewriter-effect": "^2.19.0",
-    "web-vitals": "^2.1.4"
-  },
+  "version": "1.0.0",
+  "description": "Kyo's Personal Website",
+  "main": "index.js",
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --mode development"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kyonax/kyo-web-online.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [
+    "Kyonax",
+    "kyo",
+    "kyonax_on_tech",
+    "kyo-wtf",
+    "KYO-T",
+    "京"
+  ],
+  "author": "Cristian Moreno (Kyonax)",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/Kyonax/kyo-web-online/issues"
   },
+  "homepage": "https://github.com/Kyonax/kyo-web-online#readme",
   "devDependencies": {
-    "@types/react-lazy-load-image-component": "^1.5.2",
-    "autoprefixer": "^10.4.8",
-    "buffer": "^6.0.3",
-    "console-browserify": "^1.2.0",
-    "crypto-browserify": "^3.12.0",
-    "css-loader": "^6.7.1",
-    "https-browserify": "^1.0.0",
-    "os-browserify": "^0.3.0",
-    "postcss": "^8.4.16",
-    "process": "^0.11.10",
-    "react-app-rewired": "^2.2.1",
-    "react-lazy-load-image-component": "^1.5.4",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
-    "style-loader": "^3.3.1",
-    "tailwindcss": "^3.1.8",
-    "typescript": "^4.5.5",
-    "url": "^0.11.0",
-    "web-vitals": "^2.1.4"
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "autoprefixer": "^10.4.20",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
+    "cssnano": "^7.0.6",
+    "favicons-webpack-plugin": "^6.0.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.6.3",
+    "image-minimizer-webpack-plugin": "^4.1.1",
+    "image-webpack-loader": "^8.1.0",
+    "imagemin-webp": "^8.0.0",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.81.0",
+    "sass-loader": "^16.0.3",
+    "style-loader": "^4.0.0",
+    "svgo-loader": "^4.0.0",
+    "webpack": "^5.96.1",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0",
+    "webpack-manifest-plugin": "^5.0.0"
   }
 }
