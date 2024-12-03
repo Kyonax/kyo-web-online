@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,25 +15,25 @@ jobs:
         uses: actions/checkout@v3
 
       # Step 2: Set up Node.js environment
-      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Use the version your project requires
+          node-version: '20'
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: npm ci
-
-      # Step 4: Run the build script
-      - name: Build project
-        run: npm run build
-
-      # Step 5: Deploy to the build-dev branch
-      - name: Deploy to build-dev
+      # Step 3: Install dependencies and build
+      - name: Install and Build
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B build-dev
-          git add dist -f
-          git commit -m "Deploy build to build-dev branch"
-          git push -u origin build-dev --force
+          npm ci
+          npm run build
+
+      # Step 4: Deploy dist to build-dev
+      - name: Deploy dist to build-dev
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin build-dev || git branch build-dev
+          git checkout -B build-dev origin/build-dev || git checkout -b build-dev
+          git rm -rf . # Remove existing files
+          cp -r dist/* . # Copy new build files
+          git add .
+          git commit -m "Deploy new build from develop branch"
+          git push --force origin build-dev
