@@ -12,8 +12,6 @@
  * Email: iamkyo@kyo.wtf
  */
 
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
@@ -192,12 +190,10 @@ module.exports = {
    * @description
    * Defines plugins to extend Webpack's functionality. Includes:
    * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template and uses dynamic metadata from constants.
-   * - BundleAnalyzerPlugin: Visualizes bundle size and contents.
    * - WebpackManifestPlugin: Generates a manifest for bundled assets.
    * - FaviconsWebpackPlugin: Generates and injects favicon assets in different sizes.
    */
   plugins: [
-    new BundleAnalyzerPlugin(),
     new FaviconsWebpackPlugin({
       logo: FAVICON.path,
       prefix: "assets/favicon/",
