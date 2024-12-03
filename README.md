@@ -16,3 +16,8 @@
     </picture>
   </a>
 </p>
+
+
+#### Technologies
+- node v20.17.0
+- webpack 5.96.1

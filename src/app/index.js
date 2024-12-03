@@ -12,7 +12,7 @@
  */
 
 // Import global styles
-import "@styling/index.scss";
+import "@styling/main.scss";
 
 // Initialize custom elements
 import "@components/blastImage";

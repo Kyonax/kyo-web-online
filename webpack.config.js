@@ -138,6 +138,13 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[name][ext][query]'
+        },
+      },
     ],
   },
 
@@ -234,8 +241,10 @@ module.exports = {
    */
   resolve: {
     alias: {
+      '@app': path.resolve(__dirname, 'src/app/'),
       "@components": path.resolve(__dirname, "src/app/components"),
       "@constants": path.resolve(__dirname, "src/app/constants"),
+      "@fonts": path.resolve(__dirname, "src/app/fonts"),
       "@plugins": path.resolve(__dirname, "src/app/plugins"),
       "@styling": path.resolve(__dirname, "src/app/scss"),
       "@utils": path.resolve(__dirname, "src/app/utils"),
