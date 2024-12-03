@@ -1,51 +1,75 @@
 /**
- * Body Styles
+ * _global.scss - Global Styles for the Application
  *
  * @description
- * Defines the default background color and text color for the entire application.
- * These styles ensure a high-contrast design for accessibility.
+ * This file defines global styles, including layout, typography, and
+ * accessibility. It also sets default scrollbar styles and applies
+ * variables from `_variables.scss` for consistent design throughout the app.
  *
- * @properties
- * - `background-color`: Sets the background to black.
- * - `color`: Sets the text color to yellow.
+ * @author
+ * Cristian Moreno (Kyonax)
+ * Email: iamkyo@kyo.wtf
+ *
+ * @note
+ * Import this file into `main.scss` to apply these global styles across
+ * the application.
  */
 @use '../abstracts/variables' as *;
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: $border-color;
 }
 
+/**
+ * Body Styles
+ *
+ * @description
+ * Sets the default background and text colors to ensure high contrast
+ * for readability and accessibility.
+ */
 body {
-    background-color: $body-bg-color; /* Application-wide background color */
+    background-color: $body-bg-color;
     color: $foreground-color;
-    overflow: hidden;
     height: 100vh;
+    overflow: hidden;
+}
 
-    #main-container {
-        height: 93%;
-        display: grid;
-        grid-template-columns: 25% 74.4%; // Define the widths for the two sections
-        column-gap: 0.5rem;
+/**
+ * Layout and Container Styles
+ *
+ * @description
+ * Defines the grid layout for the main container and individual blocks,
+ * ensuring consistent spacing and alignment.
+ */
+#main-container {
+    height: 93%;
+    display: grid;
+    grid-template-columns: 25% 74.4%;
+    column-gap: 0.5rem;
 
-        img {
-            width: 100%;
-        }
+    img {
+        width: 100%;
     }
+}
 
-    #left-section,
-    #main-section {
-        display: grid;
-        gap: 0.5rem;
-    }
+.container-block {
+    border: 1px solid $border-color;
+    padding: 0.36rem;
+}
 
-    .container-block {
-        border: 1px solid $border-color;
-        padding: 0.36rem;
-    }
+.main-scroll-block {
+    overflow-y: auto;
+    height: 95vh;
+}
 
-    .container-content {
-        overflow-y: auto;
-        height: 93vh;
-    }
+/**
+ * Document Sections
+ *
+ * @description
+ * Defines the layout for the left and main sections using grid with gaps
+ * for better spacing.
+ */
+#left-section, #main-section {
+    display: grid;
+    gap: 0.5rem;
 }

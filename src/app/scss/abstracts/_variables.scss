@@ -1,4 +1,22 @@
+/**
+ * _variables.scss - Global Variables for Styling
+ *
+ * @description
+ * This file defines essential variables used throughout the application,
+ * including color palettes, spacing, typography settings, and other design tokens.
+ * The variables promote consistency and reusability by centralizing key styling
+ * values, making the application more maintainable and easier to update.
+ *
+ * @author
+ * Cristian Moreno (Kyonax)
+ * Email: iamkyo@kyo.wtf
+ *
+ * @note
+ * Ensure this file is imported into the main stylesheet (e.g., `main.scss`)
+ * to provide access to the global variables throughout the application.
+ */
+
 // Colors
-$border-color: hsla(0,0%,100%,.1);
+$border-color: hsla(0, 0%, 100%, .1);
 $body-bg-color: #111111;
 $foreground-color: white;

@@ -1,3 +1,20 @@
+/**
+ * _typography.scss - Typography Styles for the Application
+ *
+ * @description
+ * This file defines the typography settings, including custom font faces
+ * using the "SpaceMono" font family. It imports mixins for defining various
+ * font styles (regular, bold, italic, and bold-italic) to be used across
+ * the application. Consistent typography is applied for improved readability.
+ *
+ * @author
+ * Cristian Moreno (Kyonax)
+ * Email: iamkyo@kyo.wtf
+ *
+ * @note
+ * Ensure that this file is imported into the main stylesheet (e.g., `main.scss`)
+ * for the typography styles to be applied globally.
+ */
 @use "../abstracts/mixins";
 
 @include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Regular", 400, normal);

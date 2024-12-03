@@ -207,6 +207,7 @@ module.exports = {
         background: THEME_SETTINGS.primaryColor,
         theme_color: THEME_SETTINGS.primaryColor,
         icons: {
+          favicons: true,
           coast: false,
           yandex: false,
         },
