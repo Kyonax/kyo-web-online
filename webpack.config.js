@@ -198,25 +198,6 @@ module.exports = {
    * - FaviconsWebpackPlugin: Generates and injects favicon assets in different sizes.
    */
   plugins: [
-    new FaviconsWebpackPlugin({
-      logo: FAVICON.path,
-      prefix: "assets/favicon/",
-      inject: true,
-      mode: "webapp",
-      favicons: {
-        appName: SITE_TITLE,
-        appDescription: APP_DESCRIPTION,
-        developerName: AUTHOR_INFO.name,
-        developerURL: SITE_URL,
-        background: THEME_SETTINGS.primaryColor,
-        theme_color: THEME_SETTINGS.primaryColor,
-        icons: {
-          favicons: true,
-          coast: false,
-          yandex: false,
-        },
-      },
-    }),
     new HtmlWebpackPlugin({
       template: "src/views/index.html",
       title: SITE_TITLE,
@@ -231,7 +212,18 @@ module.exports = {
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
     }),
-    new WebpackManifestPlugin(),
+    new WebpackManifestPlugin({
+      publicPath: '/',
+      generate: (seed, files, entries) => {
+        const manifest = files.reduce((acc, file) => {
+          acc[file.name] = file.path;
+          return acc;
+        }, seed);
+
+        // Optionally, add custom entries here
+        return manifest;
+      },
+    }),
   ],
 
   /**
