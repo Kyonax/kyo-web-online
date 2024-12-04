@@ -16,10 +16,12 @@
 // Is necessary to solve the way to create the favicon manifest
 // if webpack is still creating it like webp, consider migrate
 // the issue to gulp or grunt
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const path = require("path");
+const fs = require("fs");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 
 // Import configuration constants from Data.js
@@ -183,7 +185,6 @@ module.exports = {
    */
   output: {
     assetModuleFilename: "assets/[name][ext]",
-    clean: true,
     filename: "app/js/bundle-[contenthash].js",
     path: path.resolve(__dirname, "dist"),
   },
@@ -212,15 +213,30 @@ module.exports = {
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
     }),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
+      cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
+    }),
     new WebpackManifestPlugin({
-      publicPath: '/',
+      publicPath: "/",
       generate: (seed, files, entries) => {
         const manifest = files.reduce((acc, file) => {
           acc[file.name] = file.path;
           return acc;
         }, seed);
 
-        // Optionally, add custom entries here
+        // Ensure favicons are included
+        const faviconsPath = path.resolve(__dirname, "dist/favicons");
+        if (fs.existsSync(faviconsPath)) {
+          const favicons = fs.readdirSync(faviconsPath).map((filename) => ({
+            src: `favicons/${filename}`,
+            sizes: filename.match(/\d+x\d+/)?.[0] || "any",
+            type: `image/${path.extname(filename).slice(1)}`,
+          }));
+
+          manifest.icons = favicons;
+        }
+
         return manifest;
       },
     }),

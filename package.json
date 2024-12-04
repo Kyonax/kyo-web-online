@@ -7,22 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
     "dev": "webpack-dev-server --mode development",
-    "generate-favicons": "node generateFavicons.js",
-    "build-all": "npm-run-all --sequential build generate-favicons",
+    "generate-favicons": "grunt --force",
+    "build-all": "npm-run-all --sequential generate-favicons build",
     "dev-all": "npm run dev & npm run generate-favicons"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kyonax/kyo-web-online.git"
   },
-  "keywords": [
-    "Kyonax",
-    "kyo",
-    "kyonax_on_tech",
-    "kyo-wtf",
-    "KYO-T",
-    "京"
-  ],
+  "keywords": ["Kyonax", "kyo", "kyonax_on_tech", "kyo-wtf", "KYO-T", "京"],
   "author": "Cristian Moreno (Kyonax)",
   "license": "GPL-2.0-only",
   "bugs": {
@@ -34,6 +27,7 @@
     "@babel/preset-env": "^7.26.0",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.2.1",
+    "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
     "cssnano": "^7.0.6",
     "fancy-log": "^2.0.0",

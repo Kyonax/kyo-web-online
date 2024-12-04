@@ -1,18 +1,19 @@
-module.exports = function(grunt) {
-  // Project configuration
+module.exports = function (grunt) {
   grunt.initConfig({
     favicons: {
-      options: {},
+      options: {
+        trueColor: true,
+        precomposed: false,
+        windowsTile: true,
+        tileBlackWhite: true,
+      },
       icons: {
-        src: 'src/assets/favicon.png',
-        dest: 'dist/favicons'
-      }
+        src: "src/assets/favicon.png",
+        dest: "dist/favicons",
+      },
     },
-  })
+  });
 
-  // Load the plugin
-  grunt.loadNpmTasks('grunt-favicons');
-
-  // Register default task
-  grunt.registerTask('default', ['favicons']);
+  grunt.loadNpmTasks("grunt-favicons");
+  grunt.registerTask("default", ["favicons"]);
 };
