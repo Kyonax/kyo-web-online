@@ -1,3 +1,5 @@
+const { FAVICON } = require("./src/app/constants/Data");
+
 module.exports = function (grunt) {
   grunt.initConfig({
     favicons: {
@@ -8,8 +10,8 @@ module.exports = function (grunt) {
         tileBlackWhite: true,
       },
       icons: {
-        src: "src/assets/favicon.png",
-        dest: "dist/favicons",
+        src: FAVICON.path,
+        dest: FAVICON.dest,
       },
     },
   });

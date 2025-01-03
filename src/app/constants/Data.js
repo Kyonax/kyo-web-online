@@ -48,31 +48,32 @@ module.exports = {
   // Favicon and Site Configuration
   FAVICON: {
     path: "src/assets/favicon.png", // Path to the favicon image
-    gulp: {
+    dest: "dist/favicons",
+    grunt: {
       path: "/",
-      appName: 'Kyo Web Online', // Name of your app
-      appShortName: 'Kyo', // Short name of your app
-      appDescription: 'Cristian Moreno (Kyonax)', // Description of your app
-      developerName: 'Cristian Moreno', // Developer name
-      developerURL: 'https://kyo.wtf', // Developer URL
+      appName: "Kyo Web Online", // Name of your app
+      appShortName: "Kyo", // Short name of your app
+      appDescription: "Cristian Moreno (Kyonax)", // Description of your app
+      developerName: "Cristian Moreno", // Developer name
+      developerURL: "https://kyo.wtf", // Developer URL
       dir: "auto",
-      url: 'https://kyo.wtf/', // URL for your site
-      display: 'standalone', // How the app should be displayed
-      orientation: 'any', // Orientation of the icons
-      start_url: '/?homescreen=1', // Start URL of the app
+      url: "https://kyo.wtf/", // URL for your site
+      display: "standalone", // How the app should be displayed
+      orientation: "any", // Orientation of the icons
+      start_url: "/?homescreen=1", // Start URL of the app
       version: 1.0, // Version of the favicons
       logging: false,
       icons: {
-        android: true,              // Create Android homescreen icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        appleIcon: true,            // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        appleStartup: false,         // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        coast: false,                // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        favicons: true,             // Create regular favicons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        firefox: true,              // Create Firefox OS icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        windows: true,              // Create Windows 8 tile icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
-        yandex: false
-      }
-    }
+        android: true, // Create Android homescreen icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        appleIcon: true, // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        appleStartup: false, // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        coast: false, // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        favicons: true, // Create regular favicons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        firefox: true, // Create Firefox OS icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        windows: true, // Create Windows 8 tile icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+        yandex: false,
+      },
+    },
   },
 
   // Application URL and Metadata

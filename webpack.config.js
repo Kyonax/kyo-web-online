@@ -12,17 +12,12 @@
  * Email: iamkyo@kyo.wtf
  */
 
-// TODO: SOLVE THE FAVICON WEBP FORMAT
-// Is necessary to solve the way to create the favicon manifest
-// if webpack is still creating it like webp, consider migrate
-// the issue to gulp or grunt
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const path = require("path");
 const fs = require("fs");
-const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 
 // Import configuration constants from Data.js
 const {
@@ -194,9 +189,9 @@ module.exports = {
    *
    * @description
    * Defines plugins to extend Webpack's functionality. Includes:
-   * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template and uses dynamic metadata from constants.
+   * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template
+   *   and uses dynamic metadata from constants.
    * - WebpackManifestPlugin: Generates a manifest for bundled assets.
-   * - FaviconsWebpackPlugin: Generates and injects favicon assets in different sizes.
    */
   plugins: [
     new HtmlWebpackPlugin({
@@ -213,10 +208,13 @@ module.exports = {
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
     }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
-      cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
-    }),
+    // Only apply CleanWebpackPlugin in production mode
+    ...(process.env.NODE_ENV === 'production' ? [
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
+        cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
+      })
+    ] : []),
     new WebpackManifestPlugin({
       publicPath: "/",
       generate: (seed, files, entries) => {
