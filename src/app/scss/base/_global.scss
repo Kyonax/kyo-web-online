@@ -14,7 +14,7 @@
  * Import this file into `main.scss` to apply these global styles across
  * the application.
  */
-@use '../abstracts/variables' as *;
+@use "../abstracts/variables" as *;
 
 * {
     scrollbar-width: thin;
@@ -44,12 +44,8 @@ body {
 #main-container {
     height: 93%;
     display: grid;
-    grid-template-columns: 25% 74.4%;
+    grid-template-columns: min-content auto;
     column-gap: 0.5rem;
-
-    img {
-        width: 100%;
-    }
 }
 
 .container-block {
@@ -69,7 +65,8 @@ body {
  * Defines the layout for the left and main sections using grid with gaps
  * for better spacing.
  */
-#left-section, #right-section {
+#left-section,
+#right-section {
     display: grid;
     gap: 0.5rem;
 }
