@@ -69,7 +69,7 @@ body {
  * Defines the layout for the left and main sections using grid with gaps
  * for better spacing.
  */
-#left-section, #main-section {
+#left-section, #right-section {
     display: grid;
     gap: 0.5rem;
 }
