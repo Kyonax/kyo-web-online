@@ -189,7 +189,8 @@ module.exports = {
    *
    * @description
    * Defines plugins to extend Webpack's functionality. Includes:
-   * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template and uses dynamic metadata from constants.
+   * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template
+   *   and uses dynamic metadata from constants.
    * - WebpackManifestPlugin: Generates a manifest for bundled assets.
    */
   plugins: [
@@ -207,10 +208,13 @@ module.exports = {
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
     }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
-      cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
-    }),
+    // Only apply CleanWebpackPlugin in production mode
+    ...(process.env.NODE_ENV === 'production' ? [
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
+        cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
+      })
+    ] : []),
     new WebpackManifestPlugin({
       publicPath: "/",
       generate: (seed, files, entries) => {

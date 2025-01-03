@@ -8,8 +8,7 @@
     "build": "webpack --mode production",
     "dev": "webpack-dev-server --mode development",
     "generate-favicons": "grunt --force",
-    "build-all": "npm-run-all --sequential generate-favicons build",
-    "dev-all": "npm run dev & npm run generate-favicons"
+    "build-all": "npm-run-all --sequential generate-favicons build"
   },
   "repository": {
     "type": "git",
