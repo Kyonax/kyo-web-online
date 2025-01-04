@@ -8,14 +8,30 @@
         display: grid;
         gap: 0.25rem;
     }
+}
 
+.dev-info,
+.dev-communities,
+.dev-tech {
     span {
         padding-left: 0.25rem;
         padding-right: 0.25rem;
         background-color: white;
         color: black;
     }
+}
 
+.dev-marquee {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-top: auto;
+    background-color: black;
+}
+
+.dev-info,
+.dev-communities {
     .span-container {
         display: grid;
         gap: 0.25rem;
@@ -24,13 +40,6 @@
 }
 
 .dev-tech {
-    span {
-        padding-left: 0.25rem;
-        padding-right: 0.25rem;
-        background-color: white;
-        color: black;
-    }
-
     .span-container {
         display: grid;
         gap: 0.25rem;
