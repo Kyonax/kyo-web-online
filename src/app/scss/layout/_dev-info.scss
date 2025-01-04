@@ -1,0 +1,73 @@
+@use "../abstracts/variables" as *;
+
+.dev-info {
+    display: block;
+    justify-content: center;
+
+    header {
+        display: grid;
+        gap: 0.25rem;
+    }
+}
+
+.dev-info,
+.dev-communities,
+.dev-tech {
+    span {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        background-color: white;
+        color: black;
+    }
+}
+
+.dev-marquee {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-top: auto;
+    background-color: black;
+}
+
+.dev-info,
+.dev-communities {
+    .span-container {
+        display: grid;
+        gap: 0.25rem;
+        grid-template-columns: max-content auto;
+    }
+}
+
+.dev-tech {
+    .span-container {
+        display: grid;
+        gap: 0.25rem;
+        grid-template-columns: max-content max-content max-content;
+    }
+}
+
+.dev-profile {
+    padding: 0.25rem;
+    border: 1px solid $border-color;
+    width: min-content;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+}
+
+.dev-img {
+    width: 150px; // Adjust to your desired width
+    height: 149px; // Adjust to your desired height
+    overflow: hidden;
+    position: relative; // Required for child absolute positioning
+    background-color: $border-color;
+}
+
+.dev-img img {
+    position: absolute;
+    width: fit-content;
+    height: 300px;
+    transform: translate(-450px);
+    object-fit: cover; // Ensures the image covers the area
+}
