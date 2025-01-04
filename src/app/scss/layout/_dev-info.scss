@@ -19,7 +19,22 @@
     .span-container {
         display: grid;
         gap: 0.25rem;
-        grid-template-columns: auto auto;
+        grid-template-columns: max-content auto;
+    }
+}
+
+.dev-tech {
+    span {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        background-color: white;
+        color: black;
+    }
+
+    .span-container {
+        display: grid;
+        gap: 0.25rem;
+        grid-template-columns: max-content max-content max-content;
     }
 }
 
@@ -27,6 +42,9 @@
     padding: 0.25rem;
     border: 1px solid $border-color;
     width: min-content;
+    left: 0px;
+    right: 0px;
+    margin: auto;
 }
 
 .dev-img {
