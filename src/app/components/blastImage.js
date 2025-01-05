@@ -77,6 +77,8 @@ class BlastImage extends HTMLElement {
       attributes.forEach((attr) => {
         if (attr.name === "class") {
           container.classList.add(attr.value);
+        } else if (attr.name === "sizes") {
+          picture.querySelector("source").setAttribute(attr.name, attr.value);
         } else {
           picture.querySelector("img").setAttribute(attr.name, attr.value);
         }
