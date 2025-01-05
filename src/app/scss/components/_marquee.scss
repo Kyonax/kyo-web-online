@@ -1,0 +1,37 @@
+@use "../abstracts/variables" as *;
+
+.marquee {
+    background-color: #f9cd26;
+    color: $body-bg-color;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden; // Ensures only the visible part is shown
+    --marquee-play: running;
+
+    &__items {
+        display: flex; // Flexbox for inline layout
+        white-space: nowrap; // Prevents text wrapping
+        animation: marqueeScroll 5s linear infinite;
+        animation-play-state: var(--marquee-play);
+    }
+
+    &__item {
+        display: inline-block; // Keeps items in a single line
+        margin-right: 0.5rem; // Space between repeated items
+    }
+
+    // Keyframes for seamless scrolling
+    @keyframes marqueeScroll {
+        0% {
+            transform: translateX(0%); // Start at the initial position
+        }
+
+        100% {
+            transform: translateX(
+                -158%
+            ); // Shift left by half of the total content width
+        }
+    }
+}
