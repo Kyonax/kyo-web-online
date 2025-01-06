@@ -41,6 +41,12 @@
     700,
     italic
 );
+@include mixins.font-face(
+    "SymbolsNerdFont",
+    "SymbolsNerdFonts/SymbolsNerdFontMono-Regular",
+    700,
+    italic
+);
 
 body {
     font-family: "SpaceMono", monospace;
@@ -48,4 +54,11 @@ body {
     font-size: 12px;
     line-height: 14px;
     letter-spacing: -0.6px;
+}
+
+symbol {
+    font-display: swap;
+    font-size: 12px;
+    line-height: 14px;
+    margin-right: 0.6rem;
 }
