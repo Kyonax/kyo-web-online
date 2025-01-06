@@ -17,13 +17,34 @@
  */
 @use "../abstracts/mixins";
 
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Regular", 400, normal);
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Bold", 700, normal);
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Italic", 400, italic);
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-BoldItalic", 700, italic);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-Regular",
+    400,
+    normal
+);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-Bold",
+    700,
+    normal
+);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-Italic",
+    400,
+    italic
+);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-BoldItalic",
+    700,
+    italic
+);
 
 body {
-    font-family: "SpaceMono";
+    font-family: "SpaceMono", "sans-serif";
+    font-display: swap;
     font-size: 12px;
     line-height: 14px;
     letter-spacing: -0.6px;
