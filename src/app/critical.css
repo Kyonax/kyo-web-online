@@ -12,35 +12,83 @@ body {
  * Defines the grid layout for the main container and individual blocks,
  * ensuring consistent spacing and alignment.
  */
-#main-container {
-    height: 93%;
-    display: grid;
-    grid-template-columns: min-content auto;
-    column-gap: 0.5rem;
-}
-
 .container-block {
-    position: relative;
-    border: 1px solid $border-color;
+    border: 1px solid hsla(0, 0%, 100%, 0.1);
     padding: 0.36rem;
+    position: relative;
 }
 
 .main-scroll-block {
-    overflow-y: auto;
+    display: none;
     height: 95vh;
+    overflow-y: auto;
+}
+
+#left-section {
+    display: none;
+}
+
+#main-container {
+    column-gap: 0.5rem;
+    display: grid;
+    grid-template-columns: auto;
+    height: 93%;
+}
+
+.page-loader {
+    align-items: center;
+    color: white;
+    display: grid;
+    font-family: monospace;
+    height: 95vh;
+    justify-content: center;
+    letter-spacing: -0.7px;
+    overflow: hidden;
+}
+
+.page-loader pre {
+    animation: pulse 1.5s infinite alternate;
+    color: #f9cd26; /* Main text color */
+    text-shadow:
+        0 0 2px #f9cd26,
+        0 0 5px #f9cd26,
+        0 0 10px #ffcc00,
+        0 0 20px #ff9900; /* Fewer layers for a softer effect */
+    white-space: pre; /* Preserve spacing */
+}
+
+.page-loader__footer {
+    align-items: center;
+    bottom: 0px;
+    display: flex;
+    font-size: 11px;
+    font-weight: 900;
+    justify-content: center;
+    left: 0px;
+    line-height: 2rem;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
 }
 
 /**
- * Document Sections
- *
- * @description
- * Defines the layout for the left and main sections using grid with gaps
- * for better spacing.
+ * Pulse animation with adjusted intensity
  */
-#left-section,
-#right-section {
-    display: grid;
-    gap: 0.5rem;
+@keyframes pulse {
+    0% {
+        text-shadow:
+            0 0 2px #f9cd26,
+            0 0 5px #f9cd26,
+            0 0 10px #ffcc00,
+            0 0 20px #ff9900;
+    }
+    100% {
+        text-shadow:
+            0 0 4px #f9cd26,
+            0 0 1px #f9cd26,
+            0 0 15px #ffcc00,
+            0 0 60px #ff9900;
+    }
 }
 
 /**
@@ -50,14 +98,8 @@ body {
  * Ensures the application is responsive by adapting layout and styles
  * based on the screen size.
  */
-
 /* Extra Small Devices (Portrait Phones, <576px) */
 @media (max-width: 575.98px) {
-    #main-container {
-        grid-template-columns: 1fr; // Stacks sections vertically
-        gap: 0.25rem;
-    }
-
     #left-section,
     #right-section {
         gap: 0.25rem;
@@ -66,53 +108,58 @@ body {
     .container-block {
         padding: 0.25rem;
     }
+
+    #main-container {
+        gap: 0.25rem;
+        grid-template-columns: 1fr; /* Stacks sections vertically */
+    }
 }
 
 /* Small Devices (Landscape Phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) {
-    #main-container {
-        grid-template-columns: 1fr 2fr; // Adjust column proportions
-    }
-
     .container-block {
         padding: 0.3rem;
+    }
+
+    #main-container {
+        grid-template-columns: 1fr; /* Adjust column proportions */
     }
 }
 
 /* Medium Devices (Tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-    #main-container {
-        grid-template-columns: min-content auto; // Default layout
+    #left-section,
+    #right-section {
+        gap: 0.5rem;
     }
 
     .container-block {
         padding: 0.36rem;
     }
 
-    #left-section,
-    #right-section {
-        gap: 0.5rem;
+    #main-container {
+        grid-template-columns: auto; /* Default layout */
     }
 }
 
 /* Large Devices (Desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
-    #main-container {
-        grid-template-columns: min-content auto;
-    }
-
     .container-block {
         padding: 0.4rem;
+    }
+
+    #main-container {
+        grid-template-columns: auto;
     }
 }
 
 /* Extra Large Devices (Large Desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    #main-container {
-        grid-template-columns: min-content auto;
-    }
-
     .container-block {
         padding: 0.5rem;
+    }
+
+    #main-container {
+        grid-template-columns: auto;
     }
 }

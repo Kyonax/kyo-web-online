@@ -1,3 +1,4 @@
+@use "../abstracts/mixins";
 @use "../abstracts/variables" as *;
 
 .marquee {
@@ -10,6 +11,7 @@
     overflow: hidden; // Ensures only the visible part is shown
     --marquee-play: running;
     --marquee-speed: 33s; // Adjust speed (slower for larger text)
+    @include mixins.cyberpunk-glow(#f9cd26, 1px, 9px, true);
 
     &__items {
         display: flex; // Flexbox for inline layout
