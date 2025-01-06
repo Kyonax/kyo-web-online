@@ -68,12 +68,16 @@
     background-color: $border-color;
 }
 
-.dev-img img {
+.dev-img picture {
     position: absolute;
     width: max-content;
-    height: 201%;
+    height: 100%;
     top: 0px;
     right: 0px;
+}
+
+.dev-img img {
+    height: 200%;
     object-fit: cover; // Ensures the image covers the area
 }
 
