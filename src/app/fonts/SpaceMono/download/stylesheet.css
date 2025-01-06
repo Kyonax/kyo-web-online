@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'SpaceMono Nerd Font';
+    src: url('subset-SpaceMonoNF-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpaceMono Nerd Font';
+    src: url('subset-SpaceMonoNF-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpaceMono Nerd Font';
+    src: url('subset-SpaceMonoNF.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpaceMono Nerd Font';
+    src: url('subset-SpaceMonoNF-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
