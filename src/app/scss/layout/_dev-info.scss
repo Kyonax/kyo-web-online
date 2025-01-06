@@ -75,3 +75,21 @@
     transform: translate(-75%);
     object-fit: cover; // Ensures the image covers the area
 }
+
+@media (max-width: 575.98px) {
+    .dev-tech .span-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 414.98px) {
+    .dev-tech .span-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 320.98px) {
+    .dev-tech .span-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

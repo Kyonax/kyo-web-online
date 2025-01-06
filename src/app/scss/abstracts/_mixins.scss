@@ -23,3 +23,39 @@
         font-style: #{$style};
     }
 }
+
+/**
+ * Cyberpunk Glow Mixin
+ *
+ * @description
+ * Adds a customizable soft glowing effect to block-level elements.
+ * Includes an optional animation dynamically generated based on input values.
+ *
+ * @param {Color} $glow-color - The color of the glow (default: #f9cd26).
+ * @param {Number} $blur - The blur radius of the glow (default: 15px).
+ * @param {Number} $spread - The spread radius of the glow (default: 5px).
+ * @param {Boolean} $animated - Whether to add a subtle pulsing animation (default: true).
+ */
+@mixin cyberpunk-glow(
+    $glow-color: #f9cd26,
+    $blur: 15px,
+    $spread: 5px,
+    $animated: true
+) {
+    box-shadow: 0 0 $spread $blur $glow-color;
+
+    // Dynamically generate animation if $animated is true
+    @if $animated {
+        animation: cyberpunk-pulse-#{$blur}-#{$spread} 1.5s infinite alternate;
+
+        @keyframes cyberpunk-pulse-#{$blur}-#{$spread} {
+            0% {
+                box-shadow: 0 0 calc(#{$spread} / 2) calc(#{$blur} / 2)
+                    rgba($glow-color, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 #{$spread} #{$blur} rgba($glow-color, 0.5);
+            }
+        }
+    }
+}
