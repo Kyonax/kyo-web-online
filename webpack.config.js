@@ -30,6 +30,19 @@ const {
   APP_DESCRIPTION,
 } = require("./src/app/constants/Data");
 
+const getCriticalCSS = () => {
+  const criticalCSSPath = path.resolve(__dirname, "src/app/critical.css");
+  try {
+    return fs.readFileSync(criticalCSSPath, "utf8");
+  } catch (err) {
+    console.error(
+      `Failed to read critical CSS file at ${criticalCSSPath}:`,
+      err,
+    );
+    return ""; // Fallback to an empty string if the file is not found
+  }
+};
+
 module.exports = {
   /**
    * Development server
@@ -207,14 +220,17 @@ module.exports = {
       theme_color: THEME_SETTINGS.primaryColor,
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
+      criticalCSS: getCriticalCSS(),
     }),
     // Only apply CleanWebpackPlugin in production mode
-    ...(process.env.NODE_ENV === 'production' ? [
-      new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
-        cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
-      })
-    ] : []),
+    ...(process.env.NODE_ENV === "production"
+      ? [
+          new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
+            cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
+          }),
+        ]
+      : []),
     new WebpackManifestPlugin({
       publicPath: "/",
       generate: (seed, files, entries) => {

@@ -19,6 +19,10 @@
     <meta name="keywords" content="<%= htmlWebpackPlugin.options.keywords %>" />
     <meta name="author" content="<%= htmlWebpackPlugin.options.author %>" />
 
+    <style>
+      <%= htmlWebpackPlugin.options.criticalCSS %>
+    </style>
+
     <!-- Favicons Injected by favicons-webpack-plugin -->
     <link
       rel="icon"
@@ -147,7 +151,7 @@
               <div class="dev-profile">
                 <blast-image
                   class="dev-img"
-                  sizes="40vw"
+                  sizes="(max-width: 600px) 50vw, 30vw"
                   img="kyonax_multiverse_characters"
                 ></blast-image>
               </div>
@@ -202,18 +206,18 @@
 
           <section class="marquee">
             <div class="marquee__items">
-              <div class="marquee__item">
-                <strong
-                  >TESTING THE NEXT TEXT :: IS WORKING $ HOW LONG THIS WILL
-                  TAKE</strong
-                >
-              </div>
-              <div class="marquee__item">
-                <strong
-                  >TESTING THE NEXT TEXT :: IS WORKING $ HOW LONG THIS WILL
-                  TAKE</strong
-                >
-              </div>
+              <span class="marquee__item">
+                TESTING THE NEXT TEXT :: IS WORKING _ HOW LONG THIS WILL TAKE
+              </span>
+              <span class="marquee__item"> FUCK </span>
+              <span class="marquee__item"> FUCK </span>
+              <span class="marquee__item"> FUCK </span>
+              <span class="marquee__item">
+                TESTING THE NEXT TEXT :: IS WORKING _ HOW LONG THIS WILL TAKE
+              </span>
+              <span class="marquee__item"> FUCK </span>
+              <span class="marquee__item"> FUCK </span>
+              <span class="marquee__item"> FUCK </span>
             </div>
           </section>
         </div>
