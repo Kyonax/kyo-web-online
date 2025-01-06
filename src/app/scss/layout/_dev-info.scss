@@ -70,9 +70,10 @@
 
 .dev-img img {
     position: absolute;
-    width: fit-content;
+    width: max-content;
     height: 201%;
-    transform: translate(-75%);
+    top: 0px;
+    right: 0px;
     object-fit: cover; // Ensures the image covers the area
 }
 
