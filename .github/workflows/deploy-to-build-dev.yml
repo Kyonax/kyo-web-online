@@ -24,9 +24,13 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      #Install ImageMagick
+      - name: Install ImageMagick
+        run: apt-get install imagemagick
+
       # Build the project
       - name: Build App
-        run: npm run generate-favicons
+        run: npm run build-all
 
       # Push the built folder to build-dev branch
       - name: Push to build-dev
