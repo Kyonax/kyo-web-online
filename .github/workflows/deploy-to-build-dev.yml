@@ -36,6 +36,10 @@ jobs:
       - name: Install Grunt & Webpack
         run: npm install -g grunt-cli webpack-cli
 
+      # Install all Runners
+      - name: Install ImageMagick Node
+        run: npm install -g imagemagick gm
+
       # Build the project
       - name: Build App
         run: npm run generate-favicons
