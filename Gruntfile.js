@@ -4,10 +4,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     favicons: {
       options: {
-        trueColor: true,
-        precomposed: false,
-        windowsTile: true,
-        tileBlackWhite: true,
+        debug: true,
+        windowsTile: false,
       },
       icons: {
         src: FAVICON.path,

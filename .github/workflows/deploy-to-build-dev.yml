@@ -13,28 +13,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup ImageMagick
+        uses: mfinelli/setup-imagemagick@v5.0.1
+
+      - name: Check Convert of ImageMagick
+        run: convert --help
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      - name: Setup ImageMagick
-        uses: mfinelli/setup-imagemagick@v5.0.1
-
-      - name: Setup Dependencies
-        run: sudo apt-get install -y libpng-dev libjpeg-dev libtiff-dev
-
-      - name: Check Imagemagick
-        run: source ~/.bashrc && magick --help
-
       - name: Install Dependencies
         run: npm install
-
-      - name: Install Grunt & Webpack
-        run: npm install -g grunt-cli webpack-cli
-
-      - name: Check Favicon Source
-        run: ls -la ./src/assets
 
       - name: Build App
         run: npm run generate-favicons
