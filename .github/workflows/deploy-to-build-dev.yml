@@ -10,45 +10,38 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Push
     steps:
-      # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Install Node.js and npm
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20 # Use the version of Node.js your project requires
+          node-version: 20
 
-      # Install ImageMagick
       - name: Setup ImageMagick
         uses: mfinelli/setup-imagemagick@v5.0.1
 
-      # Check Imagemagick
+      - name: Install Additional ImageMagick Dependencies
+        run: sudo apt-get install -y libmagickwand-dev
+
       - name: Check Imagemagick
         run: magick --help
 
-      # Install all dependencies
       - name: Install Dependencies
         run: npm install
 
-      # Install all Runners
       - name: Install Grunt & Webpack
         run: npm install -g grunt-cli webpack-cli
 
-      # Install all Runners
-      - name: Install ImageMagick Node
-        run: npm install -g imagemagick gm
+      - name: Check Favicon Source
+        run: ls -la ./src/assets
 
-      # Build the project
       - name: Build App
         run: npm run generate-favicons
 
-      # Check Favicons
       - name: Check Favicons
         run: ls -la ./dist/favicons
 
-      # Push the built folder to build-dev branch
       - name: Push to build-dev
         uses: s0/git-publish-subdir-action@develop
         env:
