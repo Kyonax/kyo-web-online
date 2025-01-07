@@ -24,6 +24,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      #Install Runners
+      - name: Install Grunt & Webpack vCli
+        run: npm install -g grunt-cli webpack-cli
+
       # Build the project
       - name: Build App
         run: npm run build-all
