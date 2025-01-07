@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup Dependencies
+        run: sudo apt-get install -y libpng-dev libjpeg-dev libtiff-dev
+
       - name: Setup ImageMagick
         run: sudo apt-get install -y imagemagick
 
