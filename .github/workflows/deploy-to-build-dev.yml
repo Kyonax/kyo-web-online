@@ -22,7 +22,7 @@ jobs:
         run: sudo apt-get install -y imagemagick
 
       - name: Check Imagemagick
-        run: magick --help
+        run: source ~/.bashrc && magick --help
 
       - name: Install Dependencies
         run: npm install
