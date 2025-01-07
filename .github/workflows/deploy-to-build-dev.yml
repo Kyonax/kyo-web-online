@@ -25,8 +25,8 @@ jobs:
         run: npm install
 
       #Install ImageMagick
-      - name: Install ImageMagick
-        run: apt-get install imagemagick
+      - name: Setup ImageMagick
+        uses: mfinelli/setup-imagemagick@v5.0.1
 
       # Build the project
       - name: Build App
