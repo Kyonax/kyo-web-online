@@ -20,9 +20,13 @@ jobs:
         with:
           node-version: 20 # Use the version of Node.js your project requires
 
-      #Install ImageMagick
+      # Install ImageMagick
       - name: Setup ImageMagick
         uses: mfinelli/setup-imagemagick@v5.0.1
+
+      # Check Imagemagick
+      - name: Check Imagemagick
+        run: magick --help
 
       # Install all dependencies
       - name: Install Dependencies
