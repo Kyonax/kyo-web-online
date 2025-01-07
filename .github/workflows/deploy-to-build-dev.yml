@@ -20,13 +20,17 @@ jobs:
         with:
           node-version: 20 # Use the version of Node.js your project requires
 
+      #Install ImageMagick
+      - name: Setup ImageMagick
+        uses: mfinelli/setup-imagemagick@v5.0.1
+
       # Install all dependencies
       - name: Install Dependencies
         run: npm install
 
-      #Install ImageMagick
-      - name: Setup ImageMagick
-        uses: mfinelli/setup-imagemagick@v5.0.1
+      # Install all Runners
+      - name: Install Grunt & Webpack
+        run: npm install -g grunt-cli webpack-cli
 
       # Build the project
       - name: Build App
