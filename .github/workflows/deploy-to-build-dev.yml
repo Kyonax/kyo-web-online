@@ -42,7 +42,7 @@ jobs:
 
       # Check Favicons
       - name: Check Favicons
-        run: ls -la ./dist
+        run: ls -la ./dist/favicons
 
       # Push the built folder to build-dev branch
       - name: Push to build-dev
