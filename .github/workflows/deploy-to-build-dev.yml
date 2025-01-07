@@ -38,7 +38,11 @@ jobs:
 
       # Build the project
       - name: Build App
-        run: npm run build-all
+        run: npm run generate-favicons
+
+      # Check Favicons
+      - name: Check Favicons
+        run: ls -la ./dist
 
       # Push the built folder to build-dev branch
       - name: Push to build-dev
