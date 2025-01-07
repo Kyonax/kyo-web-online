@@ -18,11 +18,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup ImageMagick
+        uses: mfinelli/setup-imagemagick@v5.0.1
+
       - name: Setup Dependencies
         run: sudo apt-get install -y libpng-dev libjpeg-dev libtiff-dev
-
-      - name: Setup ImageMagick
-        run: sudo apt-get install -y imagemagick
 
       - name: Check Imagemagick
         run: source ~/.bashrc && magick --help
