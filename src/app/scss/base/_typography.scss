@@ -2,63 +2,36 @@
  * _typography.scss - Typography Styles for the Application
  *
  * @description
- * This file defines the typography settings, including custom font faces
- * using the "SpaceMono" font family. It imports mixins for defining various
- * font styles (regular, bold, italic, and bold-italic) to be used across
- * the application. Consistent typography is applied for improved readability.
+ * This file sets up custom typography using the "SpaceMono" font family.
+ * It defines custom font faces (regular, bold, italic, bold-italic) and includes
+ * global typography styles for the application, ensuring readability and consistency.
+ * Additionally, a special font face for symbols is defined.
  *
  * @author
  * Cristian Moreno (Kyonax)
  * Email: iamkyo@kyo.wtf
  *
  * @note
- * Ensure that this file is imported into the main stylesheet (e.g., `main.scss`)
- * for the typography styles to be applied globally.
+ * Import this file into the main stylesheet (e.g., `main.scss`) to apply typography globally.
  */
+
 @use "../abstracts/mixins";
 
-@include mixins.font-face(
-    "SpaceMono",
-    "SpaceMono/SpaceMonoNerdFont-Regular",
-    400,
-    normal
-);
-@include mixins.font-face(
-    "SpaceMono",
-    "SpaceMono/SpaceMonoNerdFont-Bold",
-    700,
-    normal
-);
-@include mixins.font-face(
-    "SpaceMono",
-    "SpaceMono/SpaceMonoNerdFont-Italic",
-    400,
-    italic
-);
-@include mixins.font-face(
-    "SpaceMono",
-    "SpaceMono/SpaceMonoNerdFont-BoldItalic",
-    700,
-    italic
-);
-@include mixins.font-face(
-    "SymbolsNerdFont",
-    "SymbolsNerdFonts/SymbolsNerdFontMono-Regular",
-    700,
-    italic
-);
+// Define SpaceMono fonts
+@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Regular", 400, normal);
+@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Bold", 700, normal);
+@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Italic", 400, italic);
+@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-BoldItalic", 700, italic);
 
-body {
-    font-family: "SpaceMono", monospace;
-    font-display: swap;
+// Global typography settings
+html {
     font-size: 12px;
-    line-height: 14px;
-    letter-spacing: -0.6px;
 }
 
-symbol {
+body {
+    font-family: 'SpaceMono', 'Roboto Mono', 'Courier New', Courier, monospace;
     font-display: swap;
-    font-size: 12px;
-    line-height: 14px;
-    margin-right: 0.6rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: -0.06rem;
 }
