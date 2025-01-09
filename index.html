@@ -1,0 +1,173 @@
+<!doctype html><html lang="en"><!-- #    # #     # #######       #     # ####### ###### --><!-- #   #   #   #  #     #       #  #  # #       #     # --><!-- #  #     # #   #     #       #  #  # #       #     # --><!-- ###       #    #     # ##### #  #  # #####   ###### --><!-- #  #      #    #     #       #  #  # #       #     # --><!-- #   #     #    #     #       #  #  # #       #     # --><!-- #    #    #    #######        ## ##  ####### ###### --><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content="Welcome to the universe of a Syndicate Sentinel—where freedom in cyberspace isn’t just a concept, it’s a damn way of life!"/><meta name="keywords" content="KYO-T,kyo,kyonax,kyonax_on_tech,kyo-wtf,京"/><meta name="author" content="Cristian Moreno (Kyonax)"/><style>body {
+    background-color: #111111;
+    color: #111111;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/**
+ * Layout and Container Styles
+ *
+ * @description
+ * Defines the grid layout for the main container and individual blocks,
+ * ensuring consistent spacing and alignment.
+ */
+.container-block {
+    border: 1px solid hsla(0, 0%, 100%, 0.1);
+    padding: 0.36rem;
+    position: relative;
+}
+
+.main-scroll-block {
+    display: none;
+    height: 95vh;
+    overflow-y: auto;
+}
+
+#left-section {
+    display: none;
+}
+
+#main-container {
+    column-gap: 0.5rem;
+    display: grid;
+    grid-template-columns: auto;
+    height: 93%;
+}
+
+.page-loader {
+    align-items: center;
+    color: white;
+    display: grid;
+    font-family: monospace;
+    height: 95vh;
+    justify-content: center;
+    letter-spacing: -0.7px;
+    overflow: hidden;
+}
+
+.page-loader pre {
+    animation: pulse 1.5s infinite alternate;
+    color: #f9cd26; /* Main text color */
+    text-shadow:
+        0 0 2px #f9cd26,
+        0 0 5px #f9cd26,
+        0 0 10px #ffcc00,
+        0 0 20px #ff9900; /* Fewer layers for a softer effect */
+    white-space: pre; /* Preserve spacing */
+}
+
+.page-loader__footer {
+    align-items: center;
+    bottom: 0px;
+    display: flex;
+    font-size: 11px;
+    font-weight: 900;
+    justify-content: center;
+    left: 0px;
+    line-height: 2rem;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+}
+
+/**
+ * Pulse animation with adjusted intensity
+ */
+@keyframes pulse {
+    0% {
+        text-shadow:
+            0 0 2px #f9cd26,
+            0 0 5px #f9cd26,
+            0 0 10px #ffcc00,
+            0 0 20px #ff9900;
+    }
+    100% {
+        text-shadow:
+            0 0 4px #f9cd26,
+            0 0 1px #f9cd26,
+            0 0 15px #ffcc00,
+            0 0 60px #ff9900;
+    }
+}
+
+/**
+ * Responsive Media Queries
+ *
+ * @description
+ * Ensures the application is responsive by adapting layout and styles
+ * based on the screen size.
+ */
+/* Extra Small Devices (Portrait Phones, <576px) */
+@media (max-width: 575.98px) {
+    #left-section,
+    #right-section {
+        gap: 0.25rem;
+    }
+
+    .container-block {
+        padding: 0.25rem;
+    }
+
+    #main-container {
+        gap: 0.25rem;
+        grid-template-columns: 1fr; /* Stacks sections vertically */
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .container-block {
+        padding: 0.3rem;
+    }
+
+    #main-container {
+        grid-template-columns: 1fr; /* Adjust column proportions */
+    }
+}
+
+/* Medium Devices (Tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    #left-section,
+    #right-section {
+        gap: 0.5rem;
+    }
+
+    .container-block {
+        padding: 0.36rem;
+    }
+
+    #main-container {
+        grid-template-columns: auto; /* Default layout */
+    }
+}
+
+/* Large Devices (Desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container-block {
+        padding: 0.4rem;
+    }
+
+    #main-container {
+        grid-template-columns: auto;
+    }
+}
+
+/* Extra Large Devices (Large Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container-block {
+        padding: 0.5rem;
+    }
+
+    #main-container {
+        grid-template-columns: auto;
+    }
+}</style><link rel="icon" type="image/png" sizes="16x16" href="./favicons/16x16.png"/><link rel="icon" type="image/png" sizes="32x32" href="./favicons/32x32.png"/><link rel="icon" type="image/png" sizes="48x48" href="./favicons/48x48.png"/><link rel="apple-touch-icon" sizes="114x114" href="./favicons/apple-touch-icon-114x114.png"/><link rel="apple-touch-icon" sizes="120x120" href="./favicons/apple-touch-icon-120x120-precomposed.png"/><link rel="apple-touch-icon" sizes="144x144" href="./favicons/apple-touch-icon-144x144.png"/><link rel="apple-touch-icon" sizes="152x152" href="./favicons/apple-touch-icon-152x152-precomposed.png"/><link rel="apple-touch-icon" sizes="60x60" href="./favicons/apple-touch-icon-60x60-precomposed.png"/><link rel="apple-touch-icon" sizes="72x72" href="./favicons/apple-touch-icon-72x72.png"/><link rel="apple-touch-icon" sizes="76x76" href="./favicons/apple-touch-icon-76x76-precomposed.png"/><link rel="icon" type="image/x-icon" href="./favicons/favicon.ico"/><link rel="icon" type="image/png" href="./favicons/favicon.png"/><meta name="msapplication-TileColor" content="#ffffff"/><meta name="msapplication-TileImage" content="assets/icons/ms-icon-144x144.webp"/><link rel="manifest" href="manifest.json"/><meta name="theme-color" content="#ff5733"/><meta property="og:title" content="My name is Kyonax"/><meta property="og:description" content="Welcome to the universe of a Syndicate Sentinel—where freedom in cyberspace isn’t just a concept, it’s a damn way of life!"/><meta property="og:image" content="assets/landscape_mountain-pink-sky.webp"/><meta property="og:url" content="https://kyo.wtf"/><meta property="og:type" content="universe"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="My name is Kyonax"/><meta name="twitter:description" content="Welcome to the universe of a Syndicate Sentinel—where freedom in cyberspace isn’t just a concept, it’s a damn way of life!"/><meta name="twitter:image" content="assets/landscape_mountain-pink-sky.webp"/><meta name="twitter:url" content="https://kyo.wtf"/><title>I'm Kyo</title><script defer="defer" src="app/js/bundle-cdfdc8ce2bee2384fc27.js"></script></head><body><div id="main-container"><div id="left-section"><div class="container-block"><section class="dev-info"><header><div class="dev-profile"><blast-image class="dev-img" sizes="(max-width: 600px) 50vw, 30vw" img="kyonax_multiverse_characters"></blast-image></div><span><strong>CRISTIAN MORENO - KYONAX</strong></span><div class="span-container"><span><symbol></symbol></span><span><strong>VILLAVICENCIO - COLOMBIA</strong></span> <span><strong></strong></span></div><p>λ Dev/Creator :: Translating my world into code...</p></header></section><section class="dev-tech"><h4>TECH & T00Ls</h4><div class="span-container"><span><symbol></symbol>HTML/HTML5</span> <span><symbol></symbol>CSS/CSS3</span> <span><symbol></symbol>SASS</span> <span><symbol></symbol>JAVASCRIPT</span> <span><symbol></symbol>TYPESCRIPT</span> <span><symbol></symbol>PHP</span> <span><symbol></symbol>REACT.JS</span> <span><symbol></symbol>NODE.JS</span> <span><symbol></symbol>SYMFONY</span> <span><symbol>󰊢</symbol>GIT</span> <span><symbol></symbol>GITHUB</span> <span><symbol></symbol>DOCKER</span> <span><symbol></symbol>MySQL</span> <span><symbol></symbol>MONGODB</span> <span><symbol></symbol>HOTJAR</span> <span><symbol></symbol>AZURE</span> <span><symbol></symbol>AWS</span> <span><symbol></symbol>LINUX</span> <span><symbol></symbol>BASH</span> <span><symbol>󰨊</symbol>PWSH</span></div></section><section class="dev-communities"><h4>L0VING COMMUNITIEs</h4><span><symbol></symbol></span><span><strong>CCS - CYBER CODE SYNDICATE</strong></span></section><section class="marquee"><div class="marquee__items"><span class="marquee__item">CYBERPUNK :: 0V3RCLOCKING HUDs :: CODEPUNK :: N3TRUNNER<sup>京</sup>.SH :: GLITCHING MY W0RLD :: RUN<sub>ネット</sub> :: NODE<sub>ターゲット</sub> :: BREAK<sub>ハック</sub> :: </span><span class="marquee__item">CYBERPUNK :: 0V3RCLOCKING HUDs :: CODEPUNK :: N3TRUNNER<sup>京</sup>.SH :: GLITCHING MY W0RLD :: RUN<sub>ネット</sub> :: NODE<sub>ターゲット</sub> :: BREAK<sub>ハック</sub> ::</span></div></section></div><div class="container-block"></div></div><div id="right-section"><div class="container-block page-loader"><pre>
+       ███
+██████ ███ ██████  ████         ████
+██████ ███ ██████  ███████      ████
+████   ███   ████  █████████    ████
+████         ████  ████  ███████████
+█████████████████  ████     ████████
+█████████████████  ████        █████
+          </pre><div class="page-loader__footer"><span>KYONAX © 2025</span></div></div><div class="container-block main-scroll-block"><h1>THIS IS THE MAIN CONTENT</h1><h1>THIS IS A TITLE</h1><h2>THIS IS A TITLE</h2><h3>THIS IS A TITLE</h3><h4>THIS IS A TITLE</h4><h5>THIS IS A TITLE</h5></div></div></div></body></html>
