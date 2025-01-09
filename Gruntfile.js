@@ -1,13 +1,14 @@
 const { FAVICON } = require("./src/app/constants/Data");
 
+// TODO: Fix the Favicon Issue by creating a Grunt Plugin - Favicon use ImageMagick, however
+// this version uses something call 'convert' a command deprecated by ImageMagick
+
 module.exports = function (grunt) {
   grunt.initConfig({
     favicons: {
       options: {
-        trueColor: true,
-        precomposed: false,
-        windowsTile: true,
-        tileBlackWhite: true,
+        debug: true,
+        windowsTile: false,
       },
       icons: {
         src: FAVICON.path,
