@@ -18,14 +18,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install Node Dependencies
         run: npm install
 
       - name: Build App
-        run: npm run generate-favicons
-
-      - name: Check Favicons
-        run: ls -la ./dist/favicons
+        run: npm run build-all
 
       - name: Push to build-dev
         uses: s0/git-publish-subdir-action@develop
