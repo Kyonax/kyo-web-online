@@ -16,6 +16,7 @@
  * Make sure this file is included in the main entry point of the application
  * (e.g., `index.js`) to apply global styles throughout the project.
  */
+@use "abstracts";
 @use "base";
 @use "layout";
 @use "components";

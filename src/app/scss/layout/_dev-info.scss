@@ -16,8 +16,8 @@
     span {
         padding-left: 0.25rem;
         padding-right: 0.25rem;
-        background-color: white;
-        color: black;
+        background-color: var(--clr-neutral-50);
+        color: var(--clr-neutral-500);
     }
 }
 
@@ -27,7 +27,7 @@
     left: 0px;
     right: 0px;
     margin-top: auto;
-    background-color: black;
+    background-color: var(--clr-neutral-500);
 }
 
 .dev-communities {
@@ -55,7 +55,7 @@
 
 .dev-profile {
     padding: 0.25rem;
-    border: 1px solid $border-color;
+    border: 1px solid var(--clr-border-100);
     width: min-content;
     left: 0px;
     right: 0px;
@@ -67,7 +67,7 @@
     height: 150px; // Adjust to your desired height
     overflow: hidden;
     position: relative; // Required for child absolute positioning
-    background-color: $border-color;
+    background-color: var(--clr-neutral-400);
 }
 
 .dev-img picture {
