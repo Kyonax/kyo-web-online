@@ -19,8 +19,8 @@
 @use "../abstracts/variables" as *;
 
 .marquee {
-  font-size: 10.5px;
-  line-height: 13.5px;
+  font-size: var(--fs-100);
+  line-height: var(--fs-300);
   background-color: var(--clr-primary-100);
   color: var(--clr-neutral-500);
   position: absolute;
