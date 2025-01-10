@@ -1,5 +1,5 @@
 {
-  "main.js": "/app/js/bundle-a5bbf62e5490b76d7336.js",
+  "main.js": "/app/js/bundle-91928c8b2e1e43604cad.js",
   "assets/kyonax_multiverse_characters-900.jpg": "/assets/kyonax_multiverse_characters-900.webp",
   "assets/kyonax_multiverse_characters.jpg": "/assets/kyonax_multiverse_characters.webp",
   "assets/ai_kyonax_landscape_background.jpg": "/assets/ai_kyonax_landscape_background.webp",
@@ -11,6 +11,6 @@
   "assets/fonts/SpaceMonoNerdFont-Bold.ttf": "/assets/fonts/SpaceMonoNerdFont-Bold.ttf",
   "assets/kyonax_multiverse_characters-100.jpg": "/assets/kyonax_multiverse_characters-100.webp",
   "index.html": "/index.html",
-  "bundle-js.map": "/app/js/bundle-a5bbf62e5490b76d7336.js.map",
+  "bundle-js.map": "/app/js/bundle-91928c8b2e1e43604cad.js.map",
   "icons": []
 }
