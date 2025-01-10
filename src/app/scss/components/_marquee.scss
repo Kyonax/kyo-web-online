@@ -19,8 +19,8 @@
 @use "../abstracts/variables" as *;
 
 .marquee {
-  font-size: var(--fs-100);
-  line-height: var(--fs-300);
+  font-size: var(--fs-200);
+  line-height: var(--fs-400);
   background-color: var(--clr-primary-100);
   color: var(--clr-neutral-500);
   position: absolute;
@@ -56,5 +56,12 @@
     100% {
       transform: translateX(-50%); // Ensure the animation completes right before resetting
     }
+  }
+
+  @include max-media-query(sm) {
+      .marquee {
+          font-size: var(--fs-100);
+          line-height: var(--fs-300);
+      }
   }
 }
