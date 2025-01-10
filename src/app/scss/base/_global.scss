@@ -28,8 +28,8 @@
  * for readability and accessibility.
  */
 body {
-    background-color: $body-bg-color;
-    color: $foreground-color;
+    background-color: var(--clr-neutral-500);
+    color: var(--clr-neutral-50);
     height: 100%;
     overflow: hidden; // Disable scrolling by default
 }
@@ -50,7 +50,7 @@ body {
 
 .container-block {
     position: relative;
-    border: 1px solid $border-color;
+    border: 1px solid var(--clr-border-100);
     padding: 0.36rem;
 }
 
