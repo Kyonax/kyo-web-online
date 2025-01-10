@@ -30,8 +30,6 @@
 body {
     background-color: var(--clr-neutral-500);
     color: var(--clr-neutral-50);
-    height: 100%;
-    overflow: hidden; // Disable scrolling by default
 }
 
 /**
@@ -42,7 +40,8 @@ body {
  * ensuring consistent spacing and alignment.
  */
 #main-container {
-    height: 93%;
+    overflow: hidden; // Disable scrolling by default
+    height: calc(var(--vh, 1vh) * 98);
     display: grid;
     grid-template-columns: min-content auto;
     column-gap: 0.5rem;
@@ -61,7 +60,7 @@ body {
 .main-scroll-block {
     display: block;
     overflow-y: auto;
-    max-height: 95vh; // Allow content to scroll if it overflows
+    height: auto;
 }
 
 /**
@@ -73,7 +72,9 @@ body {
  */
 #left-section,
 #right-section {
+    position: relative;
     display: grid;
+    height: calc(var(--vh, 1vh) * 98);
 }
 
 #left-section {
@@ -89,56 +90,29 @@ body {
  */
 
 /* Extra Small Devices (Portrait Phones, <576px) */
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
     body {
         overflow: auto; // Enable scrolling for small devices
     }
 
     #main-container {
+        height: auto;
+        overflow: auto;
         grid-template-columns: 1fr; // Stacks sections vertically
         gap: 0.25rem;
+        margin-bottom: 1rem;
     }
 
     #left-section,
     #right-section {
-        gap: 0.25rem;
+        height: auto;
+        gap: 0.5rem;
     }
 
-    .container-block {
-        padding: 0.25rem;
-    }
-
-    .main-scroll-block {
-        overflow-y: scroll; // Enable vertical scrolling on small devices
-        max-height: 100vh; // Allow the main scroll block to use full height
-    }
-}
-
-/* Small Devices (Landscape Phones, 576px and up) */
-@media (min-width: 576px) and (max-width: 767.98px) {
-    body {
-        overflow: auto; // Enable scrolling for small devices
-    }
-
-    #main-container {
-        grid-template-columns: 1fr 2fr; // Adjust column proportions
-    }
-
-    .container-block {
-        padding: 0.3rem;
-    }
-
-    .main-scroll-block {
-        overflow-y: scroll; // Enable vertical scrolling on small devices
-        max-height: 100vh; // Allow the main scroll block to use full height
-    }
 }
 
 /* Medium Devices (Tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-    body {
-        overflow: auto; // Enable scrolling for tablets
-    }
 
     #main-container {
         grid-template-columns: min-content auto; // Default layout
@@ -151,11 +125,6 @@ body {
     #left-section,
     #right-section {
         gap: 0.5rem;
-    }
-
-    .main-scroll-block {
-        overflow-y: scroll; // Enable vertical scrolling on tablets
-        max-height: 100vh; // Allow the main scroll block to use full height
     }
 }
 

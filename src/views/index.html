@@ -23,6 +23,16 @@
      <%= htmlWebpackPlugin.options.criticalCSS %>
     </style>
 
+    <script>
+     function setViewportHeight() {
+       const vh = window.innerHeight * 0.01;
+       document.documentElement.style.setProperty('--vh', `${vh}px`);
+     }
+
+     setViewportHeight();
+     window.addEventListener('resize', setViewportHeight);
+    </script>
+
     <!-- Favicons Injected by favicons-webpack-plugin -->
     <link
       rel="icon"
@@ -252,6 +262,26 @@
           <h1>THIS IS THE MAIN CONTENT</h1>
 
           <h1>THIS IS A TITLE</h1>
+          <h2>THIS IS A TITLE</h2>
+          <h3>THIS IS A TITLE</h3>
+          <h4>THIS IS A TITLE</h4>
+          <h5>THIS IS A TITLE</h5>
+          <h1>THIS IS A TITLE</h1>
+          <h1>THIS IS A TITLE</h1>
+          <h1>THIS IS A TITLE</h1>
+          <h1>THIS IS A TITLE</h1>
+          <h2>THIS IS A TITLE</h2>
+          <h3>THIS IS A TITLE</h3>
+          <h4>THIS IS A TITLE</h4>
+          <h5>THIS IS A TITLE</h5>
+          <h2>THIS IS A TITLE</h2>
+          <h3>THIS IS A TITLE</h3>
+          <h4>THIS IS A TITLE</h4>
+          <h5>THIS IS A TITLE</h5>
+          <h2>THIS IS A TITLE</h2>
+          <h3>THIS IS A TITLE</h3>
+          <h4>THIS IS A TITLE</h4>
+          <h5>THIS IS A TITLE</h5>
           <h2>THIS IS A TITLE</h2>
           <h3>THIS IS A TITLE</h3>
           <h4>THIS IS A TITLE</h4>
