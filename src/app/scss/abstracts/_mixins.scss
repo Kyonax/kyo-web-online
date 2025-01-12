@@ -68,7 +68,7 @@
  * @param {Boolean} $animated - Whether to add a subtle pulsing animation (default: true).
  */
 @mixin cyberpunk-glow(
-    $glow-color: hsl(47, 95%, 56%),
+    $glow-color: #ffffff,
     $blur: 15px,
     $spread: 5px,
     $animated: true
@@ -82,10 +82,10 @@
         @keyframes cyberpunk-pulse-#{$blur}-#{$spread} {
             0% {
                 box-shadow: 0 0 calc(#{$spread} / 2) calc(#{$blur} / 2)
-                    rgba($glow-color, 0.8);
+                    rgba($glow-color, 0.8) !important;
             }
             100% {
-                box-shadow: 0 0 #{$spread} #{$blur} rgba($glow-color, 0.5);
+                box-shadow: 0 0 #{$spread} #{$blur} rgba($glow-color, 0.5) !important;
             }
         }
     }
