@@ -11,6 +11,22 @@
     }
 }
 
+.flare-100 {
+    @include border-flare(var(--clr-border-100), 15s, 3px, 3s, 0.9);
+}
+
+.flare-300 {
+    @include border-flare(var(--clr-border-100), 15s, 3px, 6s, 0.9);
+}
+
+.flare-600 {
+    @include border-flare(var(--clr-border-100), 15s, 3px, 12s, 0.9);
+}
+
+.flare-900 {
+    @include border-flare(var(--clr-border-100), 15s, 3px, 24s, 0.9);
+}
+
 .dev-info,
 .dev-communities,
 .dev-tech {
@@ -93,6 +109,7 @@
 
 .contact-me {
     display: grid;
+    width: 100%;
     grid-template-columns: 1fr;
     padding: 0.25rem;
     gap: 1rem;
@@ -102,26 +119,40 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
 
-        span {
+        a {
+            cursor: pointer;
             display: flex;
             font-size: var(--fs-400);
             width: 100%;
             border: 1px solid var(--clr-border-100);
             justify-content: center;
             align-items: center;
+            text-decoration: none;
+            color: var(--clr-neutral-50);
+        }
+
+        a:hover {
+            background-color: var(--clr-border-100);
+            @include cyberpunk-glow(var(--clr-border-100), 1px, 9px, true);
         }
     }
 
     &__contact-btn {
+        cursor: pointer;
         display: flex;
         width: 100%;
         border: 1px solid var(--clr-border-100);
         justify-content: center;
         align-items: center;
     }
+
+    &__contact-btn:hover {
+        background-color: var(--clr-border-100);
+        @include cyberpunk-glow(var(--clr-border-100), 1px, 9px, true);
+    }
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
     .dev-tech .span-container {
         grid-template-columns: repeat(4, 1fr);
     }
