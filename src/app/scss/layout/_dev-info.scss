@@ -84,16 +84,41 @@
     object-fit: cover; // Ensures the image covers the area
 }
 
-.contact-me {
-    padding: 0.25rem;
+.parent-contact {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    span {
-        font-size: var(--fs-400);
-        padding: 0.25rem  0.5rem;
-        border: 1px solid var(--clr-border-100);
-        @include cyberpunk-glow(hsla(0, 0%, 100%, 0.15), 1px, 9px, true);
+.contact-me {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0.25rem;
+    gap: 1rem;
+
+    &__socials {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+
+        span {
+            display: flex;
+            font-size: var(--fs-400);
+            width: 100%;
+            border: 1px solid var(--clr-border-100);
+            justify-content: center;
+            align-items: center;
+        }
     }
 
+    &__contact-btn {
+        display: flex;
+        width: 100%;
+        border: 1px solid var(--clr-border-100);
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 @media (max-width: 575.98px) {
