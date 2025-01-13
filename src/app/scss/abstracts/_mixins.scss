@@ -90,3 +90,57 @@
         }
     }
 }
+
+
+@mixin border-flare($color: #ff00ff, $duration: 3s, $spread: 10px, $pause-duration: 2s, $base-opacity: 0.5) {
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: calc(-#{$spread} / 2);
+    left: calc(-#{$spread} / 2);
+    right: calc(-#{$spread} / 2);
+    bottom: calc(-#{$spread} / 2);
+    border: 2px solid transparent;
+    border-radius: inherit; // Match the parent element's border-radius
+    background: linear-gradient(90deg, transparent, $color, transparent);
+    background-size: 200% 200%; // Ensure the gradient spans enough to create a smooth animation
+    filter: blur(4px); // Apply glow effect
+    opacity: $base-opacity; // Set the initial opacity to the base opacity
+    z-index: -1;
+    animation: flare-breathe $duration linear infinite, flare-opacity $pause-duration ease-in-out infinite;
+  }
+
+  // Main animation for the flare movement
+  @keyframes flare-breathe {
+    0% {
+      background-position: 100% 0;
+    }
+    25% {
+      background-position: 0 100%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% 0;
+    }
+  }
+
+  // Opacity animation for the breathing effect
+  @keyframes flare-opacity {
+    0% {
+      opacity: 0; // Use the base opacity at the start
+    }
+    50% {
+      opacity: $base-opacity; // Fade out to 0%
+    }
+    100% {
+      opacity: 0; // Fade back to the base opacity
+    }
+  }
+}
