@@ -61,8 +61,8 @@ class BlastImage extends HTMLElement {
     const { imageName, attributes } = this.options;
 
     if (!imageName) {
-      console.error(ERROR_MSG.IMG_ATTRIBUTE_REQUIRED);
-      this.textContent = ERROR_MSG.IMG_ATTRIBUTE_MISSING;
+      console.error(ERROR_MSG.COMPONENT_ATTRIBUTE_REQUIRED("img", "blast-image"));
+      this.textContent = ERROR_MSG.COMPONENT_ATTRIBUTE_MISSING("img");
       return;
     }
 
@@ -100,9 +100,9 @@ class BlastImage extends HTMLElement {
 // Replace all `<blast-image>` elements when DOM is fully loaded
 const replaceAllBlastImages = () => {
   document
-    .querySelectorAll(CUSTOM_COMPONENT.FAST_IMG.name)
-    .forEach((fastImage) => {
-      fastImage.connectedCallback();
+    .querySelectorAll(CUSTOM_COMPONENT.BLAST_IMG.name)
+    .forEach((blastImage) => {
+      blastImage.connectedCallback();
     });
 };
 
@@ -110,4 +110,4 @@ const replaceAllBlastImages = () => {
 document.addEventListener("DOMContentLoaded", replaceAllBlastImages);
 
 // Define the custom element
-customElements.define(CUSTOM_COMPONENT.FAST_IMG.name, BlastImage);
+customElements.define(CUSTOM_COMPONENT.BLAST_IMG.name, BlastImage);

@@ -11,10 +11,13 @@
  */
 
 module.exports.ERROR_MSG = {
-  IMG_ATTRIBUTE_REQUIRED:
-    "Attribute 'img' is required on <blast-image> elements.",
-  IMG_ATTRIBUTE_MISSING: "Error: 'img' attribute missing.",
   IMGs_NOT_LOADED_YET: "Images not loaded yet. Initializing loadImages...",
+
+  COMPONENT_ATTRIBUTE_REQUIRED: (attributeName, componentName) =>
+    `Attribute '${attributeName}' is required on <${componentName}> component.`,
+
+  COMPONENT_ATTRIBUTE_MISSING: (attributeName) =>
+    `Error: '${attributeName}' attribute is missing.`,
 
   /**
    * Example dynamic error message with placeholders.

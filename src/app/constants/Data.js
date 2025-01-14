@@ -84,8 +84,11 @@ module.exports = {
 
   // Components Information
   CUSTOM_COMPONENT: {
-    FAST_IMG: {
+    BLAST_IMG: {
       name: "blast-image",
+    },
+    FLARE_ELEMENT: {
+      name: "flare-element",
     },
   },
 };
