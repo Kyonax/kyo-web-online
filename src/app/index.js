@@ -14,8 +14,9 @@
 // Import global styles
 import "@styling/main.scss";
 
-// Initialize custom elements
-import "@components/blastImage";
+// Initialize custom components
+import "@components/blast-image.component";
+import "@components/flare-element.component";
 
 // Preload image assets into memory for faster access
 import { loadImages } from "@utils/loadImages";
