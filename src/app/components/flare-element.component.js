@@ -1,6 +1,7 @@
 import { ERROR_MSG } from "@constants/Error";
 import { CUSTOM_COMPONENT } from "@constants/Data";
 
+// TODO: REMOVE CLASS
 class FlareElement extends HTMLElement {
   constructor() {
     super();
@@ -44,6 +45,3 @@ const initializeAllFlareElements = () => {
   })
 };
 
-document.addEventListener("DOMContentLoaded", initializeAllFlareElements);
-
-customElements.define(CUSTOM_COMPONENT.FLARE_ELEMENT.name, FlareElement);

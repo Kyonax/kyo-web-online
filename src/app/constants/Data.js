@@ -87,8 +87,8 @@ module.exports = {
     BLAST_IMG: {
       name: "blast-image",
     },
-    FLARE_ELEMENT: {
-      name: "flare-element",
+    CLASS_SCHEDULER_COMPONENT: {
+      name: "class-scheduler",
     },
   },
 };
