@@ -17,6 +17,7 @@ import "@styling/main.scss";
 // Initialize custom components
 import "@components/blast-image.component";
 import "@components/flare-element.component";
+import "@components/class-scheduler.component";
 
 // Preload image assets into memory for faster access
 import { loadImages } from "@utils/loadImages";

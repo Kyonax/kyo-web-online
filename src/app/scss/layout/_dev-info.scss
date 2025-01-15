@@ -119,7 +119,7 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
 
-        flare-element {
+        class-scheduler {
             cursor: pointer;
             display: flex;
             font-size: var(--fs-400);
@@ -131,7 +131,7 @@
             color: var(--clr-neutral-50);
         }
 
-        flare-element:hover {
+        class-scheduler:hover {
             background-color: var(--clr-border-100);
             @include cyberpunk-glow(var(--clr-border-100), 1px, 9px, true);
         }
