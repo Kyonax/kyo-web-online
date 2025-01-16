@@ -1,15 +1,35 @@
 <!doctype html>
 <html lang="en">
-  <!-- #    # #     # #######       #     # ####### ###### -->
-  <!-- #   #   #   #  #     #       #  #  # #       #     # -->
-  <!-- #  #     # #   #     #       #  #  # #       #     # -->
-  <!-- ###       #    #     # ##### #  #  # #####   ###### -->
-  <!-- #  #      #    #     #       #  #  # #       #     # -->
-  <!-- #   #     #    #     #       #  #  # #       #     # -->
-  <!-- #    #    #    #######        ## ##  ####### ###### -->
-  <!--     MY NAME IS KYONAX, BUT U JUST CALL ME KYO 京      -->
+  <!--
+       #    # #     # #######       #     # ####### ######
+       #   #   #   #  #     #       #  #  # #       #     #
+       #  #     # #   #     #       #  #  # #       #     #
+       ###       #    #     # ##### #  #  # #####   ######
+       #  #      #    #     #       #  #  # #       #     #
+       #   #     #    #     #       #  #  # #       #     #
+       #    #    #    #######        ## ##  ####### ######
+
+       MY NAME IS KYONAX, BUT U JUST CALL ME KYO 京
+  -->
 
   <head>
+    <!--
+         @file index.html - Main HTML File for the Application
+
+         This file defines the structural and semantic foundation of the web application.
+         It includes metadata, links to stylesheets, scripts, and essential content organization.
+
+         @description
+       - Metadata: Includes charset, viewport settings, description, and author information.
+       - Favicons: Links to various sizes and types of favicons for cross-platform compatibility.
+       - Open Graph/Twitter Meta Tags: Facilitates social sharing.
+       - Critical Styles: Inline critical CSS for performance optimization.
+       - JavaScript Functions: Contains viewport height adjustment logic.
+
+         @auth or Cristian Moreno (Kyonax)
+         @contact iamkyo@kyo.wtf
+         @since 2025-01-15
+    -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
@@ -24,136 +44,75 @@
     </style>
 
     <script>
+     /**
+      * @function setViewportHeight
+      * @description Adjusts the `--vh` custom property to reflect 1% of the viewport height.
+      * This is particularly useful for ensuring consistent layout behavior across devices,
+      * especially on mobile browsers where the visible height can change (e.g., when a virtual
+      * keyboard appears or disappears).
+      *
+      * @example
+      * // CSS Usage:
+      * // Set the height of an element to the full viewport height:
+      * // height: calc(var(--vh, 1vh) * 100);
+      *
+      * setViewportHeight(); // Initializes the custom property.
+      */
      function setViewportHeight() {
+       // Calculate 1% of the current viewport height.
        const vh = window.innerHeight * 0.01;
+
+       // Set the value as a custom property on the root element.
        document.documentElement.style.setProperty('--vh', `${vh}px`);
      }
 
+     // Initialize the custom property on page load.
      setViewportHeight();
+
+     /**
+      * Adjust the `--vh` custom property whenever the window is resized.
+      * This ensures that layout remains consistent when the viewport dimensions change.
+      */
      window.addEventListener('resize', setViewportHeight);
     </script>
 
-    <!-- Favicons Injected by favicons-webpack-plugin -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="./favicons/16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./favicons/32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="48x48"
-      href="./favicons/48x48.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="114x114"
-      href="./favicons/apple-touch-icon-114x114.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="120x120"
-      href="./favicons/apple-touch-icon-120x120-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="144x144"
-      href="./favicons/apple-touch-icon-144x144.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="152x152"
-      href="./favicons/apple-touch-icon-152x152-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="60x60"
-      href="./favicons/apple-touch-icon-60x60-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="72x72"
-      href="./favicons/apple-touch-icon-72x72.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="76x76"
-      href="./favicons/apple-touch-icon-76x76-precomposed.png"
-    />
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicons/16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicons/32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicons/48x48.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="./favicons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="./favicons/apple-touch-icon-120x120-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="./favicons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="./favicons/apple-touch-icon-152x152-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="./favicons/apple-touch-icon-60x60-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="./favicons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="./favicons/apple-touch-icon-76x76-precomposed.png" />
     <link rel="icon" type="image/x-icon" href="./favicons/favicon.ico" />
     <link rel="icon" type="image/png" href="./favicons/favicon.png" />
-    <meta
-      name="msapplication-TileColor"
-      content="<%= htmlWebpackPlugin.options.msapplication_tile_color %>"
-    />
-    <meta
-      name="msapplication-TileImage"
-      content="assets/icons/ms-icon-144x144.webp"
-    />
+    <meta name="msapplication-TileColor" content="<%= htmlWebpackPlugin.options.msapplication_tile_color %>" />
+    <meta name="msapplication-TileImage" content="assets/icons/ms-icon-144x144.webp" />
     <link rel="manifest" href="manifest.json" />
-    <meta
-      name="theme-color"
-      content="<%= htmlWebpackPlugin.options.theme_color %>"
-    />
+    <meta name="theme-color" content="<%= htmlWebpackPlugin.options.theme_color %>" />
 
-    <!-- Open Graph Meta Tags (for social media sharing) -->
-    <meta
-      property="og:title"
-      content="<%= htmlWebpackPlugin.options.og_title %>"
-    />
-    <meta
-      property="og:description"
-      content="<%= htmlWebpackPlugin.options.description %>"
-    />
-    <meta
-      property="og:image"
-      content="<%= htmlWebpackPlugin.options.website_banner %>"
-    />
-    <meta
-      property="og:url"
-      content="<%= htmlWebpackPlugin.options.website_url %>"
-    />
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="<%= htmlWebpackPlugin.options.og_title %>" />
+    <meta property="og:description" content="<%= htmlWebpackPlugin.options.description %>" />
+    <meta property="og:image" content="<%= htmlWebpackPlugin.options.website_banner %>" />
+    <meta property="og:url" content="<%= htmlWebpackPlugin.options.website_url %>" />
     <meta property="og:type" content="universe" />
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="<%= htmlWebpackPlugin.options.twitter_title %>"
-    />
-    <meta
-      name="twitter:description"
-      content="<%= htmlWebpackPlugin.options.description %>"
-    />
-    <meta
-      name="twitter:image"
-      content="<%= htmlWebpackPlugin.options.website_banner %>"
-    />
-    <meta
-      name="twitter:url"
-      content="<%= htmlWebpackPlugin.options.website_url %>"
-    />
+    <meta name="twitter:title" content="<%= htmlWebpackPlugin.options.twitter_title %>" />
+    <meta name="twitter:description" content="<%= htmlWebpackPlugin.options.description %>" />
+    <meta name="twitter:image" content="<%= htmlWebpackPlugin.options.website_banner %>" />
+    <meta name="twitter:url" content="<%= htmlWebpackPlugin.options.website_url %>" />
 
-    <!-- Web Configurations -->
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
 
   <body>
     <div id="main-container">
-      <!--
-           Left Section
-
-           @description
-           All the necessary information for
-           people to know what I do!
-      -->
       <div id="left-section">
         <div class="container-block">
           <section class="dev-info">
@@ -237,7 +196,7 @@
               <class-scheduler start="2000" classScheduled="flare-100" href="https://linkedin.com/in/kyonax" target="__blank">󰌻</class-scheduler>
               <class-scheduler start="3000" classScheduled="flare-100" href="https://x.com/kyonax_on_tech"></class-scheduler>
             </div>
-            <!-- TODO: Update Please this Fucking Name -->
+
             <class-scheduler start="4000" classScheduled="flare-100" class="contact-me__contact-btn">
               CONTACT ME
             </class-scheduler>
@@ -245,13 +204,7 @@
         </div>
       </div>
 
-      <!--
-           Main Section
-
-           @description
-           All the juicy content that I want
-           to show.
-      -->
+      <!-- Main Section -->
       <div id="right-section">
         <div class="container-block page-loader">
           <pre>
