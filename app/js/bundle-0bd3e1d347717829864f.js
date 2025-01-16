@@ -773,6 +773,15 @@ module.exports = __webpack_require__.p + "assets/fonts/SpaceMonoNerdFont-Regular
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "app/js/bundle-" + "a9c9c11e0b1df799a4f3" + ".js";
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -1116,72 +1125,6 @@ document.addEventListener("DOMContentLoaded", app_replaceAllBlastImages);
 
 // Define the custom element
 customElements.define(app_Data.CUSTOM_COMPONENT.BLAST_IMG.name, app_BlastImage);
-;// ./src/app/components/flare-element.component.js
-function app_flare_element_component_typeof(o) { "@babel/helpers - typeof"; return app_flare_element_component_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, app_flare_element_component_typeof(o); }
-function app_flare_element_component_classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
-function app_flare_element_component_defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, app_flare_element_component_toPropertyKey(o.key), o); } }
-function app_flare_element_component_createClass(e, r, t) { return r && app_flare_element_component_defineProperties(e.prototype, r), t && app_flare_element_component_defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
-function app_flare_element_component_toPropertyKey(t) { var i = app_flare_element_component_toPrimitive(t, "string"); return "symbol" == app_flare_element_component_typeof(i) ? i : i + ""; }
-function app_flare_element_component_toPrimitive(t, r) { if ("object" != app_flare_element_component_typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != app_flare_element_component_typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function app_flare_element_component_callSuper(t, o, e) { return o = app_flare_element_component_getPrototypeOf(o), app_flare_element_component_possibleConstructorReturn(t, app_flare_element_component_isNativeReflectConstruct() ? Reflect.construct(o, e || [], app_flare_element_component_getPrototypeOf(t).constructor) : o.apply(t, e)); }
-function app_flare_element_component_possibleConstructorReturn(t, e) { if (e && ("object" == app_flare_element_component_typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return app_flare_element_component_assertThisInitialized(t); }
-function app_flare_element_component_assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
-function app_flare_element_component_inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && app_flare_element_component_setPrototypeOf(t, e); }
-function app_flare_element_component_wrapNativeSuper(t) { var r = "function" == typeof Map ? new Map() : void 0; return app_flare_element_component_wrapNativeSuper = function _wrapNativeSuper(t) { if (null === t || !app_flare_element_component_isNativeFunction(t)) return t; if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function"); if (void 0 !== r) { if (r.has(t)) return r.get(t); r.set(t, Wrapper); } function Wrapper() { return app_flare_element_component_construct(t, arguments, app_flare_element_component_getPrototypeOf(this).constructor); } return Wrapper.prototype = Object.create(t.prototype, { constructor: { value: Wrapper, enumerable: !1, writable: !0, configurable: !0 } }), app_flare_element_component_setPrototypeOf(Wrapper, t); }, app_flare_element_component_wrapNativeSuper(t); }
-function app_flare_element_component_construct(t, e, r) { if (app_flare_element_component_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && app_flare_element_component_setPrototypeOf(p, r.prototype), p; }
-function app_flare_element_component_isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (app_flare_element_component_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
-function app_flare_element_component_isNativeFunction(t) { try { return -1 !== Function.toString.call(t).indexOf("[native code]"); } catch (n) { return "function" == typeof t; } }
-function app_flare_element_component_setPrototypeOf(t, e) { return app_flare_element_component_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, app_flare_element_component_setPrototypeOf(t, e); }
-function app_flare_element_component_getPrototypeOf(t) { return app_flare_element_component_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, app_flare_element_component_getPrototypeOf(t); }
-
-
-
-// TODO: REMOVE CLASS
-var app_FlareElement = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_HTMLElement) {
-  function FlareElement() {
-    var _this;
-    app_flare_element_component_classCallCheck(this, FlareElement);
-    _this = app_flare_element_component_callSuper(this, FlareElement);
-    _this.options = {
-      start: _this.getAttribute("start") || null,
-      element: _this || null,
-      flare: _this.getAttribute("flare") || null
-    };
-    return _this;
-  }
-  app_flare_element_component_inherits(FlareElement, _HTMLElement);
-  return app_flare_element_component_createClass(FlareElement, [{
-    key: "connectedCallback",
-    value: function connectedCallback() {
-      this.initializeFlareElement();
-    }
-  }, {
-    key: "initializeFlareElement",
-    value: function initializeFlareElement() {
-      var flareElement = this.options;
-      if (!flareElement.start) {
-        console.error(ERROR_MSG.COMPONENT_ATTRIBUTE_REQUIRED("start", "flare-element"));
-        this.textContent = ERROR_MSG.COMPONENT_ATTRIBUTE_MISSING("start");
-        return;
-      }
-      if (!flareElement.flare) {
-        console.error(ERROR_MSG.COMPONENT_ATTRIBUTE_REQUIRED("flare", "flare-element"));
-        this.textContent = ERROR_MSG.COMPONENT_ATTRIBUTE_MISSING("flare");
-        return;
-      }
-      // TODO: Improve Coding and Create Code Documentation
-      setTimeout(function () {
-        flareElement.element.classList.add(flareElement.flare);
-      }, flareElement.start);
-    }
-  }]);
-}(/*#__PURE__*/app_flare_element_component_wrapNativeSuper(HTMLElement))));
-var app_initializeAllFlareElements = function initializeAllFlareElements() {
-  document.querySelectorAll(CUSTOM_COMPONENT.FLARE_ELEMENT.name).forEach(function (flareElement) {
-    console.log("Querying: ", flareElement);
-    flareElement.connectedCallback();
-  });
-};
 ;// ./src/app/components/class-scheduler.component.js
 function app_class_scheduler_component_typeof(o) { "@babel/helpers - typeof"; return app_class_scheduler_component_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, app_class_scheduler_component_typeof(o); }
 function app_class_scheduler_component_classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
@@ -1199,46 +1142,110 @@ function app_class_scheduler_component_isNativeReflectConstruct() { try { var t 
 function app_class_scheduler_component_isNativeFunction(t) { try { return -1 !== Function.toString.call(t).indexOf("[native code]"); } catch (n) { return "function" == typeof t; } }
 function app_class_scheduler_component_setPrototypeOf(t, e) { return app_class_scheduler_component_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, app_class_scheduler_component_setPrototypeOf(t, e); }
 function app_class_scheduler_component_getPrototypeOf(t) { return app_class_scheduler_component_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, app_class_scheduler_component_getPrototypeOf(t); }
+/**
+ * @file ClassScheduler Component
+ *
+ * This file defines the `ClassScheduler` custom element, a web component used
+ * to schedule classes dynamically. It handles attributes to initialize scheduling,
+ * communicates with a web worker for background processing, and updates the DOM
+ * based on the worker's response.
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @since 2025-01-15
+ *
+ * @dependencies
+ * - ERROR_MSG from "@constants/Error"
+ * - CUSTOM_COMPONENT from "@constants/Data"
+ *
+ * @usage
+ * ```html
+ * <class-scheduler classScheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
+ * ```
+ */
 
 
 
-//TODO: Improve/Refine Class
 var app_ClassScheduler = /*#__PURE__*/function (_HTMLElement) {
   function ClassScheduler() {
     var _this;
     app_class_scheduler_component_classCallCheck(this, ClassScheduler);
     _this = app_class_scheduler_component_callSuper(this, ClassScheduler);
+
+    /**
+     * @property {Object} options - Component options extracted from attributes.
+     * @property {string|null} options.classScheduled - The class to schedule.
+     * @property {HTMLElement|null} options.component - Reference to the component itself.
+     * @property {string|null} options.start - The start time for scheduling.
+     */
     _this.options = {
       classScheduled: _this.getAttribute("classScheduled") || null,
       component: _this || null,
       start: _this.getAttribute("start") || null
     };
+
+    /**
+     * @property {Worker} worker - Web worker instance for background processing.
+     */
+    _this.worker = new Worker(new URL(/* worker import */ __webpack_require__.p + __webpack_require__.u(424), __webpack_require__.b));
+    _this.worker.onmessage = _this.handleWorkerMessage.bind(_this);
     return _this;
   }
+
+  /**
+   * Lifecycle method called when the component is added to the DOM.
+   */
   app_class_scheduler_component_inherits(ClassScheduler, _HTMLElement);
   return app_class_scheduler_component_createClass(ClassScheduler, [{
     key: "connectedCallback",
     value: function connectedCallback() {
       this.initializeScheduler();
     }
+
+    /**
+     * Initializes the scheduler by validating attributes and posting
+     * a message to the worker.
+     */
   }, {
     key: "initializeScheduler",
     value: function initializeScheduler() {
-      var _this2 = this;
-      var scheduler = this.options;
-      Object.keys(scheduler).forEach(function (attribute, value) {
-        if (!scheduler[attribute] && attribute !== "component") {
-          console.error(app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(attribute, app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name));
-          _this2.textContent = app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_MISSING(attribute);
-          return;
-        }
+      var _this$options = this.options,
+        classScheduled = _this$options.classScheduled,
+        start = _this$options.start;
+      if (!classScheduled || !start) {
+        console.error(app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(!classScheduled ? "classScheduled" : "start", app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name));
+        this.textContent = app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(!classScheduled ? "classScheduled" : "start");
+        return;
+      }
+      this.worker.postMessage({
+        classScheduled: classScheduled,
+        start: start
       });
-      setTimeout(function () {
-        scheduler.component.classList.add(scheduler.classScheduled);
-      }, scheduler.start);
+    }
+
+    /**
+     * Handles messages received from the worker.
+     *
+     * @param {MessageEvent} event - The message event from the worker.
+     */
+  }, {
+    key: "handleWorkerMessage",
+    value: function handleWorkerMessage(event) {
+      var _event$data = event.data,
+        classScheduled = _event$data.classScheduled,
+        error = _event$data.error;
+      if (error) {
+        console.error(error);
+        this.textContent = error;
+        return;
+      }
+      this.options.component.classList.add(classScheduled);
     }
   }]);
 }(/*#__PURE__*/app_class_scheduler_component_wrapNativeSuper(HTMLElement));
+/**
+ * Initializes all `ClassScheduler` components on the page.
+ */
 var app_initializeAllComponents = function initializeAllComponents() {
   document.querySelectorAll(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name).forEach(function (component) {
     component.connectedCallback();
@@ -1248,23 +1255,33 @@ document.addEventListener("DOMContentLoaded", app_initializeAllComponents);
 customElements.define(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name, app_ClassScheduler);
 ;// ./src/app/index.js
 /**
- * index.js - Entry Point for Application
+ * @file index.js - Entry Point for Application
+ *
+ * This file serves as the main entry point for the application. It initializes
+ * global styles, registers custom web components, and preloads image assets into
+ * memory to optimize site performance.
  *
  * @description
- * This file serves as the main entry point for the application, initializing styles,
- * custom components, and utilities. It ensures that images are preloaded into the cache
- * for efficient use across the site.
+ * - Loads the primary SCSS styles for the application.
+ * - Registers custom web components for enhanced UI functionality.
+ * - Preloads image assets to improve performance and user experience.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @since 2025-01-15
+ *
+ * @dependencies
+ * - SCSS file: @styling/main.scss
+ * - Custom components:
+ *   - @components/blast-image.component
+ *   - @components/class-scheduler.component
+ * - Utility: loadImages from @utils/loadImages
  */
 
 // Import global styles
 
 
 // Initialize custom components
-
 
 
 
@@ -1275,4 +1292,4 @@ app_loadImages();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle-b1ec001c800cb156f8a4.js.map
+//# sourceMappingURL=bundle-0bd3e1d347717829864f.js.map
