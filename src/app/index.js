@@ -30,5 +30,5 @@ import "@components/blast-image.component";
 import "@components/class-scheduler.component";
 
 // Preload image assets into memory for faster access
-import { loadImages } from "@utils/loadImages";
-loadImages();
+import { load_images } from "@utils/load-images.util";
+load_images();

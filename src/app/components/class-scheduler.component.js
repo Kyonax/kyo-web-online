@@ -16,7 +16,7 @@
  *
  * @usage
  * ```html
- * <class-scheduler classScheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
+ * <class-scheduler class-scheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
  * ```
  */
 
@@ -28,63 +28,81 @@ class ClassScheduler extends HTMLElement {
     super();
 
     /**
-     * @property {Object} options - Component options extracted from attributes.
-     * @property {string|null} options.classScheduled - The class to schedule.
-     * @property {HTMLElement|null} options.component - Reference to the component itself.
-     * @property {string|null} options.start - The start time for scheduling.
+     * Component options extracted from attributes.
+     *
+     * @property {Object} options - Configuration options for the `ClassScheduler` component.
+     * @property {string|null} options.class_scheduled - The class to be scheduled, derived from the `class_scheduled` attribute.
+     * @property {HTMLElement|null} options.component - Reference to the component instance.
+     * @property {string|null} options.start - The start time for scheduling, derived from the `start` attribute.
      */
     this.options = {
-      classScheduled: this.getAttribute("classScheduled") || null,
+      class_scheduled: this.getAttribute("class-scheduled") || null,
       component: this || null,
       start: this.getAttribute("start") || null,
     };
 
     /**
-     * @property {Worker} worker - Web worker instance for background processing.
+     * Web worker instance for handling background scheduling logic.
+     *
+     * @property {Worker} worker - Instance of the worker used for processing
+     * scheduling tasks asynchronously.
      */
     this.worker = new Worker(
       new URL("../workers/class-scheduler.worker.js", import.meta.url),
     );
-    this.worker.onmessage = this.handleWorkerMessage.bind(this);
+    this.worker.onmessage = this._handle_worker_message.bind(this);
   }
 
   /**
-   * Lifecycle method called when the component is added to the DOM.
+   * Lifecycle method triggered when the element is added to the DOM.
+   *
+   * @description
+   * Invokes the `initialize_scheduler` method to validate attributes and initiate
+   * the scheduling process.
    */
   connectedCallback() {
-    this.initializeScheduler();
+    this._initialize_scheduler();
   }
 
   /**
-   * Initializes the scheduler by validating attributes and posting
-   * a message to the worker.
+   * Initializes the scheduler by validating required attributes and posting
+   * the scheduling data to the web worker for background processing.
+   *
+   * @description
+   * Validates the presence of `class_scheduled` and `start` attributes.
+   * If validation passes, sends a message to the worker with the scheduling details.
    */
-  initializeScheduler() {
-    const { classScheduled, start } = this.options;
+  _initialize_scheduler() {
+    const { class_scheduled, start } = this.options;
 
-    if (!classScheduled || !start) {
+    if (!class_scheduled || !start) {
       console.error(
         ERROR_MSG.COMPONENT_ATTRIBUTE_REQUIRED(
-          !classScheduled ? "classScheduled" : "start",
+          !class_scheduled ? "class-scheduled" : "start",
           CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name,
         ),
       );
       this.textContent = ERROR_MSG.COMPONENT_ATTRIBUTE_REQUIRED(
-        !classScheduled ? "classScheduled" : "start",
+        !class_scheduled ? "class-scheduled" : "start",
       );
       return;
     }
 
-    this.worker.postMessage({ classScheduled, start });
+    this.worker.postMessage({ class_scheduled, start });
   }
 
   /**
-   * Handles messages received from the worker.
+   * Handles messages received from the web worker.
    *
-   * @param {MessageEvent} event - The message event from the worker.
+   * @param {MessageEvent} event - The message event object containing data from the worker.
+   *
+   * @description
+   * Processes the response from the worker, updating the DOM or handling errors as necessary.
+   * If the worker responds with an error, logs the error and displays it as text content.
+   * Otherwise, applies the scheduled class to the component.
    */
-  handleWorkerMessage(event) {
-    const { classScheduled, error } = event.data;
+  _handle_worker_message(event) {
+    const { class_scheduled, error } = event.data;
 
     if (error) {
       console.error(error);
@@ -92,14 +110,19 @@ class ClassScheduler extends HTMLElement {
       return;
     }
 
-    this.options.component.classList.add(classScheduled);
+    this.options.component.classList.add(class_scheduled);
   }
 }
 
 /**
- * Initializes all `ClassScheduler` components on the page.
+ * Initialize all `<class-scheduler>` elements in the DOM.
+ *
+ * @description
+ * Iterates through all instances of the `<class-scheduler>` element and invokes
+ * their `connectedCallback` method to set the setTimeOut() for the ClassScheduled
+ * of each element.
  */
-const initializeAllComponents = () => {
+const _initialize_all_components = () => {
   document
     .querySelectorAll(CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name)
     .forEach((component) => {
@@ -107,9 +130,5 @@ const initializeAllComponents = () => {
     });
 };
 
-document.addEventListener("DOMContentLoaded", initializeAllComponents);
-
-customElements.define(
-  CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name,
-  ClassScheduler,
-);
+document.addEventListener("DOMContentLoaded", _initialize_all_components);
+customElements.define(CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name, ClassScheduler);

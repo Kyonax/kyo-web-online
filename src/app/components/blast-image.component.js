@@ -1,27 +1,43 @@
 /**
- * Blast Image Component
+ * @file Blast Image Component
  *
- * @description
- * This file defines the `<blast-image>` custom element and replaces all instances
- * in the DOM with `<picture>` elements using metadata provided via the `img` attribute.
- * If additional attributes are present, they are applied to either the container or
- * the `<img>` element inside the `<picture>`. Handles error scenarios for missing or
- * invalid attributes.
+ * This file defines the `<blast-image>` custom element and its functionality.
+ * The component replaces instances of `<blast-image>` in the DOM with `<picture>`
+ * elements based on metadata provided via the `img` attribute. Additional attributes
+ * can be transferred to the `<picture>` element or its child `<img>` element.
  *
- * Dependencies:
- * - `getImageById` from `@utils/loadImages` for fetching pre-defined `<picture>` elements.
+ * Error scenarios are handled for missing or invalid attributes, ensuring robustness.
  *
- * Author: Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @dependencies
+ * - `get_image_by_id` from `@utils/loadImages`: Fetches pre-defined `<picture>` elements.
+ * - Constants from `@constants/Error` and `@constants/Data` for error handling and
+ *   custom component definitions.
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @since 2025-01-15
+
+ * @usage
+ * ```html
+ * <blast-image img="image_name"></blast-image>
+ * ```
  */
 
 // App Imports
-import { getImageById } from "@utils/loadImages";
+import { get_image_by_id } from "@utils/load-images.util";
 
 // Constant Files
 import { ERROR_MSG } from "@constants/Error";
 import { CUSTOM_COMPONENT } from "@constants/Data";
 
+/**
+ * Custom Element: BlastImage
+ *
+ * @description
+ * Defines the `<blast-image>` element to enhance image management and rendering.
+ * Replaces the element with a `<picture>` tag while transferring attributes and
+ * handling errors for missing or invalid configurations.
+ */
 class BlastImage extends HTMLElement {
   constructor() {
     super();
@@ -29,25 +45,24 @@ class BlastImage extends HTMLElement {
     /**
      * Default options for the `<blast-image>` component.
      *
-     * @description
-     * Stores configuration data for processing the `<blast-image>` element.
-     * Includes:
-     * - `imageName`: Name of the image to fetch (from `img` attribute).
-     * - `attributes`: Array of additional attributes to transfer.
+     * @property {Object} options - Component options extracted from attributes.
+     * @property {string|null} options.image_name - Name of the image to fetch from the `img` attribute.
+     * @property {Array} options.attributes - Additional attributes to transfer to the `<picture>` or `<img>`.
      */
     this.options = {
       attributes: Array.from(this.attributes).filter(
         (attr) => attr.name !== "img",
       ),
-      imageName: this.getAttribute("img") || null,
+      image_name: this.getAttribute("img") || null,
     };
   }
 
   /**
    * Lifecycle method triggered when the element is added to the DOM.
+   * Processes the `<blast-image>` element by invoking `_process_blast_image`.
    */
   connectedCallback() {
-    this.processBlastImage();
+    this._process_blast_image();
   }
 
   /**
@@ -56,17 +71,21 @@ class BlastImage extends HTMLElement {
    * @description
    * Fetches the image using the `img` attribute, transfers additional attributes,
    * and handles error cases if the image is not found.
+   *
+   * @throws
+   * Logs errors and displays fallback messages for missing `img` attributes
+   * or unfound image references.
    */
-  processBlastImage() {
-    const { imageName, attributes } = this.options;
+  _process_blast_image() {
+    const { image_name, attributes } = this.options;
 
-    if (!imageName) {
+    if (!image_name) {
       console.error(ERROR_MSG.COMPONENT_ATTRIBUTE_REQUIRED("img", "blast-image"));
       this.textContent = ERROR_MSG.COMPONENT_ATTRIBUTE_MISSING("img");
       return;
     }
 
-    const image = getImageById(imageName);
+    const image = get_image_by_id(image_name);
 
     if (image) {
       const picture = image.cloneNode(true);
@@ -91,23 +110,26 @@ class BlastImage extends HTMLElement {
         this.replaceWith(container);
       }
     } else {
-      console.error(ERROR_MSG.IMG_NAME_NOT_FOUND(imageName));
-      this.textContent = ERROR_MSG.IMG_NAME_NOT_FOUND(imageName);
+      console.error(ERROR_MSG.IMG_NAME_NOT_FOUND(image_name));
+      this.textContent = ERROR_MSG.IMG_NAME_NOT_FOUND(image_name);
     }
   }
 }
 
-// Replace all `<blast-image>` elements when DOM is fully loaded
-const replaceAllBlastImages = () => {
+/**
+ * Replaces all `<blast-image>` elements in the DOM with `<picture>` elements.
+ *
+ * @description
+ * Iterates through all instances of the `<blast-image>` element and invokes
+ * their `connectedCallback` method to replace them with the appropriate `<picture>` tags.
+ */
+const _replace_all_blast_images = () => {
   document
     .querySelectorAll(CUSTOM_COMPONENT.BLAST_IMG.name)
-    .forEach((blastImage) => {
-      blastImage.connectedCallback();
+    .forEach((blast_image) => {
+      blast_image.connectedCallback();
     });
 };
 
-// Run the replacement function after the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", replaceAllBlastImages);
-
-// Define the custom element
+document.addEventListener("DOMContentLoaded", _replace_all_blast_images);
 customElements.define(CUSTOM_COMPONENT.BLAST_IMG.name, BlastImage);

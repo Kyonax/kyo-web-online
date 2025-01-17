@@ -1,17 +1,36 @@
 /**
- * Webpack Configuration File
+ * @file webpack.config.js - WebpackConfiguration
  *
- * @description
- * Webpack setup for bundling JavaScript, compiling SCSS to CSS, and injecting the bundled files
- * into the HTML template using HtmlWebpackPlugin. Includes development server settings,
- * source maps, and image optimization (with WebP support, excluding SVGs).
+ * The main configuration for bundling and optimizing assets for the kyo-cv-website.
+ * This setup does everything from compiling JavaScript to optimizing images.
  *
- * It also loads metadata from the constants file for dynamic HTML generation (SEO, OG tags, etc.).
+ * Nodev20.17.0
  *
- * Author: Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-16
+ *
+ * Code Guidelines :: @CCSv0.1
+ * - Indentation: Tabs are mandatory—stay sharp, no spaces.
+ * - Naming Conventions:
+ *   - snake_case for variables and methods.
+ *   - for private methods _private_method() (underscore first).
+ *   - UPPER_SNAKE_CASE for constants in your constants files.
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Descriptive Names: Make names meaningful—fetch_user_data() over doThing().
+ *
+ * @dependencies
+ * - CleanWebpackPlugin from "clean-webpack-plugin"
+ * - WebpackManifestPlugin from "webpack-manifest-plugin"
+ * - HtmlWebpackPlugin from "html-webpack-plugin"
+ * - ImageMinimizerPlugin from "image-minimizer-webpack-plugin"
+ * - path from "path"
+ * - fs from "fs"
+ *
+ * @usage
+ * Run this file with Webpack’s build command. This is how the project
+ * gets compiled and optimized.
  */
-
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
