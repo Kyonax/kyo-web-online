@@ -778,7 +778,7 @@ module.exports = __webpack_require__.p + "assets/fonts/SpaceMonoNerdFont-Regular
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "app/js/bundle-" + "a9c9c11e0b1df799a4f3" + ".js";
+/******/ 			return "app/js/bundle-" + "b694f741f7551db4ec9b" + ".js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -908,7 +908,7 @@ var app_update = app_injectStylesIntoStyleTag_default()(app_main/* default */.A,
 
 // EXTERNAL MODULE: ./src/app/constants/Error.js
 var app_Error = __webpack_require__(270);
-;// ./src/app/utils/loadImages.js
+;// ./src/app/utils/load-images.util.js
 /**
  * loadImages.js - Utility for Loading and Retrieving Images
  *
@@ -927,7 +927,7 @@ var app_Error = __webpack_require__(270);
 
 
 // Cached images store
-var app_imagesCache = null;
+var app_images_cache = null;
 
 /**
  * Loads images from the assets folder into memory and prepares `<picture>` elements.
@@ -938,39 +938,39 @@ var app_imagesCache = null;
  *
  * @returns {Object} - A collection of image IDs mapped to their `<picture>` elements.
  */
-var app_loadImages = function loadImages() {
-  if (app_imagesCache) {
+var app_load_images = function load_images() {
+  if (app_images_cache) {
     console.log("Using cached images.");
-    return app_imagesCache;
+    return app_images_cache;
   }
-  var imagesContext = __webpack_require__(718);
+  var _images_context = __webpack_require__(718);
   var images = {}; // Store `<picture>` elements by ID
   var variants = {}; // Store image variants for responsive `srcset`
-  var sortedImages = imagesContext.keys().sort(); // Sort image paths for consistency
+  var sorted_images = _images_context.keys().sort(); // Sort image paths for consistency
 
-  sortedImages.forEach(function (imagePath) {
-    var baseImagePath = imagePath.replace(/\.(png|jpe?g|gif|webp)$/, ""); // Remove extension
-    var imageId = baseImagePath.split("/").pop(); // Extract image ID
-    var variantMatch = imagePath.match(/-\d+/g); // Detect variant numbering
+  sorted_images.forEach(function (image_path) {
+    var base_image_path = image_path.replace(/\.(png|jpe?g|gif|webp)$/, ""); // Remove extension
+    var image_id = base_image_path.split("/").pop(); // Extract image ID
+    var variant_match = image_path.match(/-\d+/g); // Detect variant numbering
 
-    if (variantMatch) {
+    if (variant_match) {
       // Process variant images
-      var originalId = imageId.replace(variantMatch.join(","), ""); // Base ID without variant
-      variants[originalId] = variants[originalId] || [];
-      variants[originalId].push(imagePath); // Store variant for later processing
+      var original_id = image_id.replace(variant_match.join(","), ""); // Base ID without variant
+      variants[original_id] = variants[original_id] || [];
+      variants[original_id].push(image_path); // Store variant for later processing
       return; // Skip main processing for variants
     }
-    var webpSrcSet = variants[imageId] ? variants[imageId].map(function (variant) {
+    var webp_src_set = variants[image_id] ? variants[image_id].map(function (variant) {
       return "/assets/".concat(variant.replace(/\.(png|jpe?g|gif|webp)$/, ""), ".webp ").concat(variant.match(/\d+/g), "w");
-    }).join(", ") : "/assets/".concat(baseImagePath, ".webp");
-    var fallbackSrc = imagesContext(imagePath); // Fallback image path
+    }).join(", ") : "/assets/".concat(base_image_path, ".webp");
+    var fallback_src = _images_context(image_path); // Fallback image path
 
-    var pictureHTML = "\n      <picture id=\"".concat(imageId, "\">\n        <source type=\"image/webp\" srcset=\"").concat(webpSrcSet, "\">\n        <img src=\"").concat(fallbackSrc, "\" alt=\"").concat(imageId, "\">\n      </picture>\n    ");
+    var picture_html = "\n      <picture id=\"".concat(image_id, "\">\n        <source type=\"image/webp\" srcset=\"").concat(webp_src_set, "\">\n        <img src=\"").concat(fallback_src, "\" alt=\"").concat(image_id, "\">\n      </picture>\n    ");
     var template = document.createElement("template");
-    template.innerHTML = pictureHTML.trim();
-    images[imageId] = template.content.firstChild; // Add `<picture>` to collection
+    template.innerHTML = picture_html.trim();
+    images[image_id] = template.content.firstChild; // Add `<picture>` to collection
   });
-  app_imagesCache = images; // Cache the loaded images
+  app_images_cache = images; // Cache the loaded images
   return images;
 };
 
@@ -984,12 +984,12 @@ var app_loadImages = function loadImages() {
  * @param {string} id - The unique ID of the image (filename without extension).
  * @returns {HTMLElement|null} - The corresponding `<picture>` element or `null` if not found.
  */
-var app_getImageById = function getImageById(id) {
-  if (!app_imagesCache) {
+var app_get_image_by_id = function get_image_by_id(id) {
+  if (!app_images_cache) {
     console.warn(app_Error/* ERROR_MSG */.D.IMGs_NOT_LOADED_YET);
-    app_loadImages(); // Load images if not already cached
+    app_load_images(); // Load images if not already cached
   }
-  return app_imagesCache ? app_imagesCache[id] : null;
+  return app_images_cache ? app_images_cache[id] : null;
 };
 
 // EXTERNAL MODULE: ./src/app/constants/Data.js
@@ -1012,20 +1012,28 @@ function app_isNativeFunction(t) { try { return -1 !== Function.toString.call(t)
 function app_setPrototypeOf(t, e) { return app_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, app_setPrototypeOf(t, e); }
 function app_getPrototypeOf(t) { return app_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, app_getPrototypeOf(t); }
 /**
- * Blast Image Component
+ * @file Blast Image Component
  *
- * @description
- * This file defines the `<blast-image>` custom element and replaces all instances
- * in the DOM with `<picture>` elements using metadata provided via the `img` attribute.
- * If additional attributes are present, they are applied to either the container or
- * the `<img>` element inside the `<picture>`. Handles error scenarios for missing or
- * invalid attributes.
+ * This file defines the `<blast-image>` custom element and its functionality.
+ * The component replaces instances of `<blast-image>` in the DOM with `<picture>`
+ * elements based on metadata provided via the `img` attribute. Additional attributes
+ * can be transferred to the `<picture>` element or its child `<img>` element.
  *
- * Dependencies:
- * - `getImageById` from `@utils/loadImages` for fetching pre-defined `<picture>` elements.
+ * Error scenarios are handled for missing or invalid attributes, ensuring robustness.
  *
- * Author: Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @dependencies
+ * - `get_image_by_id` from `@utils/loadImages`: Fetches pre-defined `<picture>` elements.
+ * - Constants from `@constants/Error` and `@constants/Data` for error handling and
+ *   custom component definitions.
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @since 2025-01-15
+
+ * @usage
+ * ```html
+ * <blast-image img="image_name"></blast-image>
+ * ```
  */
 
 // App Imports
@@ -1034,6 +1042,15 @@ function app_getPrototypeOf(t) { return app_getPrototypeOf = Object.setPrototype
 // Constant Files
 
 
+
+/**
+ * Custom Element: BlastImage
+ *
+ * @description
+ * Defines the `<blast-image>` element to enhance image management and rendering.
+ * Replaces the element with a `<picture>` tag while transferring attributes and
+ * handling errors for missing or invalid configurations.
+ */
 var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
   function BlastImage() {
     var _this;
@@ -1043,29 +1060,28 @@ var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
     /**
      * Default options for the `<blast-image>` component.
      *
-     * @description
-     * Stores configuration data for processing the `<blast-image>` element.
-     * Includes:
-     * - `imageName`: Name of the image to fetch (from `img` attribute).
-     * - `attributes`: Array of additional attributes to transfer.
+     * @property {Object} options - Component options extracted from attributes.
+     * @property {string|null} options.image_name - Name of the image to fetch from the `img` attribute.
+     * @property {Array} options.attributes - Additional attributes to transfer to the `<picture>` or `<img>`.
      */
     _this.options = {
       attributes: Array.from(_this.attributes).filter(function (attr) {
         return attr.name !== "img";
       }),
-      imageName: _this.getAttribute("img") || null
+      image_name: _this.getAttribute("img") || null
     };
     return _this;
   }
 
   /**
    * Lifecycle method triggered when the element is added to the DOM.
+   * Processes the `<blast-image>` element by invoking `_process_blast_image`.
    */
   app_inherits(BlastImage, _HTMLElement);
   return app_createClass(BlastImage, [{
     key: "connectedCallback",
     value: function connectedCallback() {
-      this.processBlastImage();
+      this._process_blast_image();
     }
 
     /**
@@ -1074,19 +1090,23 @@ var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
      * @description
      * Fetches the image using the `img` attribute, transfers additional attributes,
      * and handles error cases if the image is not found.
+     *
+     * @throws
+     * Logs errors and displays fallback messages for missing `img` attributes
+     * or unfound image references.
      */
   }, {
-    key: "processBlastImage",
-    value: function processBlastImage() {
+    key: "_process_blast_image",
+    value: function _process_blast_image() {
       var _this$options = this.options,
-        imageName = _this$options.imageName,
+        image_name = _this$options.image_name,
         attributes = _this$options.attributes;
-      if (!imageName) {
+      if (!image_name) {
         console.error(app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED("img", "blast-image"));
         this.textContent = app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_MISSING("img");
         return;
       }
-      var image = app_getImageById(imageName);
+      var image = app_get_image_by_id(image_name);
       if (image) {
         var picture = image.cloneNode(true);
         var container = attributes.some(function (attr) {
@@ -1108,22 +1128,25 @@ var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
           this.replaceWith(container);
         }
       } else {
-        console.error(app_Error/* ERROR_MSG */.D.IMG_NAME_NOT_FOUND(imageName));
-        this.textContent = app_Error/* ERROR_MSG */.D.IMG_NAME_NOT_FOUND(imageName);
+        console.error(app_Error/* ERROR_MSG */.D.IMG_NAME_NOT_FOUND(image_name));
+        this.textContent = app_Error/* ERROR_MSG */.D.IMG_NAME_NOT_FOUND(image_name);
       }
     }
   }]);
-}(/*#__PURE__*/app_wrapNativeSuper(HTMLElement)); // Replace all `<blast-image>` elements when DOM is fully loaded
-var app_replaceAllBlastImages = function replaceAllBlastImages() {
-  document.querySelectorAll(app_Data.CUSTOM_COMPONENT.BLAST_IMG.name).forEach(function (blastImage) {
-    blastImage.connectedCallback();
+}(/*#__PURE__*/app_wrapNativeSuper(HTMLElement));
+/**
+ * Replaces all `<blast-image>` elements in the DOM with `<picture>` elements.
+ *
+ * @description
+ * Iterates through all instances of the `<blast-image>` element and invokes
+ * their `connectedCallback` method to replace them with the appropriate `<picture>` tags.
+ */
+var app_replace_all_blast_images = function _replace_all_blast_images() {
+  document.querySelectorAll(app_Data.CUSTOM_COMPONENT.BLAST_IMG.name).forEach(function (blast_image) {
+    blast_image.connectedCallback();
   });
 };
-
-// Run the replacement function after the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", app_replaceAllBlastImages);
-
-// Define the custom element
+document.addEventListener("DOMContentLoaded", app_replace_all_blast_images);
 customElements.define(app_Data.CUSTOM_COMPONENT.BLAST_IMG.name, app_BlastImage);
 ;// ./src/app/components/class-scheduler.component.js
 function app_class_scheduler_component_typeof(o) { "@babel/helpers - typeof"; return app_class_scheduler_component_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, app_class_scheduler_component_typeof(o); }
@@ -1160,7 +1183,7 @@ function app_class_scheduler_component_getPrototypeOf(t) { return app_class_sche
  *
  * @usage
  * ```html
- * <class-scheduler classScheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
+ * <class-scheduler class-scheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
  * ```
  */
 
@@ -1173,85 +1196,108 @@ var app_ClassScheduler = /*#__PURE__*/function (_HTMLElement) {
     _this = app_class_scheduler_component_callSuper(this, ClassScheduler);
 
     /**
-     * @property {Object} options - Component options extracted from attributes.
-     * @property {string|null} options.classScheduled - The class to schedule.
-     * @property {HTMLElement|null} options.component - Reference to the component itself.
-     * @property {string|null} options.start - The start time for scheduling.
+     * Component options extracted from attributes.
+     *
+     * @property {Object} options - Configuration options for the `ClassScheduler` component.
+     * @property {string|null} options.class_scheduled - The class to be scheduled, derived from the `class_scheduled` attribute.
+     * @property {HTMLElement|null} options.component - Reference to the component instance.
+     * @property {string|null} options.start - The start time for scheduling, derived from the `start` attribute.
      */
     _this.options = {
-      classScheduled: _this.getAttribute("classScheduled") || null,
+      class_scheduled: _this.getAttribute("class-scheduled") || null,
       component: _this || null,
       start: _this.getAttribute("start") || null
     };
 
     /**
-     * @property {Worker} worker - Web worker instance for background processing.
+     * Web worker instance for handling background scheduling logic.
+     *
+     * @property {Worker} worker - Instance of the worker used for processing
+     * scheduling tasks asynchronously.
      */
     _this.worker = new Worker(new URL(/* worker import */ __webpack_require__.p + __webpack_require__.u(424), __webpack_require__.b));
-    _this.worker.onmessage = _this.handleWorkerMessage.bind(_this);
+    _this.worker.onmessage = _this._handle_worker_message.bind(_this);
     return _this;
   }
 
   /**
-   * Lifecycle method called when the component is added to the DOM.
+   * Lifecycle method triggered when the element is added to the DOM.
+   *
+   * @description
+   * Invokes the `initialize_scheduler` method to validate attributes and initiate
+   * the scheduling process.
    */
   app_class_scheduler_component_inherits(ClassScheduler, _HTMLElement);
   return app_class_scheduler_component_createClass(ClassScheduler, [{
     key: "connectedCallback",
     value: function connectedCallback() {
-      this.initializeScheduler();
+      this._initialize_scheduler();
     }
 
     /**
-     * Initializes the scheduler by validating attributes and posting
-     * a message to the worker.
+     * Initializes the scheduler by validating required attributes and posting
+     * the scheduling data to the web worker for background processing.
+     *
+     * @description
+     * Validates the presence of `class_scheduled` and `start` attributes.
+     * If validation passes, sends a message to the worker with the scheduling details.
      */
   }, {
-    key: "initializeScheduler",
-    value: function initializeScheduler() {
+    key: "_initialize_scheduler",
+    value: function _initialize_scheduler() {
       var _this$options = this.options,
-        classScheduled = _this$options.classScheduled,
+        class_scheduled = _this$options.class_scheduled,
         start = _this$options.start;
-      if (!classScheduled || !start) {
-        console.error(app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(!classScheduled ? "classScheduled" : "start", app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name));
-        this.textContent = app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(!classScheduled ? "classScheduled" : "start");
+      if (!class_scheduled || !start) {
+        console.error(app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(!class_scheduled ? "class-scheduled" : "start", app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name));
+        this.textContent = app_Error/* ERROR_MSG */.D.COMPONENT_ATTRIBUTE_REQUIRED(!class_scheduled ? "class-scheduled" : "start");
         return;
       }
       this.worker.postMessage({
-        classScheduled: classScheduled,
+        class_scheduled: class_scheduled,
         start: start
       });
     }
 
     /**
-     * Handles messages received from the worker.
+     * Handles messages received from the web worker.
      *
-     * @param {MessageEvent} event - The message event from the worker.
+     * @param {MessageEvent} event - The message event object containing data from the worker.
+     *
+     * @description
+     * Processes the response from the worker, updating the DOM or handling errors as necessary.
+     * If the worker responds with an error, logs the error and displays it as text content.
+     * Otherwise, applies the scheduled class to the component.
      */
   }, {
-    key: "handleWorkerMessage",
-    value: function handleWorkerMessage(event) {
+    key: "_handle_worker_message",
+    value: function _handle_worker_message(event) {
       var _event$data = event.data,
-        classScheduled = _event$data.classScheduled,
+        class_scheduled = _event$data.class_scheduled,
         error = _event$data.error;
       if (error) {
         console.error(error);
         this.textContent = error;
         return;
       }
-      this.options.component.classList.add(classScheduled);
+      this.options.component.classList.add(class_scheduled);
     }
   }]);
 }(/*#__PURE__*/app_class_scheduler_component_wrapNativeSuper(HTMLElement));
 /**
- * Initializes all `ClassScheduler` components on the page.
+ * Initialize all `<class-scheduler>` elements in the DOM.
+ *
+ * @description
+ * Iterates through all instances of the `<class-scheduler>` element and invokes
+ * their `connectedCallback` method to set the setTimeOut() for the ClassScheduled
+ * of each element.
  */
-var app_initializeAllComponents = function initializeAllComponents() {
+var app_initialize_all_components = function _initialize_all_components() {
   document.querySelectorAll(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name).forEach(function (component) {
     component.connectedCallback();
   });
 };
-document.addEventListener("DOMContentLoaded", app_initializeAllComponents);
+document.addEventListener("DOMContentLoaded", app_initialize_all_components);
 customElements.define(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name, app_ClassScheduler);
 ;// ./src/app/index.js
 /**
@@ -1287,9 +1333,9 @@ customElements.define(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name, 
 
 // Preload image assets into memory for faster access
 
-app_loadImages();
+app_load_images();
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle-0bd3e1d347717829864f.js.map
+//# sourceMappingURL=bundle-843e4290b170446d9225.js.map
