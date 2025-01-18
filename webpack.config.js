@@ -1,23 +1,29 @@
 /**
- * @file webpack.config.js - WebpackConfiguration
+ * @file webpack.config.js - WebpackConfig
  *
- * The main configuration for bundling and optimizing assets for the kyo-cv-website.
- * This setup does everything from compiling JavaScript to optimizing images.
+ * This file contains the main Webpack configuration for bundling and optimizing
+ * assets for the Kyo CV website. It handles everything from compiling JavaScript
+ * and CSS, to optimizing images, fonts, and generating favicons. This setup ensures
+ * that all assets are optimized for both development and production environments.
  *
- * Nodev20.17.0
+ * node.js-v20.17.0
  *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @date 2025-01-16
+ * @date 2025-01-17
  *
  * Code Guidelines :: @CCSv0.1
- * - Indentation: Tabs are mandatory—stay sharp, no spaces.
- * - Naming Conventions:
- *   - snake_case for variables and methods.
- *   - for private methods _private_method() (underscore first).
- *   - UPPER_SNAKE_CASE for constants in your constants files.
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
  *   - kebab-case for file names (e.g., file-example.js).
- * - Descriptive Names: Make names meaningful—fetch_user_data() over doThing().
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
  *
  * @dependencies
  * - CleanWebpackPlugin from "clean-webpack-plugin"
@@ -26,10 +32,13 @@
  * - ImageMinimizerPlugin from "image-minimizer-webpack-plugin"
  * - path from "path"
  * - fs from "fs"
+ * - Constants from "./src/app/constants/Data"
  *
  * @usage
- * Run this file with Webpack’s build command. This is how the project
- * gets compiled and optimized.
+ * This Webpack configuration is executed via the following npm commands:
+ * - `npm run build`: This command bundles and optimizes the assets for production, including JavaScript, CSS, and images.
+ * - `npm run dev`: This command starts the development server with hot-reloading and live-reloading capabilities for a smooth development experience.
+ * - `npm run build-all`: Runs the full build process, which includes bundling the assets and generating favicons and manifests.
  */
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
@@ -38,7 +47,6 @@ const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const path = require("path");
 const fs = require("fs");
 
-// Import configuration constants from Data.js
 const {
   AUTHOR_INFO,
   SEO,
@@ -49,27 +57,33 @@ const {
   APP_DESCRIPTION,
 } = require("./src/app/constants/Data");
 
-const getCriticalCSS = () => {
-  const criticalCSSPath = path.resolve(__dirname, "src/app/critical.css");
+/**
+ * Fetch Critical CSS
+ *
+ * Retrieves the critical CSS content for the HTML index file.
+ * The critical CSS is intended to be used in the HTML <style> tag to improve
+ * page load performance by initially loading only the essential CSS.
+ *
+ * @returns {string} The contents of the critical CSS file, or
+ * an empty string if an error occurs while reading the file.
+ *
+ * @throws {Error} Throws an error if the critical CSS file cannot
+ * be found or read.
+ */
+const fetch_critical_css = () => {
+  const critical_css_path = path.resolve(__dirname, "src/app/critical.css");
   try {
-    return fs.readFileSync(criticalCSSPath, "utf8");
+    return fs.readFileSync(critical_css_path, "utf8");
   } catch (err) {
     console.error(
-      `Failed to read critical CSS file at ${criticalCSSPath}:`,
+      `Failed to read critical CSS file at ${critical_css_path}:`,
       err,
     );
-    return ""; // Fallback to an empty string if the file is not found
+    return "";
   }
 };
 
 module.exports = {
-  /**
-   * Development server
-   *
-   * @description
-   * Configures the Webpack Dev Server to serve files from the "dist" directory.
-   * Includes hot reloading, live reload, and support for single-page applications.
-   */
   devServer: {
     compress: true,
     historyApiFallback: true,
@@ -85,7 +99,6 @@ module.exports = {
   /**
    * Source maps
    *
-   * @description
    * Enables source maps for easier debugging during development.
    * Maps bundled code to original source files for error tracing.
    */
@@ -94,7 +107,6 @@ module.exports = {
   /**
    * Entry point for the application
    *
-   * @description
    * Specifies the main JavaScript file to start the bundling process.
    * Webpack will begin from this file and include any dependencies.
    */
@@ -103,7 +115,6 @@ module.exports = {
   /**
    * Build mode
    *
-   * @description
    * Defines the mode of the build process. Options are "development" or "production".
    * Development mode enables debugging features like source maps.
    */
@@ -112,7 +123,6 @@ module.exports = {
   /**
    * Module rules
    *
-   * @description
    * Defines rules for handling various file types, including SCSS, JavaScript, and images.
    * Excludes SVG files from WebP conversion.
    */
@@ -182,7 +192,6 @@ module.exports = {
   /**
    * Optimization settings
    *
-   * @description
    * Configures optimization steps, including image compression for PNG, JPEG, and WebP formats
    * while excluding SVG files from being converted to WebP.
    */
@@ -206,7 +215,6 @@ module.exports = {
   /**
    * Output configuration
    *
-   * @description
    * Defines the output location and filename format for the generated files.
    * Ensures clean builds and organizes assets in structured directories.
    */
@@ -219,7 +227,6 @@ module.exports = {
   /**
    * Plugins
    *
-   * @description
    * Defines plugins to extend Webpack's functionality. Includes:
    * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template
    *   and uses dynamic metadata from constants.
@@ -239,7 +246,7 @@ module.exports = {
       theme_color: THEME_SETTINGS.primaryColor,
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
-      criticalCSS: getCriticalCSS(),
+      criticalCSS: fetch_critical_css(),
     }),
     // Only apply CleanWebpackPlugin in production mode
     ...(process.env.NODE_ENV === "production"
@@ -278,7 +285,6 @@ module.exports = {
   /**
    * Resolve configuration
    *
-   * @description
    * Adds path aliases for cleaner imports.
    */
   resolve: {
