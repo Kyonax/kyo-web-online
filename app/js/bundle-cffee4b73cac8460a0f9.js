@@ -5,15 +5,34 @@
 /***/ ((module) => {
 
 /**
- * Data.js - Global Constants for Application
+ * @file Data.js - Data
  *
- * @description
  * This file contains all the global constants used throughout the application.
- * These constants are critical for SEO, social media, and general configuration of the website.
+ * These constants are critical for SEO, social media, and
+ * general configuration of the website.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.17.0
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-17
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @usage
+ * This file should be called on this way:
+ * - const { CONSTANTs } = require('path-to-this-file.constant.js')
  */
 
 module.exports = {
@@ -1338,4 +1357,4 @@ app_load_images();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle-843e4290b170446d9225.js.map
+//# sourceMappingURL=bundle-cffee4b73cac8460a0f9.js.map
