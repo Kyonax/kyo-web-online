@@ -1,34 +1,41 @@
 /**
- * @file index.js - Entry Point for Application
+ * @file index.js - AppIndex
  *
  * This file serves as the main entry point for the application. It initializes
  * global styles, registers custom web components, and preloads image assets into
  * memory to optimize site performance.
  *
- * @description
- * - Loads the primary SCSS styles for the application.
- * - Registers custom web components for enhanced UI functionality.
- * - Preloads image assets to improve performance and user experience.
+ * node.js-v20.18.1
  *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
  *
  * @dependencies
- * - SCSS file: @styling/main.scss
- * - Custom components:
- *   - @components/blast-image.component
- *   - @components/class-scheduler.component
- * - Utility: loadImages from @utils/loadImages
+ * - load_images from "@utils/load-images.util"
+ *
+ * @usage
+ * Include this file as the entry point in the Webpack configuration to
+ * ensure the application is properly initialized during build and runtime.
  */
-
-// Import global styles
 import "@styling/main.scss";
 
-// Initialize custom components
 import "@components/blast-image.component";
 import "@components/class-scheduler.component";
 
-// Preload image assets into memory for faster access
 import { load_images } from "@utils/load-images.util";
+
 load_images();

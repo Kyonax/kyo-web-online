@@ -1,15 +1,32 @@
 /**
- * Error.js - Application Error Constants
+ * @file Error.js - ErrorConstant
  *
- * @description
  * This file holds all error messages that are used across the application. It ensures consistency
  * when handling error messages related to various features or operations.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.18.1
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @usage
+ * This file should be called on this way:
+ * - const { CONSTANTs } = require('path-to-this-file.constant.js')
  */
-
 module.exports.ERROR_MSG = {
   IMGs_NOT_LOADED_YET: "Images not loaded yet. Initializing loadImages...",
 

@@ -1,27 +1,47 @@
 /**
- * loadImages.js - Utility for Loading and Retrieving Images
+ * @file load-images.util.js - LoadImages
  *
- * @description
- * Handles the loading of image assets from a predefined folder and caches them
- * for efficient reuse across the application. Provides methods to retrieve
- * `<picture>` elements by their unique IDs, supporting WebP and fallback formats.
+ * Manages the loading and caching of image assets from a predefined folder.
+ * It supports loading WebP and fallback formats, and allows retrieval of
+ * `<picture>` elements by their unique image IDs for efficient reuse across
+ * the application.
  *
- * Supports variant images, automatically creating `srcset` attributes for responsive design.
+ * node.js-v20.18.1
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - ERROR_MSG from "@constants/Error"
+ *
+ * @usage
+ * Import and call `load_images()` to preload and cache images from the assets folder.
+ * Use `get_image_by_id(id)` to retrieve a `<picture>` element by its unique image ID
+ * after images are loaded.
  */
-
 import { ERROR_MSG } from "@constants/Error";
 
 // Cached images store
 let images_cache = null;
 
 /**
- * Loads images from the assets folder into memory and prepares `<picture>` elements.
+ * Load Images
  *
- * @description
+ * Loads images from the assets folder into memory and prepares `<picture>` elements.
  * Processes images in the specified folder, identifying WebP and fallback formats,
  * and creates an object keyed by image IDs for efficient access.
  *
@@ -29,7 +49,7 @@ let images_cache = null;
  */
 const load_images = () => {
   if (images_cache) {
-    console.log("Using cached images.");
+    console.log("ƛ :: IMAGE CACHE SUCCESSFULLY LOADED - ", images_cache);
     return images_cache;
   }
 
@@ -84,6 +104,8 @@ const load_images = () => {
 };
 
 /**
+ * Get Image By ID
+ *
  * Retrieves a `<picture>` element by its unique image ID.
  *
  * @description
