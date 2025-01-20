@@ -1,25 +1,37 @@
 /**
- * @file ClassScheduler Component
+ * @file class-scheduler.component.js - ClassSchedulerComponent
  *
  * This file defines the `ClassScheduler` custom element, a web component used
  * to schedule classes dynamically. It handles attributes to initialize scheduling,
  * communicates with a web worker for background processing, and updates the DOM
  * based on the worker's response.
  *
+ * node.js-v20.18.1
+ *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
  *
  * @dependencies
  * - ERROR_MSG from "@constants/Error"
  * - CUSTOM_COMPONENT from "@constants/Data"
  *
  * @usage
- * ```html
  * <class-scheduler class-scheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
- * ```
  */
-
 import { ERROR_MSG } from "@constants/Error";
 import { CUSTOM_COMPONENT } from "@constants/Data";
 
@@ -65,12 +77,15 @@ class ClassScheduler extends HTMLElement {
   }
 
   /**
+   * _Initialize Scheduler
+   *
    * Initializes the scheduler by validating required attributes and posting
    * the scheduling data to the web worker for background processing.
    *
-   * @description
    * Validates the presence of `class_scheduled` and `start` attributes.
    * If validation passes, sends a message to the worker with the scheduling details.
+   *
+   * @return {void}
    */
   _initialize_scheduler() {
     const { class_scheduled, start } = this.options;
@@ -92,14 +107,17 @@ class ClassScheduler extends HTMLElement {
   }
 
   /**
+   * _Handle Worker Message
+   *
    * Handles messages received from the web worker.
    *
-   * @param {MessageEvent} event - The message event object containing data from the worker.
-   *
-   * @description
    * Processes the response from the worker, updating the DOM or handling errors as necessary.
    * If the worker responds with an error, logs the error and displays it as text content.
    * Otherwise, applies the scheduled class to the component.
+   *
+   * @param {MessageEvent} event - The message event object containing data from the worker.
+   *
+   * @return {void}
    */
   _handle_worker_message(event) {
     const { class_scheduled, error } = event.data;
@@ -115,12 +133,15 @@ class ClassScheduler extends HTMLElement {
 }
 
 /**
+ * _Initialize All Components
+ *
  * Initialize all `<class-scheduler>` elements in the DOM.
  *
- * @description
  * Iterates through all instances of the `<class-scheduler>` element and invokes
  * their `connectedCallback` method to set the setTimeOut() for the ClassScheduled
  * of each element.
+ *
+ * @return {void}
  */
 const _initialize_all_components = () => {
   document

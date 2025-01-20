@@ -1,5 +1,5 @@
 /**
- * @file Blast Image Component
+ * @file blast-image.component.js - BlastImageComponent
  *
  * This file defines the `<blast-image>` custom element and its functionality.
  * The component replaces instances of `<blast-image>` in the DOM with `<picture>`
@@ -8,36 +8,38 @@
  *
  * Error scenarios are handled for missing or invalid attributes, ensuring robustness.
  *
- * @dependencies
- * - `get_image_by_id` from `@utils/loadImages`: Fetches pre-defined `<picture>` elements.
- * - Constants from `@constants/Error` and `@constants/Data` for error handling and
- *   custom component definitions.
+ * node.js-v20.18.1
  *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
-
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - get_image_by_id from "@utils/load-images.util"
+ * - ERROR_MSG from "@constants/Error"
+ * - CUSTOM_COMPONENT from "@constants/Data"
+ *
  * @usage
- * ```html
  * <blast-image img="image_name"></blast-image>
- * ```
  */
-
-// App Imports
 import { get_image_by_id } from "@utils/load-images.util";
 
-// Constant Files
 import { ERROR_MSG } from "@constants/Error";
 import { CUSTOM_COMPONENT } from "@constants/Data";
 
-/**
- * Custom Element: BlastImage
- *
- * @description
- * Defines the `<blast-image>` element to enhance image management and rendering.
- * Replaces the element with a `<picture>` tag while transferring attributes and
- * handling errors for missing or invalid configurations.
- */
 class BlastImage extends HTMLElement {
   constructor() {
     super();
@@ -66,9 +68,10 @@ class BlastImage extends HTMLElement {
   }
 
   /**
+   * _Process Blast Image
+   *
    * Processes a single `<blast-image>` element by replacing it with a `<picture>` element.
    *
-   * @description
    * Fetches the image using the `img` attribute, transfers additional attributes,
    * and handles error cases if the image is not found.
    *
@@ -117,6 +120,8 @@ class BlastImage extends HTMLElement {
 }
 
 /**
+ * _Replace All Blast Images
+ *
  * Replaces all `<blast-image>` elements in the DOM with `<picture>` elements.
  *
  * @description

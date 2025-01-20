@@ -28,7 +28,6 @@
  * This file should be called on this way:
  * - const { CONSTANTs } = require('path-to-this-file.constant.js')
  */
-
 module.exports = {
   // General Application Info
   APP_NAME: "Kyo's Personal Website", // The name of the application
