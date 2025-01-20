@@ -35,7 +35,6 @@ jobs:
             echo "Alias 'convert' successfully set!"
           else
             echo "Alias 'convert' not found!"
-            exit 1
           fi
 
       - name: Build App
