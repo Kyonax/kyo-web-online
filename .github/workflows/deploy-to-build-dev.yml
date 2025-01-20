@@ -13,6 +13,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup ImageMagick
+        uses: mfinelli/setup-imagemagick@v6.0.0
+
+      - name: Set up ImageMagick alias
+        run: |
+          echo "alias convert='magick convert'" >> ~/.bashrc
+          source ~/.bashrc
+
+      - name: Verify the alias
+        run: |
+          if alias convert &>/dev/null; then
+            echo "Alias 'convert' successfully set!"
+          else
+            echo "Alias 'convert' not found!"
+            exit 1
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
