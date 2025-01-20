@@ -24,19 +24,6 @@ jobs:
       - name: Install ImageMagick
         run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Set up ImageMagick alias
-        run: |
-          echo "alias convert='magick convert'" >> ~/.bashrc
-          source ~/.bashrc
-
-      - name: Verify the alias
-        run: |
-          if alias convert &>/dev/null; then
-            echo "Alias 'convert' successfully set!"
-          else
-            echo "Alias 'convert' not found!"
-          fi
-
       - name: Build App
         run: npm run build-all
 
