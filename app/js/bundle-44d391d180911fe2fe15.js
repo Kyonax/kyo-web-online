@@ -34,7 +34,6 @@
  * This file should be called on this way:
  * - const { CONSTANTs } = require('path-to-this-file.constant.js')
  */
-
 module.exports = {
   // General Application Info
   APP_NAME: "Kyo's Personal Website",
@@ -155,17 +154,34 @@ module.exports = {
 /***/ ((module) => {
 
 /**
- * Error.js - Application Error Constants
+ * @file Error.js - ErrorConstant
  *
- * @description
  * This file holds all error messages that are used across the application. It ensures consistency
  * when handling error messages related to various features or operations.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.18.1
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @usage
+ * This file should be called on this way:
+ * - const { CONSTANTs } = require('path-to-this-file.constant.js')
  */
-
 module.exports.D = {
   IMGs_NOT_LOADED_YET: "Images not loaded yet. Initializing loadImages...",
   COMPONENT_ATTRIBUTE_REQUIRED: function COMPONENT_ATTRIBUTE_REQUIRED(attributeName, componentName) {
@@ -797,7 +813,7 @@ module.exports = __webpack_require__.p + "assets/fonts/SpaceMonoNerdFont-Regular
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "app/js/bundle-" + "b694f741f7551db4ec9b" + ".js";
+/******/ 			return "app/js/bundle-" + "0b6005e6c1a79ea7f66f" + ".js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -929,29 +945,49 @@ var app_update = app_injectStylesIntoStyleTag_default()(app_main/* default */.A,
 var app_Error = __webpack_require__(270);
 ;// ./src/app/utils/load-images.util.js
 /**
- * loadImages.js - Utility for Loading and Retrieving Images
+ * @file load-images.util.js - LoadImages
  *
- * @description
- * Handles the loading of image assets from a predefined folder and caches them
- * for efficient reuse across the application. Provides methods to retrieve
- * `<picture>` elements by their unique IDs, supporting WebP and fallback formats.
+ * Manages the loading and caching of image assets from a predefined folder.
+ * It supports loading WebP and fallback formats, and allows retrieval of
+ * `<picture>` elements by their unique image IDs for efficient reuse across
+ * the application.
  *
- * Supports variant images, automatically creating `srcset` attributes for responsive design.
+ * node.js-v20.18.1
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - ERROR_MSG from "@constants/Error"
+ *
+ * @usage
+ * Import and call `load_images()` to preload and cache images from the assets folder.
+ * Use `get_image_by_id(id)` to retrieve a `<picture>` element by its unique image ID
+ * after images are loaded.
  */
-
 
 
 // Cached images store
 var app_images_cache = null;
 
 /**
- * Loads images from the assets folder into memory and prepares `<picture>` elements.
+ * Load Images
  *
- * @description
+ * Loads images from the assets folder into memory and prepares `<picture>` elements.
  * Processes images in the specified folder, identifying WebP and fallback formats,
  * and creates an object keyed by image IDs for efficient access.
  *
@@ -959,7 +995,7 @@ var app_images_cache = null;
  */
 var app_load_images = function load_images() {
   if (app_images_cache) {
-    console.log("Using cached images.");
+    console.log("ƛ :: IMAGE CACHE SUCCESSFULLY LOADED - ", app_images_cache);
     return app_images_cache;
   }
   var _images_context = __webpack_require__(718);
@@ -994,6 +1030,8 @@ var app_load_images = function load_images() {
 };
 
 /**
+ * Get Image By ID
+ *
  * Retrieves a `<picture>` element by its unique image ID.
  *
  * @description
@@ -1031,7 +1069,7 @@ function app_isNativeFunction(t) { try { return -1 !== Function.toString.call(t)
 function app_setPrototypeOf(t, e) { return app_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, app_setPrototypeOf(t, e); }
 function app_getPrototypeOf(t) { return app_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, app_getPrototypeOf(t); }
 /**
- * @file Blast Image Component
+ * @file blast-image.component.js - BlastImageComponent
  *
  * This file defines the `<blast-image>` custom element and its functionality.
  * The component replaces instances of `<blast-image>` in the DOM with `<picture>`
@@ -1040,36 +1078,36 @@ function app_getPrototypeOf(t) { return app_getPrototypeOf = Object.setPrototype
  *
  * Error scenarios are handled for missing or invalid attributes, ensuring robustness.
  *
- * @dependencies
- * - `get_image_by_id` from `@utils/loadImages`: Fetches pre-defined `<picture>` elements.
- * - Constants from `@constants/Error` and `@constants/Data` for error handling and
- *   custom component definitions.
+ * node.js-v20.18.1
  *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
-
- * @usage
- * ```html
- * <blast-image img="image_name"></blast-image>
- * ```
- */
-
-// App Imports
-
-
-// Constant Files
-
-
-
-/**
- * Custom Element: BlastImage
+ * @date 2025-01-19
  *
- * @description
- * Defines the `<blast-image>` element to enhance image management and rendering.
- * Replaces the element with a `<picture>` tag while transferring attributes and
- * handling errors for missing or invalid configurations.
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - get_image_by_id from "@utils/load-images.util"
+ * - ERROR_MSG from "@constants/Error"
+ * - CUSTOM_COMPONENT from "@constants/Data"
+ *
+ * @usage
+ * <blast-image img="image_name"></blast-image>
  */
+
+
+
 var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
   function BlastImage() {
     var _this;
@@ -1104,9 +1142,10 @@ var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
     }
 
     /**
+     * _Process Blast Image
+     *
      * Processes a single `<blast-image>` element by replacing it with a `<picture>` element.
      *
-     * @description
      * Fetches the image using the `img` attribute, transfers additional attributes,
      * and handles error cases if the image is not found.
      *
@@ -1154,6 +1193,8 @@ var app_BlastImage = /*#__PURE__*/function (_HTMLElement) {
   }]);
 }(/*#__PURE__*/app_wrapNativeSuper(HTMLElement));
 /**
+ * _Replace All Blast Images
+ *
  * Replaces all `<blast-image>` elements in the DOM with `<picture>` elements.
  *
  * @description
@@ -1185,27 +1226,39 @@ function app_class_scheduler_component_isNativeFunction(t) { try { return -1 !==
 function app_class_scheduler_component_setPrototypeOf(t, e) { return app_class_scheduler_component_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, app_class_scheduler_component_setPrototypeOf(t, e); }
 function app_class_scheduler_component_getPrototypeOf(t) { return app_class_scheduler_component_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, app_class_scheduler_component_getPrototypeOf(t); }
 /**
- * @file ClassScheduler Component
+ * @file class-scheduler.component.js - ClassSchedulerComponent
  *
  * This file defines the `ClassScheduler` custom element, a web component used
  * to schedule classes dynamically. It handles attributes to initialize scheduling,
  * communicates with a web worker for background processing, and updates the DOM
  * based on the worker's response.
  *
+ * node.js-v20.18.1
+ *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
  *
  * @dependencies
  * - ERROR_MSG from "@constants/Error"
  * - CUSTOM_COMPONENT from "@constants/Data"
  *
  * @usage
- * ```html
  * <class-scheduler class-scheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
- * ```
  */
-
 
 
 var app_ClassScheduler = /*#__PURE__*/function (_HTMLElement) {
@@ -1254,12 +1307,15 @@ var app_ClassScheduler = /*#__PURE__*/function (_HTMLElement) {
     }
 
     /**
+     * _Initialize Scheduler
+     *
      * Initializes the scheduler by validating required attributes and posting
      * the scheduling data to the web worker for background processing.
      *
-     * @description
      * Validates the presence of `class_scheduled` and `start` attributes.
      * If validation passes, sends a message to the worker with the scheduling details.
+     *
+     * @return {void}
      */
   }, {
     key: "_initialize_scheduler",
@@ -1279,14 +1335,17 @@ var app_ClassScheduler = /*#__PURE__*/function (_HTMLElement) {
     }
 
     /**
+     * _Handle Worker Message
+     *
      * Handles messages received from the web worker.
      *
-     * @param {MessageEvent} event - The message event object containing data from the worker.
-     *
-     * @description
      * Processes the response from the worker, updating the DOM or handling errors as necessary.
      * If the worker responds with an error, logs the error and displays it as text content.
      * Otherwise, applies the scheduled class to the component.
+     *
+     * @param {MessageEvent} event - The message event object containing data from the worker.
+     *
+     * @return {void}
      */
   }, {
     key: "_handle_worker_message",
@@ -1304,12 +1363,15 @@ var app_ClassScheduler = /*#__PURE__*/function (_HTMLElement) {
   }]);
 }(/*#__PURE__*/app_class_scheduler_component_wrapNativeSuper(HTMLElement));
 /**
+ * _Initialize All Components
+ *
  * Initialize all `<class-scheduler>` elements in the DOM.
  *
- * @description
  * Iterates through all instances of the `<class-scheduler>` element and invokes
  * their `connectedCallback` method to set the setTimeOut() for the ClassScheduled
  * of each element.
+ *
+ * @return {void}
  */
 var app_initialize_all_components = function _initialize_all_components() {
   document.querySelectorAll(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name).forEach(function (component) {
@@ -1320,41 +1382,45 @@ document.addEventListener("DOMContentLoaded", app_initialize_all_components);
 customElements.define(app_Data.CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name, app_ClassScheduler);
 ;// ./src/app/index.js
 /**
- * @file index.js - Entry Point for Application
+ * @file index.js - AppIndex
  *
  * This file serves as the main entry point for the application. It initializes
  * global styles, registers custom web components, and preloads image assets into
  * memory to optimize site performance.
  *
- * @description
- * - Loads the primary SCSS styles for the application.
- * - Registers custom web components for enhanced UI functionality.
- * - Preloads image assets to improve performance and user experience.
+ * node.js-v20.18.1
  *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
  *
  * @dependencies
- * - SCSS file: @styling/main.scss
- * - Custom components:
- *   - @components/blast-image.component
- *   - @components/class-scheduler.component
- * - Utility: loadImages from @utils/loadImages
+ * - load_images from "@utils/load-images.util"
+ *
+ * @usage
+ * Include this file as the entry point in the Webpack configuration to
+ * ensure the application is properly initialized during build and runtime.
  */
 
-// Import global styles
 
 
-// Initialize custom components
-
-
-
-// Preload image assets into memory for faster access
 
 app_load_images();
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle-cffee4b73cac8460a0f9.js.map
+//# sourceMappingURL=bundle-44d391d180911fe2fe15.js.map
