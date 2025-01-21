@@ -1,3 +1,31 @@
+/**
+ * @file critical.css - Critical
+ *
+ * All the Critical CSS that will be injected on the
+ * index.html page on the tag <style> of the file
+ * focus to just load the most Critical CSS.
+ *
+ * node.js-v20.17.0
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-21
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @usage
+ * This is used by Webpack to inject the Code in the index.html
+ * file.
+ */
 body {
     background-color: #111111;
     color: #111111;

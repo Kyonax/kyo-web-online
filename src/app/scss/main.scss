@@ -1,5 +1,5 @@
 /**
- * @file main.scss - Central Stylesheet for the Application
+ * @file main.scss - Main
  *
  * This file serves as the primary stylesheet for the application, consolidating
  * all global styles, utility classes, and foundational design elements. It imports
@@ -7,29 +7,33 @@
  * configurations, and component-specific styles. The structure ensures consistency,
  * scalability, and maintainability as the application evolves.
  *
- * @description
- * - Abstracts: Variables, mixins, and functions for reusable design patterns.
- * - Base: Reset and base styles for foundational elements (e.g., typography, body).
- * - Layout: Layout utilities and grid configurations for flexible positioning.
- * - Components: Styles for reusable components to maintain modularity.
+ * node.js-v20.17.0
  *
  * @author Cristian Moreno (Kyonax)
  * @contact iamkyo@kyo.wtf
- * @since 2025-01-15
+ * @date 2025-01-21
  *
- * @note
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - Using "abstracts";
+ * - Using "base";
+ * - Using "layout";
+ * - Using "components";
+ *
+ * @usage
  * This file must be imported into the main entry point of the application
  * (e.g., `index.js`) to apply global styles across the project.
- *
- * @structure
- * The following partials are imported in this order:
- * 1. Abstracts: For design tokens (variables, mixins, and functions).
- * 2. Base: For global resets and typography.
- * 3. Layout: For layout utilities and grid settings.
- * 4. Components: For component-level styles.
  */
-
-/* Importing SCSS partials */
 @use "abstracts";
 @use "base";
 @use "layout";
