@@ -20,11 +20,11 @@
 }
 
 .flare-600 {
-    @include border-flare(var(--clr-border-100), 15s, 3px, 12s, 0.9);
+    @include border-flare(var(--clr-neutral-100), 15s, 3px, 12s, 0.9);
 }
 
 .flare-900 {
-    @include border-flare(var(--clr-border-100), 15s, 3px, 24s, 0.9);
+    @include border-flare(var(--clr-primary-100), 15s, 3px, 24s, 0.9);
 }
 
 .dev-info,
@@ -32,7 +32,7 @@
 .dev-tech {
     span {
         padding-left: 0.25rem;
-        padding-right: 0.25rem;
+        padding-right: 0.5rem;
         background-color: var(--clr-neutral-50);
         color: var(--clr-neutral-500);
     }

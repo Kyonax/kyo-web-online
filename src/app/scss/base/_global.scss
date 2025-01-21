@@ -1,20 +1,44 @@
 /**
- * _global.scss - Global Styles for the Application
+ * @file _global.scss - Global
  *
- * @description
  * This file defines global styles, including layout, typography, and
  * accessibility. It also sets default scrollbar styles and applies
  * variables from `_variables.scss` for consistent design throughout the app.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.17.0
  *
- * @note
- * Import this file into `main.scss` to apply these global styles across
- * the application.
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-21
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - Using * from "../abstracts/variables"
+ *
+ * @usage
+ * This file will be imported from index.js aside
  */
 @use "../abstracts/variables" as *;
+
+/**
+ * Class Testing
+ *
+ * DescriptionOfStyle
+ */
+class-testing{
+
+};
+
 
 * {
     scrollbar-width: thin;
@@ -108,12 +132,10 @@ body {
         height: auto;
         gap: 0.5rem;
     }
-
 }
 
 /* Medium Devices (Tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-
     #main-container {
         grid-template-columns: min-content auto; // Default layout
     }
