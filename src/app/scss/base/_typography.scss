@@ -18,18 +18,38 @@
 @use "../abstracts/mixins";
 
 // Define SpaceMono fonts
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Regular", 400, normal);
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Bold", 700, normal);
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-Italic", 400, italic);
-@include mixins.font-face("SpaceMono", "SpaceMono/SpaceMonoNerdFont-BoldItalic", 700, italic);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-Regular",
+    400,
+    normal
+);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-Bold",
+    700,
+    normal
+);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-Italic",
+    400,
+    italic
+);
+@include mixins.font-face(
+    "SpaceMono",
+    "SpaceMono/SpaceMonoNerdFont-BoldItalic",
+    700,
+    italic
+);
 
 // Global typography settings
 html {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 body {
-    font-family: 'SpaceMono', 'Roboto Mono', 'Courier New', Courier, monospace;
+    font-family: "SpaceMono", "Roboto Mono", "Courier New", Courier, monospace;
     font-display: swap;
     font-size: var(--fs-300);
     line-height: var(--fs-500);
