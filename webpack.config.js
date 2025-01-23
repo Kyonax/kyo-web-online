@@ -1,24 +1,52 @@
 /**
- * Webpack Configuration File
+ * @file webpack.config.js - WebpackConfig
  *
- * @description
- * Webpack setup for bundling JavaScript, compiling SCSS to CSS, and injecting the bundled files
- * into the HTML template using HtmlWebpackPlugin. Includes development server settings,
- * source maps, and image optimization (with WebP support, excluding SVGs).
+ * This file contains the main Webpack configuration for bundling and optimizing
+ * assets for the Kyo CV website. It handles everything from compiling JavaScript
+ * and CSS, to optimizing images, fonts, and generating favicons. This setup ensures
+ * that all assets are optimized for both development and production environments.
  *
- * It also loads metadata from the constants file for dynamic HTML generation (SEO, OG tags, etc.).
+ * node.js-v20.17.0
  *
- * Author: Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-17
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - CleanWebpackPlugin from "clean-webpack-plugin"
+ * - WebpackManifestPlugin from "webpack-manifest-plugin"
+ * - HtmlWebpackPlugin from "html-webpack-plugin"
+ * - ImageMinimizerPlugin from "image-minimizer-webpack-plugin"
+ * - path from "path"
+ * - fs from "fs"
+ * - Constants from "./src/app/constants/Data"
+ *
+ * @usage
+ * This Webpack configuration is executed via the following npm commands:
+ * - `npm run build`: This command bundles and optimizes the assets for production, including JavaScript, CSS, and images.
+ * - `npm run dev`: This command starts the development server with hot-reloading and live-reloading capabilities for a smooth development experience.
+ * - `npm run build-all`: Runs the full build process, which includes bundling the assets and generating favicons and manifests.
  */
-
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const path = require("path");
-const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const fs = require("fs");
 
-// Import configuration constants from Data.js
 const {
   AUTHOR_INFO,
   SEO,
@@ -29,14 +57,33 @@ const {
   APP_DESCRIPTION,
 } = require("./src/app/constants/Data");
 
+/**
+ * Fetch Critical CSS
+ *
+ * Retrieves the critical CSS content for the HTML index file.
+ * The critical CSS is intended to be used in the HTML <style> tag to improve
+ * page load performance by initially loading only the essential CSS.
+ *
+ * @returns {string} The contents of the critical CSS file, or
+ * an empty string if an error occurs while reading the file.
+ *
+ * @throws {Error} Throws an error if the critical CSS file cannot
+ * be found or read.
+ */
+const fetch_critical_css = () => {
+  const critical_css_path = path.resolve(__dirname, "src/app/critical.css");
+  try {
+    return fs.readFileSync(critical_css_path, "utf8");
+  } catch (err) {
+    console.error(
+      `Failed to read critical CSS file at ${critical_css_path}:`,
+      err,
+    );
+    return "";
+  }
+};
+
 module.exports = {
-  /**
-   * Development server
-   *
-   * @description
-   * Configures the Webpack Dev Server to serve files from the "dist" directory.
-   * Includes hot reloading, live reload, and support for single-page applications.
-   */
   devServer: {
     compress: true,
     historyApiFallback: true,
@@ -52,7 +99,6 @@ module.exports = {
   /**
    * Source maps
    *
-   * @description
    * Enables source maps for easier debugging during development.
    * Maps bundled code to original source files for error tracing.
    */
@@ -61,7 +107,6 @@ module.exports = {
   /**
    * Entry point for the application
    *
-   * @description
    * Specifies the main JavaScript file to start the bundling process.
    * Webpack will begin from this file and include any dependencies.
    */
@@ -70,7 +115,6 @@ module.exports = {
   /**
    * Build mode
    *
-   * @description
    * Defines the mode of the build process. Options are "development" or "production".
    * Development mode enables debugging features like source maps.
    */
@@ -79,7 +123,6 @@ module.exports = {
   /**
    * Module rules
    *
-   * @description
    * Defines rules for handling various file types, including SCSS, JavaScript, and images.
    * Excludes SVG files from WebP conversion.
    */
@@ -138,9 +181,9 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
         generator: {
-          filename: 'assets/fonts/[name][ext][query]'
+          filename: "assets/fonts/[name][ext][query]",
         },
       },
     ],
@@ -149,7 +192,6 @@ module.exports = {
   /**
    * Optimization settings
    *
-   * @description
    * Configures optimization steps, including image compression for PNG, JPEG, and WebP formats
    * while excluding SVG files from being converted to WebP.
    */
@@ -173,13 +215,11 @@ module.exports = {
   /**
    * Output configuration
    *
-   * @description
    * Defines the output location and filename format for the generated files.
    * Ensures clean builds and organizes assets in structured directories.
    */
   output: {
     assetModuleFilename: "assets/[name][ext]",
-    clean: true,
     filename: "app/js/bundle-[contenthash].js",
     path: path.resolve(__dirname, "dist"),
   },
@@ -187,31 +227,12 @@ module.exports = {
   /**
    * Plugins
    *
-   * @description
    * Defines plugins to extend Webpack's functionality. Includes:
-   * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template and uses dynamic metadata from constants.
+   * - HtmlWebpackPlugin: Injects the JavaScript bundle into the HTML template
+   *   and uses dynamic metadata from constants.
    * - WebpackManifestPlugin: Generates a manifest for bundled assets.
-   * - FaviconsWebpackPlugin: Generates and injects favicon assets in different sizes.
    */
   plugins: [
-    new FaviconsWebpackPlugin({
-      logo: FAVICON.path,
-      prefix: "assets/favicon/",
-      inject: true,
-      mode: "webapp",
-      favicons: {
-        appName: SITE_TITLE,
-        appDescription: APP_DESCRIPTION,
-        developerName: AUTHOR_INFO.name,
-        developerURL: SITE_URL,
-        background: THEME_SETTINGS.primaryColor,
-        theme_color: THEME_SETTINGS.primaryColor,
-        icons: {
-          coast: false,
-          yandex: false,
-        },
-      },
-    }),
     new HtmlWebpackPlugin({
       template: "src/views/index.html",
       title: SITE_TITLE,
@@ -225,19 +246,50 @@ module.exports = {
       theme_color: THEME_SETTINGS.primaryColor,
       msapplication_tile_color: THEME_SETTINGS.msApplicationTileColor,
       filename: "index.html",
+      criticalCSS: fetch_critical_css(),
     }),
-    new WebpackManifestPlugin(),
+    // Only apply CleanWebpackPlugin in production mode
+    ...(process.env.NODE_ENV === "production"
+      ? [
+          new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ["**/*", "!favicons/**"],
+            cleanAfterEveryBuildPatterns: [], // Prevent accidental cleaning
+          }),
+        ]
+      : []),
+    new WebpackManifestPlugin({
+      publicPath: "/",
+      generate: (seed, files, entries) => {
+        const manifest = files.reduce((acc, file) => {
+          acc[file.name] = file.path;
+          return acc;
+        }, seed);
+
+        // Ensure favicons are included
+        const faviconsPath = path.resolve(__dirname, "dist/favicons");
+        if (fs.existsSync(faviconsPath)) {
+          const favicons = fs.readdirSync(faviconsPath).map((filename) => ({
+            src: `favicons/${filename}`,
+            sizes: filename.match(/\d+x\d+/)?.[0] || "any",
+            type: `image/${path.extname(filename).slice(1)}`,
+          }));
+
+          manifest.icons = favicons;
+        }
+
+        return manifest;
+      },
+    }),
   ],
 
   /**
    * Resolve configuration
    *
-   * @description
    * Adds path aliases for cleaner imports.
    */
   resolve: {
     alias: {
-      '@app': path.resolve(__dirname, 'src/app/'),
+      "@app": path.resolve(__dirname, "src/app/"),
       "@components": path.resolve(__dirname, "src/app/components"),
       "@constants": path.resolve(__dirname, "src/app/constants"),
       "@fonts": path.resolve(__dirname, "src/app/fonts"),

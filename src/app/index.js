@@ -1,22 +1,41 @@
 /**
- * index.js - Entry Point for Application
+ * @file index.js - AppIndex
  *
- * @description
- * This file serves as the main entry point for the application, initializing styles,
- * custom components, and utilities. It ensures that images are preloaded into the cache
- * for efficient use across the site.
+ * This file serves as the main entry point for the application. It initializes
+ * global styles, registers custom web components, and preloads image assets into
+ * memory to optimize site performance.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.18.1
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-19
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - snake_case for variables/methods.
+ *   - _private_method() for private methods (underscore prefix).
+ *   - UPPER_SNAKE_CASE for constants (in constant files).
+ *   - kebab-case for file names (e.g., file-example.js).
+ * - Meaningful names—fetch_user_data() over doThing().
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - load_images from "@utils/load-images.util"
+ *
+ * @usage
+ * Include this file as the entry point in the Webpack configuration to
+ * ensure the application is properly initialized during build and runtime.
  */
-
-// Import global styles
 import "@styling/main.scss";
 
-// Initialize custom elements
-import "@components/blastImage";
+import "@components/blast-image.component";
+import "@components/class-scheduler.component";
 
-// Preload image assets into memory for faster access
-import { loadImages } from "@utils/loadImages";
-loadImages();
+import { load_images } from "@utils/load-images.util";
+
+load_images();
