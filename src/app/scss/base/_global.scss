@@ -35,10 +35,8 @@
  *
  * DescriptionOfStyle
  */
-class-testing{
-
-};
-
+class-testing {
+}
 
 * {
     scrollbar-width: thin;
@@ -67,7 +65,7 @@ body {
     overflow: hidden; // Disable scrolling by default
     height: calc(var(--vh, 1vh) * 98);
     display: grid;
-    grid-template-columns: min-content auto;
+    grid-template-columns: auto;
     column-gap: 0.5rem;
 }
 
@@ -78,11 +76,11 @@ body {
 }
 
 .page-loader {
-    display: none;
+    // display: none;
 }
 
 .main-scroll-block {
-    display: block;
+    // display: block;
     overflow-y: auto;
     height: auto;
 }
@@ -97,7 +95,7 @@ body {
 #left-section,
 #right-section {
     position: relative;
-    display: grid;
+    // display: grid;
     height: calc(var(--vh, 1vh) * 98);
 }
 
@@ -137,7 +135,7 @@ body {
 /* Medium Devices (Tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     #main-container {
-        grid-template-columns: min-content auto; // Default layout
+        grid-template-columns: auto; // Default layout
     }
 
     .container-block {
@@ -157,7 +155,7 @@ body {
     }
 
     #main-container {
-        grid-template-columns: min-content auto;
+        grid-template-columns: auto;
     }
 
     .container-block {
@@ -172,7 +170,7 @@ body {
     }
 
     #main-container {
-        grid-template-columns: min-content auto;
+        grid-template-columns: auto;
     }
 
     .container-block {
