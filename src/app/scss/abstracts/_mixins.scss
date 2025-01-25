@@ -1,37 +1,47 @@
 /**
- * _mixins.scss - Reusable Mixins for Styling
+ * @file _mixins.scss - Mixins
  *
- * @description
- * This file defines reusable mixins for styling throughout the application.
- * It includes a `font-face` mixin to simplify the inclusion of custom fonts
- * by generating the appropriate `@font-face` rules.
+ * This file is dedicated to managing all the mixins for this
+ * project, ensuring reusable and consistent styling.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.17.0
  *
- * @note
- * Import this file wherever mixins are needed, such as in typography or global
- * stylesheets, to take advantage of reusable code and maintain consistency.
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-24
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - Using "sass:map";
+ * - Using * from "variables"
+ *
+ * @usage
+ * Import this file into any SASS where mixins are needed,
+ * like typography or global stylesheets, to leverage
+ * reusable code and keep styles uniform.
  */
 @use "sass:map";
-@use 'variables' as *;
+@use "variables" as *;
 
-/**
- * Font-Face Mixin
- *
- * @description
-*/
 
 @mixin font-face($name, $path, $weight: normal, $style: normal) {
-    @font-face {
-        font-family: "#{$name}";
-        src: url("~@app/fonts/#{$path}.ttf") format("truetype");
-        font-weight: #{$weight};
-        font-style: #{$style};
-    }
+  @font-face {
+    font-family: "#{$name}";
+    src: url("~@app/fonts/#{$path}.ttf") format("truetype");
+    font-weight: #{$weight};
+    font-style: #{$style};
+  }
 }
-
 
 /**
  * Media Query Mixin
@@ -39,21 +49,20 @@
  * @description
 */
 @mixin min-media-query($key) {
-    $size: map.get($breakpoints, $key);
+  $size: map.get($breakpoints, $key);
 
-    @media only screen and (min-width: $size) {
-        @content;
-    }
+  @media only screen and (min-width: $size) {
+    @content;
+  }
 }
 
 @mixin max-media-query($key) {
-    $size: map.get($breakpoints, $key);
+  $size: map.get($breakpoints, $key);
 
-    @media only screen and (max-width: $size) {
-        @content;
-    }
+  @media only screen and (max-width: $size) {
+    @content;
+  }
 }
-
 
 /**
  * Cyberpunk Glow Mixin
@@ -68,35 +77,40 @@
  * @param {Boolean} $animated - Whether to add a subtle pulsing animation (default: true).
  */
 @mixin cyberpunk-glow(
-    $glow-color: #ffffff,
-    $blur: 15px,
-    $spread: 5px,
-    $animated: true
+  $glow-color: #ffffff,
+  $blur: 15px,
+  $spread: 5px,
+  $animated: true
 ) {
-    box-shadow: 0 0 $spread $blur $glow-color;
+  box-shadow: 0 0 $spread $blur $glow-color;
 
-    // Dynamically generate animation if $animated is true
-    @if $animated {
-        animation: cyberpunk-pulse-#{$blur}-#{$spread} 1.5s infinite alternate;
+  // Dynamically generate animation if $animated is true
+  @if $animated {
+    animation: cyberpunk-pulse-#{$blur}-#{$spread} 1.5s infinite alternate;
 
-        @keyframes cyberpunk-pulse-#{$blur}-#{$spread} {
-            0% {
-                box-shadow: 0 0 calc(#{$spread} / 2) calc(#{$blur} / 2)
-                    rgba($glow-color, 0.8) !important;
-            }
-            100% {
-                box-shadow: 0 0 #{$spread} #{$blur} rgba($glow-color, 0.5) !important;
-            }
-        }
+    @keyframes cyberpunk-pulse-#{$blur}-#{$spread} {
+      0% {
+        box-shadow: 0 0 calc(#{$spread} / 2) calc(#{$blur} / 2)
+          rgba($glow-color, 0.8) !important;
+      }
+      100% {
+        box-shadow: 0 0 #{$spread} #{$blur} rgba($glow-color, 0.5) !important;
+      }
     }
+  }
 }
 
-
-@mixin border-flare($color: #ff00ff, $duration: 3s, $spread: 10px, $pause-duration: 2s, $base-opacity: 0.5) {
+@mixin border-flare(
+  $color: #ff00ff,
+  $duration: 3s,
+  $spread: 10px,
+  $pause-duration: 2s,
+  $base-opacity: 0.5
+) {
   position: relative;
 
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     top: calc(-#{$spread} / 2);
     left: calc(-#{$spread} / 2);
@@ -109,7 +123,9 @@
     filter: blur(4px); // Apply glow effect
     opacity: $base-opacity; // Set the initial opacity to the base opacity
     z-index: -1;
-    animation: flare-breathe $duration linear infinite, flare-opacity $pause-duration ease-in-out infinite;
+    animation:
+      flare-breathe $duration linear infinite,
+      flare-opacity $pause-duration ease-in-out infinite;
   }
 
   // Main animation for the flare movement
