@@ -26,26 +26,25 @@
  * https://github.com/Kyonax/kyo-web-online
  *
  * @dependencies
- * - ERROR_MSG from "@constants/Error"
  * - CUSTOM_COMPONENT from "@constants/Data"
+ * - ERROR_MSG from "@constants/Error"
  *
  * @usage
  * <class-scheduler class-scheduled="some-class" start="2025-01-15T10:00:00"></class-scheduler>
  */
-import { ERROR_MSG } from "@constants/Error";
 import { CUSTOM_COMPONENT } from "@constants/Data";
+import { ERROR_MSG } from "@constants/Error";
 
 class ClassScheduler extends HTMLElement {
   constructor() {
     super();
 
     /**
-     * Component options extracted from attributes.
+     * Options for the ClassScheduler component.
      *
-     * @property {Object} options - Configuration options for the `ClassScheduler` component.
-     * @property {string|null} options.class_scheduled - The class to be scheduled, derived from the `class_scheduled` attribute.
-     * @property {HTMLElement|null} options.component - Reference to the component instance.
-     * @property {string|null} options.start - The start time for scheduling, derived from the `start` attribute.
+     * @property {string|null} class_scheduled - The class to schedule, taken from the `class-scheduled` attribute.
+     * @property {HTMLElement|null} component - The component instance itself.
+     * @property {string|null} start - The start time, taken from the `start` attribute.
      */
     this.options = {
       class_scheduled: this.getAttribute("class-scheduled") || null,
@@ -71,6 +70,8 @@ class ClassScheduler extends HTMLElement {
    * @description
    * Invokes the `initialize_scheduler` method to validate attributes and initiate
    * the scheduling process.
+   *
+   * @return {void}
    */
   connectedCallback() {
     this._initialize_scheduler();
@@ -152,4 +153,7 @@ const _initialize_all_components = () => {
 };
 
 document.addEventListener("DOMContentLoaded", _initialize_all_components);
-customElements.define(CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name, ClassScheduler);
+customElements.define(
+  CUSTOM_COMPONENT.CLASS_SCHEDULER_COMPONENT.name,
+  ClassScheduler,
+);
