@@ -33,7 +33,18 @@
 @use "sass:map";
 @use "variables" as *;
 
-
+/**
+ * Font Face Mixin
+ *
+ * Creates a custom @font-face rule to use your own fonts.
+ * It's quick and to the point.
+ *
+ * @params
+ * $name - The font name.
+ * $path - Where the font file lives.
+ * $weight - Font weight (default: normal).
+ * $style - Font style (default: normal).
+ */
 @mixin font-face($name, $path, $weight: normal, $style: normal) {
   @font-face {
     font-family: "#{$name}";
@@ -44,10 +55,14 @@
 }
 
 /**
- * Media Query Mixin
+ * Min Media Query Mixin
  *
- * @description
-*/
+ * Sets up a media query for when the screen is at least a
+ * certain size. Perfect for scaling up.
+ *
+ * @params
+ * $key - The size key from your $breakpoints map.
+ */
 @mixin min-media-query($key) {
   $size: map.get($breakpoints, $key);
 
@@ -56,6 +71,15 @@
   }
 }
 
+/**
+ * Max Media Query Mixin
+ *
+ * Sets up a media query for when the screen is at most a
+ * certain size. Handy for scaling down.
+ *
+ * @params
+ * $key - The size key from your $breakpoints map.
+ */
 @mixin max-media-query($key) {
   $size: map.get($breakpoints, $key);
 
@@ -67,14 +91,14 @@
 /**
  * Cyberpunk Glow Mixin
  *
- * @description
- * Adds a customizable soft glowing effect to block-level elements.
- * Includes an optional animation dynamically generated based on input values.
+ * Gives your block elements a glowing, futuristic look.
+ * Optionally adds a cool pulsing animation.
  *
- * @param {Color} $glow-color - The color of the glow (default: #f9cd26).
- * @param {Number} $blur - The blur radius of the glow (default: 15px).
- * @param {Number} $spread - The spread radius of the glow (default: 5px).
- * @param {Boolean} $animated - Whether to add a subtle pulsing animation (default: true).
+ * @params
+ * $glow-color - The glow color (default: #ffffff).
+ * $blur - How blurry the glow is (default: 15px).
+ * $spread - How wide the glow spreads (default: 5px).
+ * $animated - Adds a pulsing effect if true (default: true).
  */
 @mixin cyberpunk-glow(
   $glow-color: #ffffff,
@@ -83,8 +107,6 @@
   $animated: true
 ) {
   box-shadow: 0 0 $spread $blur $glow-color;
-
-  // Dynamically generate animation if $animated is true
   @if $animated {
     animation: cyberpunk-pulse-#{$blur}-#{$spread} 1.5s infinite alternate;
 
@@ -100,6 +122,19 @@
   }
 }
 
+/**
+ * Border Flare Mixin
+ *
+ * Adds a glowing border that breathes in and out.
+ * Perfect for grabbing attention.
+ *
+ * @params
+ * $color - The border color (default: #ff00ff).
+ * $duration - How long the breathing animation takes (default: 3s).
+ * $spread - How far the border glow spreads (default: 10px).
+ * $pause-duration - The time for the fade-in/fade-out effect (default: 2s).
+ * $base-opacity - The base opacity of the border glow (default: 0.5).
+ */
 @mixin border-flare(
   $color: #ff00ff,
   $duration: 3s,
@@ -117,11 +152,11 @@
     right: calc(-#{$spread} / 2);
     bottom: calc(-#{$spread} / 2);
     border: 2px solid transparent;
-    border-radius: inherit; // Match the parent element's border-radius
+    border-radius: inherit; // Matches the parent element's border-radius
     background: linear-gradient(90deg, transparent, $color, transparent);
-    background-size: 200% 200%; // Ensure the gradient spans enough to create a smooth animation
-    filter: blur(4px); // Apply glow effect
-    opacity: $base-opacity; // Set the initial opacity to the base opacity
+    background-size: 200% 200%;
+    filter: blur(4px); // Adds the glow effect
+    opacity: $base-opacity;
     z-index: -1;
     animation:
       flare-breathe $duration linear infinite,
@@ -150,13 +185,13 @@
   // Opacity animation for the breathing effect
   @keyframes flare-opacity {
     0% {
-      opacity: 0; // Use the base opacity at the start
+      opacity: 0; // Starts with no glow
     }
     50% {
-      opacity: $base-opacity; // Fade out to 0%
+      opacity: $base-opacity; // Full glow
     }
     100% {
-      opacity: 0; // Fade back to the base opacity
+      opacity: 0; // Fades back out
     }
   }
 }
