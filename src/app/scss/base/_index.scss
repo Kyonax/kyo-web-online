@@ -1,18 +1,36 @@
 /**
- * _index.scss - Index for Base Stylesheets
+ * @file _index.scss - Base Index
  *
- * @description
- * This file serves as an entry point for all base styles, forwarding the
- * core typography and global styles to be used throughout the application.
- * It ensures that the necessary base styles are available to other parts of the app.
+ * This file acts as the primary entry point for applying
+ * foundational styles across the application.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * It imports and distributes essential typography and global
+ * style settings, making these base styles accessible for use in
+ * other components of the application.
  *
- * @note
- * Import this file into the main stylesheet (e.g., `main.scss`) to ensure
- * both typography and global styles are applied across the application.
+ * node.js-v20.17.0
+ *
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-28
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - Forwarding "typography";
+ * - Forwarding "global";
+ *
+ * @usage
+ * Import the Base Index by using @use in the main SASS file.
  */
 @forward "typography";
 @forward "global";
