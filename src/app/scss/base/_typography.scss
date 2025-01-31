@@ -1,20 +1,34 @@
 /**
- * _typography.scss - Typography Styles for the Application
+ * @file _typography.scss - Typography
  *
- * @description
- * This file sets up custom typography using the "SpaceMono" font family.
- * It defines custom font faces (regular, bold, italic, bold-italic) and includes
- * global typography styles for the application, ensuring readability and consistency.
- * Additionally, a special font face for symbols is defined.
+ * This file establishes custom typography using the "SpaceMono"
+ * font family. It defines font faces for regular, bold,
+ * italic, and bold-italic styles and sets global typography for the
+ * application, promoting readability and consistency.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.17.0
  *
- * @note
- * Import this file into the main stylesheet (e.g., `main.scss`) to apply typography globally.
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-01-31
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - Using "../abstracts/mixins";
+ *
+ * @usage
+ * Import this file from the base index, which is then imported into main SASS file.
  */
-
 @use "../abstracts/mixins";
 
 // Define SpaceMono fonts
