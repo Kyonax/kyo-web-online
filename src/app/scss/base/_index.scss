@@ -1,5 +1,5 @@
 /**
- * @file _index.scss - Base Index
+ * @file _index.scss - base Index
  *
  * This file acts as the primary entry point for applying
  * foundational styles across the application.
@@ -30,7 +30,8 @@
  * - Forwarding "global";
  *
  * @usage
- * Import the Base Index by using @use in the main SASS file.
+ * Import this file into the main stylesheet (e.g., `main.scss`) to ensure
+ * both typography and global styles are applied across the website.
  */
 @forward "typography";
 @forward "global";

@@ -27,7 +27,8 @@
  * - Using "../abstracts/mixins";
  *
  * @usage
- * Import this file from the base index, which is then imported into main SASS file.
+ * Import this file from the base folder index as a forwarded file
+ * which is then imported into main SASS file.
  */
 @use "../abstracts/mixins";
 

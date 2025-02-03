@@ -25,6 +25,7 @@
  * - Forwarding "theme";
  *
  * @usage
- * Import the Abstract Index by using @use in the main SASS file.
+ * Import this file into the main stylesheet (e.g., `main.scss`) to ensure
+ * the Theme is applied successfully in to the website.
  */
 @forward "theme";

@@ -1,20 +1,37 @@
 /**
- * _marquee.scss - Marquee Component Styles
+ * @file _marquee.scss - Marquee Component
  *
- * @description
- * This file defines styles for the marquee component, a scrolling text banner often used for announcements or highlights.
- * The marquee has a cyberpunk glow effect, supports customization for speed, and ensures smooth scrolling.
- * It uses CSS custom properties for flexibility and includes keyframes for seamless animation.
+ * This file defines styles for the marquee component, a scrolling text
+ * banner often used for announcements or highlights. The marquee has a cyberpunk
+ * low effect, supports customization for speed, and ensures smooth scrolling.
+ * It uses CSS custom properties for flexibility and includes keyframes for
+ * seamless animation.
  *
- * @author
- * Cristian Moreno (Kyonax)
- * Email: iamkyo@kyo.wtf
+ * node.js-v20.17.0
  *
- * @note
- * Ensure to include this file in the main stylesheet (e.g., `main.scss`) for the marquee to function correctly.
- * Modify custom properties (--marquee-speed, --marquee-play) for different behaviors.
+ * @author Cristian Moreno (Kyonax)
+ * @contact iamkyo@kyo.wtf
+ * @date 2025-02-02
+ *
+ * Code Guidelines :: @CCSv0.1
+ * More details: https://code-guidelines.cybercodesyndicate.org
+ * - Tabs only—no spaces.
+ * - Naming:
+ *   - kebab-case for classes and file names (e.g., file-example.js).
+ *   - __underscore for childs (double underscore prefix).
+ * - Meaningful Names btn-default-class over classOne.
+ *
+ * Repository-URL
+ * https://github.com/Kyonax/kyo-web-online
+ *
+ * @dependencies
+ * - Using * from "../abstracts/mixins"
+ * - Using * from "../abstracts/variables"
+ *
+ * @usage
+ * Import this file from the components folder index as a forwarded file
+ * which is then imported into main SASS file.
  */
-
 @use "../abstracts/mixins" as *;
 @use "../abstracts/variables" as *;
 
@@ -36,7 +53,9 @@
     display: flex; // Ensures inline layout for marquee items
     white-space: nowrap; // Prevents text wrapping
     animation: marqueeScroll var(--marquee-speed) linear infinite; // Smooth scrolling animation
-    animation-play-state: var(--marquee-play); // Dynamic control of animation state
+    animation-play-state: var(
+      --marquee-play
+    ); // Dynamic control of animation state
     will-change: transform; // Optimization for smoother animations
     width: max-content;
     font-weight: 900;
@@ -54,14 +73,16 @@
     }
 
     100% {
-      transform: translateX(-50%); // Ensure the animation completes right before resetting
+      transform: translateX(
+        -50%
+      ); // Ensure the animation completes right before resetting
     }
   }
 
   @include max-media-query(sm) {
-      .marquee {
-          font-size: var(--fs-100);
-          line-height: var(--fs-300);
-      }
+    .marquee {
+      font-size: var(--fs-100);
+      line-height: var(--fs-300);
+    }
   }
 }
