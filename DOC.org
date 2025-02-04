@@ -1,4 +1,29 @@
-#+title: Project Documentation
-#+subtitle: ORG Documents & Organization
-#+description:
-#+author: Cristian D. Moreno - Kyonax
+#+TITLE: KYO's WEBSITE
+#+SUBTITLE: Professional Background Landing Page
+#+AUTHOR: Cristian D. Moreno - Kyonax
+#+EMAIL: iam@kyo.wtf
+#+DATE: 2025-02-03
+
+#+begin_quote
+📌 This document serves as the comprehensive guide for the Kyonax main site, crafted to display Cristian D. Moreno's career highlights. It includes an in-depth explanation of the site's structure, coding practices, design approaches, and file system organization. All these elements are meticulously detailed in the DOCs and integrated into the Code Documentation, providing a complete resource for anyone seeking to understand the intricacies of this project's development.
+#+end_quote
+
+The core directive of this website is to showcase my professional background, but it's also set up as an index for all the future projects I'm gonna dive into over this century. The interface screams ~cyberpunk/sci-fi~ inspiration, crafted to sync with my vision of what a futuristic UI should be.
+
+------
+
+* TABLE OF CONTENTs :toc:
+- [[#code-guidelines][CODE GUIDELINEs]]
+  - [[#naming-conventions][NAMING CONVENTIONS]]
+
+* CODE GUIDELINEs
+The code adheres to a rigorous structure and set of guidelines to ensure exceptional code consistency. Additionally, the mission is to tailor the code documentation in such a way that it becomes straightforward to recall and modify the code as needed in the future.
+
+This adheres strictly to my personal coding preferences and does not follow any global guidelines; it's tailored solely for my comprehension and also designed to facilitate learning for others.
+
+** NAMING CONVENTIONS
+Structured naming convention for files, file structures, and code across JavaScript, HTML, and SASS.
+
+*** Files & Folders
+- Use ~kebab-case~ for all files except constants files or configuration files.
+- For constants files, the naming should follow the format ~Example.js~.
