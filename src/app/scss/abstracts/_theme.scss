@@ -1,8 +1,12 @@
 /**
  * @file _theme.scss - Theme Variables
  *
- * This SASS file defines theme-related CSS custom properties (variables) within the :root selector
+ * This SASS file defines theme-related CSS custom
+ * properties (variables) within the :root selector
  * for use throughout the website.
+ *
+ * Also everything regarding Custom Styles to
+ * mantain a consistent style across the website.
  *
  * node.js-v20.17.0
  *
@@ -26,7 +30,8 @@
  * - Using * from "mixins"
  *
  * @usage
- * This file should be imported into the abstract index in the main SASS file of the project.
+ * This file should be imported into the abstract index in the
+ * main SASS file of the project.
  */
 @use "variables" as *;
 @use "mixins" as *;
@@ -73,4 +78,42 @@
             }
         }
     }
+}
+
+/**
+ * Element Flare
+ *
+ * Injects the Element Flare animation into your scene. Comes with
+ * standard settings for Color, Speed, Spread, Breath, and Duration.
+ *
+ * Reference the non-private variables to edit the defaults
+ * (e.g., --element-flare-color: red;)
+ */
+.element-flare {
+    $color: var(--element-flare-color, var(--clr-border-100));
+    $speed: var(--element-flare-speed, 24s);
+    $spread: var(--element-flare-spread, 1px);
+    $breath-duration: var(--element-flare-breath-duration, 6s);
+    $opacity: var(--element-flare-opacity, 0.9);
+
+    @include element-flare($color, $speed, $spread, $breath-duration, $opacity);
+}
+
+/**
+ * Cyberpunk Glow
+ *
+ * Injects the Cyberpunk Glow animation into your element. Comes with
+ * standard settings for Color, Blur, Spread, and Animated.
+ *
+ * Reference the non-private variables to edit the defaults
+ * (e.g., --element-flare-color: red;)
+ */
+.cyberpunk-glow {
+    $color: var(--cyberpunk-glow-color, var(--clr-primary-100));
+    $blur: var(--cyberpunk-glow-blur, 1px);
+    $spread: var(--cyberpunk-glow-spread, 9px);
+    $animated: var(--cyberpunk-glow-animated, true);
+    $speed: var(--cyberpunk-glow-speed, 1.5s);
+
+    @include cyberpunk-glow($color, $blur, $spread, $animated, $speed);
 }

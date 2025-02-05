@@ -23,6 +23,9 @@
  *
  * @dependencies
  * - Using "sass:map";
+ * - Using "sass:math";
+ * - Using "sass:meta";
+ * - Using "sass:string";
  * - Using * from "variables"
  *
  * @usage
@@ -31,6 +34,10 @@
  * reusable code and keep styles uniform.
  */
 @use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:color";
+@use "sass:string";
 @use "variables" as *;
 
 /**
@@ -94,52 +101,67 @@
  * Gives your block elements a glowing, futuristic look.
  * Optionally adds a cool pulsing animation.
  *
- * @params
+ * @parammath
  * $glow-color - The glow color (default: #ffffff).
  * $blur - How blurry the glow is (default: 15px).
  * $spread - How wide the glow spreads (default: 5px).
  * $animated - Adds a pulsing effect if true (default: true).
  */
 @mixin cyberpunk-glow(
-  $glow-color: #ffffff,
+  $glow-color: hsl(47, 95%, 56%),
   $blur: 15px,
   $spread: 5px,
-  $animated: true
+  $animated: true,
+  $speed: 1.5s,
+  $pulse-variation: 0.2
 ) {
   box-shadow: 0 0 $spread $blur $glow-color;
   @if $animated {
-    animation: cyberpunk-pulse-#{$blur}-#{$spread} 1.5s infinite alternate;
+    $index: math.floor(calc(math.random() * 1000000));
 
-    @keyframes cyberpunk-pulse-#{$blur}-#{$spread} {
+    animation: cyberpunk-pulse-#{$index} $speed ease-in-out infinite alternate;
+
+    @keyframes cyberpunk-pulse-#{$index} {
       0% {
-        box-shadow: 0 0 calc(#{$spread} / 2) calc(#{$blur} / 2)
-          rgba($glow-color, 0.8) !important;
+        $min-spread: calc(#{$spread} / 2);
+        $min-blur: calc(#{$blur} / 2);
+        box-shadow: 0 0 $min-spread $min-blur $glow-color;
+      }
+      50% {
+        $max-spread: calc(#{$spread} * (1.5 + $pulse-variation));
+        $max-blur: calc(#{$blur} * (1.5 + $pulse-variation));
+        box-shadow: 0 0 $max-spread $max-blur $glow-color;
       }
       100% {
-        box-shadow: 0 0 #{$spread} #{$blur} rgba($glow-color, 0.5) !important;
+        $min-spread: calc(#{$spread} / 2);
+        $min-blur: calc(#{$blur} / 2);
+        box-shadow: 0 0 $min-spread $min-blur $glow-color;
       }
     }
   }
 }
 
 /**
- * Border Flare Mixin
+ * Element Flare Mixin
  *
- * Adds a glowing border that breathes in and out.
- * Perfect for grabbing attention.
+ * Applies a dynamic glowing effect to your element,
+ * causing it to oscillate side to side, enhancing visibility
+ * with a soft glow, and simulating a breathing effect.
+ *
+ * This can give your UI a lively, almost animated feel.
  *
  * @params
- * $color - The border color (default: #ff00ff).
- * $duration - How long the breathing animation takes (default: 3s).
- * $spread - How far the border glow spreads (default: 10px).
- * $pause-duration - The time for the fade-in/fade-out effect (default: 2s).
- * $base-opacity - The base opacity of the border glow (default: 0.5).
+ * $color - The Flare Color (default: #ff00ff).
+ * $duration - Time for the flare to swing back and forth (default: 3s).
+ * $spread - how much the flare spreads its wings (default: 10px).
+ * $breath - Time for the flare to inhale and exhale (default: 2s).
+ * $base-opacity - Base glow intensity (default: 0.5, because it's halfway cool).
  */
-@mixin border-flare(
+@mixin element-flare(
   $color: #ff00ff,
   $duration: 3s,
   $spread: 10px,
-  $pause-duration: 2s,
+  $breath: 2s,
   $base-opacity: 0.5
 ) {
   position: relative;
@@ -147,20 +169,20 @@
   &:before {
     content: "";
     position: absolute;
-    top: calc(-#{$spread} / 2);
-    left: calc(-#{$spread} / 2);
-    right: calc(-#{$spread} / 2);
-    bottom: calc(-#{$spread} / 2);
+    top: calc(#{$spread} / 2);
+    left: calc(#{$spread} / 2);
+    right: calc(#{$spread} / 2);
+    bottom: calc(#{$spread} / 2);
     border: 2px solid transparent;
-    border-radius: inherit; // Matches the parent element's border-radius
+    border-radius: inherit;
     background: linear-gradient(90deg, transparent, $color, transparent);
     background-size: 200% 200%;
-    filter: blur(4px); // Adds the glow effect
+    filter: blur(4px);
     opacity: $base-opacity;
     z-index: -1;
     animation:
       flare-breathe $duration linear infinite,
-      flare-opacity $pause-duration ease-in-out infinite;
+      flare-opacity $breath ease-in-out infinite;
   }
 
   // Main animation for the flare movement

@@ -1,11 +1,14 @@
 /**
  * @file _variables.scss - Variables
  *
- * This file defines the global styling variables for the project. It ensures design consistency and facilitates
- * updates to the look and feel through a centralized control over key design aspects. It includes:
- * - A color palette for primary, secondary, and contextual colors like success, warning, and error states.
+ * This file defines the global styling variables for the project.
+ * It ensures design consistency and facilitates updates
+ * to the look and feel through a centralized control over key
+ * design aspects. It includes:
+ * - A full brand Color Palette.
  * - Responsive breakpoints for different screen sizes.
- * - A typography scale to maintain font size consistency across the site.
+ * - A typography scale to maintain font size consistency
+ * across the site.
  *
  * node.js-v20.17.0
  *
@@ -25,8 +28,10 @@
  * https://github.com/Kyonax/kyo-web-online
  *
  * @usage
- * This file must be imported using the @import directive at the beginning of SCSS files that need access to these variables.
- * This allows for maintaining consistent design elements throughout the project.
+ * This file must be imported using the @import directive at the
+ * beginning of SCSS files that need access to these variables.
+ * This allows for maintaining consistent design elements
+ * throughout the project.
  */
 
 /**
@@ -42,7 +47,7 @@ $breakpoints: (
     // Medium Devices (Tablets, 768px and up)
     lg: 82.667em,
     // Large Devices (Desktops, 992px and up)
-    xl: 100em // Extra Large Devices (Large Desktops, 1200px and up),
+    xl: 100em // Extra Large Devices (Large Desktops, 1200px and up),,,,
 );
 
 /**
@@ -76,7 +81,7 @@ $colors: (
         200: hsl(0, 0%, 59%),
         300: hsl(0, 0%, 40%),
         400: hsl(0, 0%, 22%),
-        500: hsl(0, 0%, 7%) // Background Color #111111,
+        500: hsl(0, 0%, 7%) // Background Color #111111,,,,
     ),
     border: (
         50: hsla(0, 0%, 95.29%, 0.1),
@@ -137,7 +142,7 @@ $typo-scale: (
         // 22.5px
         700: 2.25rem,
         // 27px
-        800: 3rem // 36px,
+        800: 3rem // 36px,,,,
     ),
     medium: (
         100: 0.75rem,
@@ -154,7 +159,7 @@ $typo-scale: (
         // 27px
         700: 3rem,
         // 36px
-        800: 4rem // 48px,
+        800: 4rem // 48px,,,,
     ),
     large: (
         100: 0.875rem,
@@ -171,6 +176,6 @@ $typo-scale: (
         // 36px
         700: 4.5rem,
         // 54px
-        800: 6rem // 72px,
+        800: 6rem // 72px,,,,
     ),
 );
