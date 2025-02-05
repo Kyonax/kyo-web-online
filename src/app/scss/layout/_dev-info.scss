@@ -11,22 +11,6 @@
     }
 }
 
-.flare-100 {
-    @include border-flare(var(--clr-border-100), 15s, 3px, 3s, 0.9);
-}
-
-.flare-300 {
-    @include border-flare(var(--clr-border-100), 15s, 3px, 6s, 0.9);
-}
-
-.flare-600 {
-    @include border-flare(var(--clr-neutral-100), 15s, 3px, 12s, 0.9);
-}
-
-.flare-900 {
-    @include border-flare(var(--clr-primary-100), 15s, 3px, 24s, 0.9);
-}
-
 .dev-info,
 .dev-communities,
 .dev-tech {
