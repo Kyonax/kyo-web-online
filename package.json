@@ -25,7 +25,7 @@
     "check:seo": "node scripts/seo-audit.mjs",
     "check:size": "size-limit",
     "check:lighthouse": "lhci autorun",
-    "precheck": "node scripts/precheck.mjs",
+    "precheck": "npm run sync:blog && node scripts/precheck.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "generate:og": "node scripts/generate-og-resume.mjs",
     "convert:fonts": "./scripts/convert-fonts.sh",
@@ -37,9 +37,10 @@
     "convert:ascii:force": "node scripts/ascii-to-image.mjs --force",
     "convert:images": "node scripts/convert-images.mjs",
     "convert:images:force": "node scripts/convert-images.mjs --force",
-    "predev": "npm run convert:ascii && npm run convert:images -- --quiet && npm run generate:sitemap",
-    "prebuild": "npm run convert:ascii && npm run convert:images && npm run generate:sitemap && npm run precheck",
-    "postbuild": "node scripts/defer-async-css.mjs && node scripts/seo-audit.mjs && rm -rf dist/.vite"
+    "predev": "npm run sync:blog && npm run convert:ascii && npm run convert:images -- --quiet && npm run generate:sitemap",
+    "prebuild": "npm run sync:blog && npm run convert:ascii && npm run convert:images && npm run generate:sitemap && npm run precheck",
+    "postbuild": "node scripts/defer-async-css.mjs && node scripts/seo-audit.mjs && node scripts/check-blog-prerender.mjs && rm -rf dist/.vite",
+    "sync:blog": "node scripts/sync-blog.mjs"
   },
   "repository": {
     "type": "git",

@@ -4,6 +4,7 @@
  */
 
 import { LOCALE_URL, SITE_ORIGIN, X_DEFAULT_URL } from '@data/data';
+import { blogLocaleSwapTarget, isBlogPath } from '@seo/blog-routes';
 
 export const ROUTE_BY_LOCALE = Object.freeze({
   en: '/',
@@ -85,6 +86,13 @@ export const routeKind = (path) => {
   if (Object.values(PRIVACY_ROUTE_BY_LOCALE).some((r) => _matches(path, r))) {
     return 'privacy';
   }
+  /* A PREFIX test, not a family lookup. The archive is generated, so its paths
+     cannot be listed here; anything under /blog is a blog page, including one the
+     manifest does not name — which then 404s as a blog page instead of silently
+     rendering landing chrome with dead section anchors. */
+  if (isBlogPath(path)) {
+    return 'blog';
+  }
   return 'landing';
 };
 
@@ -93,6 +101,11 @@ export const routeKind = (path) => {
  * belongs to no known family.
  */
 export const localeSwapTarget = (path, locale) => {
+  /* Blog families are derived from the manifest, not declared above — a post's
+     twin is looked up by its translation key. */
+  if (isBlogPath(path)) {
+    return blogLocaleSwapTarget(path, locale);
+  }
   const family = ROUTE_FAMILIES.find((f) => Object.values(f).some((r) => _matches(path, r)));
   return (family || ROUTE_BY_LOCALE)[locale] || ROUTE_BY_LOCALE.en;
 };

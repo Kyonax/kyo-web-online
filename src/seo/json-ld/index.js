@@ -16,6 +16,7 @@ import { buildTestimonialsJsonLd }    from './testimonials';
 import buildVideoObjectsJsonLd        from './videos';
 import buildWebSiteJsonLd             from './website';
 
+export { buildBlogJsonLd } from './blog-page';
 export { buildFaqJsonLd } from './faq-page';
 export { buildPrivacyJsonLd } from './privacy-page';
 export { buildResumeJsonLd } from './resume-page';

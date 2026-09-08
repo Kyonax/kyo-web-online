@@ -31,10 +31,20 @@ const GRAPH_BY_PAGE = {
   landing: buildSiteJsonLd,
   resume:  buildResumeJsonLd,
   privacy: buildPrivacyJsonLd,
+  /* No `blog` entry on purpose. A BlogPosting needs the article's own title,
+     date and image, and that data is loaded by the VIEW — App cannot see it.
+     So the blog views emit their own graph under the same head key, exactly as
+     they already own their own useSeoHead call. */
 };
 
 export const useStructuredData = ({ page = 'landing' } = {}) => {
   const { locale } = useI18n();
+
+  /* An unknown kind falls back to the landing graph, which is right for a
+     stray path and wrong for the blog — hence the explicit opt-out. */
+  if (page === 'blog') {
+    return;
+  }
 
   const build = GRAPH_BY_PAGE[page] || GRAPH_BY_PAGE.landing;
 

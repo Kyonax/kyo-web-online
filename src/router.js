@@ -3,6 +3,8 @@
  * Distributed under the terms of GPL-2.0-only — see LICENSE.
  */
 
+import { blogRoutePaths, localeOfBlogPath } from '@seo/blog-routes';
+
 import App from './App.vue';
 
 export const ROUTES = [
@@ -19,6 +21,19 @@ export const ROUTES = [
      already published and indexed under it. */
   { path: '/privacy',    name: 'privacy-en', component: App, meta: { locale: 'en' } },
   { path: '/es/privacy', name: 'privacy-es', component: App, meta: { locale: 'es' } },
+
+  /* The blog, derived from the manifest kyo-blog builds. Every post and every
+     archive page is a STATIC route: vite-ssg prerenders only what
+     router.getRoutes() enumerates and skips anything carrying a :param, so a
+     parametric /blog/:slug would ship the whole archive as empty shells.
+     Keep in lockstep with ssgOptions.includedRoutes in vite.config.js — both
+     read the same manifest, so they cannot drift. */
+  ...blogRoutePaths().map((path) => ({
+    path,
+    name: `blog:${path}`,
+    component: App,
+    meta: { locale: localeOfBlogPath(path) },
+  })),
 ];
 
 export default ROUTES;

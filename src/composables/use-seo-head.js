@@ -30,6 +30,14 @@ const OG_LOCALE = { en: 'en_US', es: 'es_CO' };
  *               WRONG for a policy page, which is a document about the site.
  *               The profile:* properties follow it, since they only mean
  *               anything on a profile object.
+ *   title / description / ogTitle
+ *             — literal overrides that WIN over the i18n lookup. Every page
+ *               written by hand keeps its copy in the catalogue and passes
+ *               none of these; a blog post cannot, because its title is
+ *               CONTENT authored in an .org file, not a translatable UI
+ *               string. Passing a literal keeps such a page out of
+ *               check-i18n's parity rules instead of forcing one catalogue
+ *               entry per article in both locales.
  * Omitting `opts` yields the landing-page behaviour unchanged.
  */
 export const useSeoHead = (opts = {}) => {
@@ -41,10 +49,10 @@ export const useSeoHead = (opts = {}) => {
   const og_type    = opts.ogType || 'profile';
   const is_profile = og_type === 'profile';
 
-  const title       = computed(() => t(`${prefix}.title`));
-  const description = computed(() => t(`${prefix}.description`));
-  const ogTitle     = computed(() => t(`${prefix}.og-title`));
-  const ogImageAlt  = computed(() => t(`${prefix}.og-image-alt`));
+  const title       = computed(() => opts.title || t(`${prefix}.title`));
+  const description = computed(() => opts.description || t(`${prefix}.description`));
+  const ogTitle     = computed(() => opts.ogTitle || opts.title || t(`${prefix}.og-title`));
+  const ogImageAlt  = computed(() => opts.ogImageAlt || t(`${prefix}.og-image-alt`));
   const canonical   = computed(() => urls[locale.value] || urls.en);
   const ogImageAbs  = computed(() => {
     const img = opts.ogImage;

@@ -91,5 +91,27 @@
     ],
     "limit": "10 KB",
     "gzip": true
+  },
+  {
+    "name": "blog index chunk",
+    "path": [
+      "dist/assets/blog-*.{js,css}",
+      "!dist/assets/blog-post-*",
+      "!dist/assets/blog-footer-*"
+    ],
+    "limit": "6 KB",
+    "gzip": true
+  },
+  {
+    "name": "blog post chunk",
+    "path": "dist/assets/blog-post-*.{js,css}",
+    "limit": "4 KB",
+    "gzip": true
+  },
+  {
+    "name": "blog footer chunk",
+    "path": "dist/assets/blog-footer-*.{js,css}",
+    "limit": "1.5 KB",
+    "gzip": true
   }
 ]

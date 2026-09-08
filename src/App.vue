@@ -29,6 +29,19 @@ const PrivacyView = defineAsyncComponent(() => {
   return import('@views/privacy.vue');
 });
 
+/* The blog splits in two: an archive page and an article. Both are async and
+   both are wrapped in <Suspense> below, which is what makes vite-ssg await
+   them during prerender — without it the article ships as an empty shell. */
+const BlogView = defineAsyncComponent(() => {
+  return import('@views/blog.vue');
+});
+const BlogPostView = defineAsyncComponent(() => {
+  return import('@views/blog-post.vue');
+});
+const BlogFooter = defineAsyncComponent(() => {
+  return import('@views/components/blog/blog-footer.vue');
+});
+
 const TestimonialsSection = defineAsyncComponent(() => {
   return import('@sections/testimonials-proof.vue');
 });
@@ -58,7 +71,7 @@ const { locale } = useI18n();
    / and /es; the secondary routes render their own document view instead. Each
    document view owns its own <head> (it calls useSeoHead with its own keys), so
    the landing meta must NOT be applied on those routes. */
-const { kind, isLanding, isResume, isPrivacy } = usePageKind();
+const { kind, isLanding, isResume, isPrivacy, isBlog, isBlogPost } = usePageKind();
 if (isLanding.value) {
   useSeoHead();
 }
@@ -126,7 +139,24 @@ watch(locale, (next) => {
     <PrivacyView />
   </Suspense>
 
+  <!-- A post renders the article; anything else under /blog is an archive
+       page, including a path the manifest does not name, which then renders
+       the archive's own empty state rather than landing chrome. -->
+  <Suspense v-else-if="isBlogPost">
+    <BlogPostView />
+  </Suspense>
+
+  <Suspense v-else-if="isBlog">
+    <BlogView />
+  </Suspense>
+
   <SiteFooter v-if="isLanding" />
+
+  <!-- The landing footer is deliberately not reused under an article: it
+       carries the brand signature, socials and a runtime manifest. -->
+  <Suspense v-else-if="isBlog">
+    <BlogFooter />
+  </Suspense>
 
   <CookieConsent />
 </template>

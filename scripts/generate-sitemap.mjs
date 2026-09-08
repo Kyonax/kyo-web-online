@@ -4,7 +4,7 @@
  * Distributed under the terms of GPL-2.0-only — see LICENSE.
  */
 
-import { writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -82,15 +82,83 @@ const cv_entries = CV_URLS.map((u) => `    <url>
         <priority>0.7</priority>
     </url>`).join('\n');
 
+/*
+ * The blog, from the manifest kyo-blog builds and scripts/sync-blog.mjs copies
+ * into src/data/blog/. Everything above is a page written by hand with a fixed
+ * URL; the archive is not, so its entries are DERIVED.
+ *
+ * The alternates block above is built ONCE PER FAMILY and stamped into every
+ * <url> of that family. That cannot work here: each article pairs with its own
+ * translation, so the rows are built PER POST. An archive page pairs with the
+ * same page number in the other locale, falling back to that locale's index.
+ *
+ * No manifest, or an empty one, contributes nothing — the sitemap is then
+ * byte-identical to what it was before the blog existed.
+ */
+const _blog = () => {
+  const file = resolve(__dirname, '..', 'src/data/blog/manifest.json');
+  if (!existsSync(file)) {
+    return '';
+  }
+
+  const m = JSON.parse(readFileSync(file, 'utf8'));
+  const origin = m.origin || 'https://kyonax.com';
+  const abs = (u) => `${origin}${u}`;
+  const rows = [];
+
+  const block = (pairs, x_default) => _alternates(pairs, x_default);
+
+  /* Archive pages: /blog, /blog/page/2, and their locale twins. */
+  for (const [locale, pages] of Object.entries(m.pages || {})) {
+    for (const page of pages) {
+      const pairs = (m.locales || []).map((l) => {
+        const twin = (m.pages[l] || [])[page.number - 1];
+        const index = (m.pages[l] || [])[0];
+        return { locale: l, loc: abs((twin || index || page).url) };
+      });
+      const first = (m.pages[m.defaultLocale] || [])[0];
+      rows.push(`    <url>
+        <loc>${abs(page.url)}</loc>
+        <lastmod>${lastmod}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>${page.number === 1 ? '0.8' : '0.5'}</priority>
+${block(pairs, abs((first || page).url))}
+    </url>`);
+      void locale;
+    }
+  }
+
+  /* Articles. lastmod is the post's own date, not the build date — a sitemap
+     that claims every article changed today teaches a crawler to ignore the
+     field. */
+  for (const post of m.posts || []) {
+    const family = (m.families || {})[post.key] || {};
+    const pairs = Object.entries(family).map(([l, u]) => ({ locale: l, loc: abs(u) }));
+    const x_default = family[m.defaultLocale] || post.url;
+    rows.push(`    <url>
+        <loc>${abs(post.url)}</loc>
+        <lastmod>${post.date || lastmod}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+${block(pairs, abs(x_default))}
+    </url>`);
+  }
+
+  return rows.join('\n');
+};
+
+const blog_entries = _blog();
+
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${entries}
 ${resume_entries}
 ${cv_entries}
-${privacy_entries}
+${privacy_entries}${blog_entries ? `\n${blog_entries}` : ''}
 </urlset>
 `;
 
 writeFileSync(resolve(PUBLIC_DIR, 'sitemap.xml'), xml, 'utf8');
-console.log(`[generate-sitemap] wrote ${URLS.length + RESUME_URLS.length + CV_URLS.length + PRIVACY_URLS.length} URLs to public/sitemap.xml`);
+const _count = (xml.match(/<url>/g) || []).length;
+console.log(`[generate-sitemap] wrote ${_count} URLs to public/sitemap.xml`);

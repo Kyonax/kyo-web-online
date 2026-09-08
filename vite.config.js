@@ -44,6 +44,29 @@ import { browserslistToTargets } from 'lightningcss';
 import { defineConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
+/*
+ * Blog routes for the prerender list. A route missing here is silently NOT
+ * prerendered and ships as an empty shell to crawlers, so this must stay in
+ * lockstep with src/router.js — both read this one generated manifest.
+ */
+const _blogRoutePaths = () => {
+  try {
+    const file = fileURLToPath(new URL('./src/data/blog/manifest.json', import.meta.url));
+    const m = JSON.parse(readFileSync(file, 'utf8'));
+    const pages = Object.values(m.pages || {}).flat().map((p) => p.url);
+    /* `routes`, not `posts`: the manifest is split so the eagerly-imported half
+       carries only routing rows. Reading the wrong key here does not error —
+       it silently prerenders nothing, which is exactly the failure this list's
+       own comment warns about. */
+    const posts = (m.routes || []).map((p) => p.url);
+    return [...pages, ...posts];
+  } catch {
+    /* No manifest yet: the site builds exactly as it did before the blog existed. */
+    return [];
+  }
+};
+
+
 const r = (path) => fileURLToPath(new URL(path, import.meta.url));
 const SCSS_DIR = r('./src/scss');
 
@@ -308,7 +331,15 @@ export default defineConfig(({ mode }) => {
          the URL lists in scripts/generate-sitemap.mjs — a route missing here is
          silently NOT prerendered and ships as an empty shell to crawlers. */
       includedRoutes() {
-        return ['/', '/es', '/resume', '/es/hoja-de-vida', '/privacy', '/es/privacy'];
+        /* The hand-written pages, plus every blog route the synced manifest names.
+           Read with readFileSync rather than imported: this runs at CONFIG time,
+           before the @-aliases exist, and the file is generated so it may be an
+           empty manifest on a checkout with no blog build. */
+        const blog = _blogRoutePaths();
+        return [
+          '/', '/es', '/resume', '/es/hoja-de-vida', '/privacy', '/es/privacy',
+          ...blog,
+        ];
       },
     },
 

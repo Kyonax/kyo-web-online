@@ -286,4 +286,120 @@ onBeforeUnmount(() => {
     &--left   { text-align: left; }
   }
 }
+
+/*
+ * .blog-rich — the article vocabulary.
+ *
+ * .doc-rich above styles bare p/ul/li because the tags arrive from an i18n
+ * string and cannot carry classes. A blog article is the same situation with a
+ * much wider vocabulary: the markup comes from org2html, so every element has
+ * to be reachable by tag rather than by class.
+ *
+ * The org-* hooks the engine emits are addressed directly where a bare tag is
+ * not specific enough. Colours are tokens only — check-color-usage.mjs hard
+ * fails on a hex literal in any .vue <style> block, which is exactly what a
+ * pasted syntax-highlight theme would bring.
+ */
+:deep(.blog-rich) {
+  h2, h3, h4 {
+    margin: 2.25rem 0 0.75rem;
+    line-height: 1.25;
+    letter-spacing: -0.03rem;
+  }
+
+  h2 { font-size: var(--fs-500); }
+  h3 { font-size: var(--fs-400); }
+  h4 { font-size: var(--fs-300); }
+
+  ol {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+  }
+
+  li + li { margin-top: 0.35rem; }
+
+  blockquote {
+    margin: 1.5rem 0;
+    padding: 0.25rem 0 0.25rem 1rem;
+    border-left: 2px solid var(--clr-primary-100);
+    color: var(--clr-neutral-100);
+  }
+
+  pre {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid var(--clr-border-100);
+    border-radius: 6px;
+    background-color: var(--clr-neutral-400);
+    font-size: var(--fs-200);
+  }
+
+  code {
+    font-family: 'SpaceMono', monospace;
+    font-size: 0.95em;
+  }
+
+  :not(pre) > code {
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background-color: var(--clr-neutral-400);
+  }
+
+  figure {
+    margin: 1.75rem 0;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+
+  /* Upgraded to a real hit area by v-blog-lightbox. */
+  .org-image[role='button'] { cursor: zoom-in; }
+
+  figcaption {
+    margin-top: 0.5rem;
+    color: var(--clr-neutral-200);
+    font-size: var(--fs-200);
+  }
+
+  hr {
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--clr-border-100);
+  }
+
+  /* Wide content scrolls inside its own box; the page never scrolls sideways. */
+  .org-table-scroll { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-200);
+  }
+
+  th, td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--clr-border-100);
+    text-align: left;
+  }
+
+  th { color: var(--clr-neutral-200); }
+
+  .org-footnotes {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--clr-border-100);
+    font-size: var(--fs-200);
+  }
+
+  .org-drawer {
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--clr-border-100);
+    border-radius: 6px;
+  }
+}
 </style>

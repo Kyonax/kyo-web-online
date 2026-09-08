@@ -31,6 +31,12 @@ const REQUIRED = {
   ProfilePage: ['mainEntity'],
   FAQPage:     ['mainEntity', 'inLanguage', 'isPartOf'],
   VideoObject: ['name', 'thumbnailUrl', 'uploadDate'],
+  /* The blog graph. BreadcrumbList was already emitted by the resume and
+     privacy pages without being listed here — only seo-audit's per-document
+     dangling-@id pass caught it — so both are declared now. */
+  BlogPosting: ['headline', 'url', 'inLanguage'],
+  Blog: ['name', 'url', 'inLanguage'],
+  BreadcrumbList: ['itemListElement'],
 };
 
 const SUPPORTED_LOCALES = ['en', 'es'];
@@ -44,10 +50,11 @@ mkdirSync(TMP_DIR, { recursive: true });
 const _build = (locale) => {
   const entry = resolve(TMP_DIR, `entry-${locale}.mjs`);
   writeFileSync(entry, `
-import { buildSiteJsonLd, buildFaqJsonLd } from '@seo/json-ld';
+import { buildSiteJsonLd, buildBlogJsonLd, buildFaqJsonLd } from '@seo/json-ld';
 const out = {
   site: buildSiteJsonLd({ locale: ${JSON.stringify(locale)} }),
   faq:  buildFaqJsonLd(${JSON.stringify(locale)}),
+  blog: buildBlogJsonLd({ locale: ${JSON.stringify(locale)} }),
 };
 process.stdout.write(JSON.stringify(out));
 `);
