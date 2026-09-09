@@ -11,6 +11,7 @@
  * three chances to forget one.
  */
 
+import { isBlogPostPath } from '@seo/blog-routes';
 import { routeKind } from '@seo/routes';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
@@ -24,6 +25,9 @@ export const usePageKind = () => {
     isLanding:  computed(() => kind.value === 'landing'),
     isResume:   computed(() => kind.value === 'resume'),
     isPrivacy:  computed(() => kind.value === 'privacy'),
+    isBlog:     computed(() => kind.value === 'blog'),
+    /* A post renders an article; anything else under /blog is an archive page. */
+    isBlogPost: computed(() => kind.value === 'blog' && isBlogPostPath(route.path)),
     /* Anything that is not the landing renders through document-page.vue. */
     isDocument: computed(() => kind.value !== 'landing'),
   };

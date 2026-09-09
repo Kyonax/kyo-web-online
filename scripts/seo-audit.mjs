@@ -28,6 +28,60 @@ const PRIVACY_ALTS = { en: 'https://kyonax.com/privacy', es: 'https://kyonax.com
    description inside budget and a resolvable JSON-LD graph. Auditing only the
    landing pages is how a dangling @id and an over-length ES description both
    survived to production. */
+/*
+ * Blog targets, derived from the same manifest the head is built from — so an
+ * audited canonical and the rendered one cannot drift.
+ *
+ * This script never enumerates dist/; it opens the paths it is told about and
+ * FAILS on a missing file. That cuts both ways: an unlisted blog page is not
+ * audited at all, which is why these are generated rather than hand-kept.
+ *
+ * kind: 'page' — the landing-only assertions (exactly 2 JSON-LD blocks, an
+ * FAQPage, the hero name, the kyo:lang marker) do not apply to an article.
+ */
+const _blogTargets = () => {
+  const file = resolve(REPO_ROOT, 'src/data/blog/manifest.json');
+  if (!existsSync(file)) {
+    return [];
+  }
+
+  const m = JSON.parse(readFileSync(file, 'utf8'));
+  const origin = m.origin || 'https://kyonax.com';
+  const toPath = (url) => `${url.replace(/^\//, '')}/index.html`;
+  const out = [];
+
+  for (const [locale, pages] of Object.entries(m.pages || {})) {
+    for (const page of pages) {
+      const alts = {};
+      for (const l of m.locales || []) {
+        const twin = (m.pages[l] || [])[page.number - 1] || (m.pages[l] || [])[0];
+        if (twin) {
+          alts[l] = `${origin}${twin.url}`;
+        }
+      }
+      const first = (m.pages[m.defaultLocale] || [])[0];
+      alts['x-default'] = `${origin}${(first || page).url}`;
+      out.push({
+        path: toPath(page.url), locale, kind: 'page',
+        canonical: `${origin}${page.url}`, alts,
+      });
+    }
+  }
+
+  for (const post of m.posts || []) {
+    const alts = {};
+    for (const row of post.alternates || []) {
+      alts[row.hreflang] = row.href;
+    }
+    out.push({
+      path: toPath(post.url), locale: post.locale, kind: 'page',
+      canonical: `${origin}${post.url}`, alts,
+    });
+  }
+
+  return out;
+};
+
 const TARGETS = [
   { path: 'index.html',                 locale: 'en', kind: 'landing', canonical: 'https://kyonax.com/',
     alts: LANDING_ALTS },
@@ -41,6 +95,7 @@ const TARGETS = [
     alts: PRIVACY_ALTS },
   { path: 'es/privacy/index.html',      locale: 'es', kind: 'page',    canonical: 'https://kyonax.com/es/privacy',
     alts: PRIVACY_ALTS },
+  ..._blogTargets(),
 ];
 
 /* SERP truncation budget. Anything longer is silently cut in results. */

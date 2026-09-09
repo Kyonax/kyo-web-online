@@ -15,6 +15,11 @@ on:
   push:
     branches:
       - main
+  # A merge in Kyonax/kyo-blog fires this. Blog CONTENT lives in that
+  # repository, so a new article changes nothing here and would otherwise
+  # never reach production.
+  repository_dispatch:
+    types: [blog-updated]
   workflow_dispatch:
 
 concurrency:
@@ -28,6 +33,11 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+    env:
+      # Every step below reads the same corpus; sync-blog.mjs falls back to an
+      # empty manifest if this path does not exist.
+      BLOG_DIST: ${{ github.workspace }}/kyo-blog/dist
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -40,6 +50,24 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      # Blog content, checked out beside this repo. sync-blog.mjs (wired into
+      # prebuild) reads BLOG_DIST and copies the manifest, the post bodies, the
+      # search indexes and the media in. If this step is ever removed the build
+      # still succeeds — sync-blog writes an empty manifest and the site ships
+      # exactly as it did before the blog existed.
+      - name: Checkout blog content
+        uses: actions/checkout@v4
+        with:
+          repository: Kyonax/kyo-blog
+          ref: main
+          path: kyo-blog
+
+      - name: Build the blog corpus
+        working-directory: kyo-blog
+        run: |
+          npm ci
+          npm run blog:build
 
       - name: Run precheck gate
         run: npm run precheck

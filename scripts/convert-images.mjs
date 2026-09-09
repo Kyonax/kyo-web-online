@@ -16,6 +16,11 @@ const SRC_DIRS = [
   join(REPO_ROOT, 'src/assets/app'),
   join(REPO_ROOT, 'src/assets/projects'),
   join(REPO_ROOT, 'src/assets/testimonials'),
+  /* Blog media, synced from kyo-blog by scripts/sync-blog.mjs. org2html does
+     not copy content images, so this pipeline is what gives the archive cards
+     their AVIF/WebP siblings and their intrinsic dimensions — and dimensions
+     are what hold the CLS <= 0.1 Lighthouse assertion. */
+  join(REPO_ROOT, 'src/assets/blog'),
 ];
 const SOURCE_EXTS = ['.jpg', '.jpeg', '.png'];
 const WEBP_QUALITY = 90;

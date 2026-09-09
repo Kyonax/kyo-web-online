@@ -164,3 +164,9 @@ COMMIT.org
 PR.org
 
 .lighthouseci/
+
+# Blog corpus synced from kyo-blog by scripts/sync-blog.mjs.
+# CONTENT lives in that repo; a copy here is a build artefact, never source.
+src/data/blog/
+public/blog-search/
+src/assets/blog/
