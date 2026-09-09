@@ -29,6 +29,12 @@
  * TITLE AND DESCRIPTION are passed to useSeoHead as literals rather than i18n
  * keys: they are CONTENT, authored per article, and putting them in the
  * catalogue would demand one entry per post in every locale.
+ *
+ * NO `signoff`. DocumentPage's sign-off exists because /resume and /privacy
+ * render no chrome below the sheet — a blog route does: App.vue renders
+ * <BlogFooter> under every one of them. Passing both painted two footers.
+ * BlogFooter is the one that stays; it is the owner's ask and it carries the
+ * way back, which a sign-off line does not.
  */
 
 import { loadBlogPost } from '@composables/use-blog';
@@ -121,7 +127,6 @@ const formatted_date = computed(() => {
     align="left"
     :crumbs="crumbs"
     :crumbs-label="t('kyo-web.breadcrumb.aria')"
-    :signoff="t('kyo-web.blog.signoff')"
   >
     <template #header>
       <h1 class="doc__title">
@@ -170,6 +175,21 @@ const formatted_date = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+/* The masthead carried no styling of its own — it was a bare <h1> inheriting
+   the mono body face, and it read as a caption rather than a title. It is the
+   display face at the archive's own scale now, one step down from the archive
+   masthead because an article sits under it. */
+.doc__title {
+  margin: 0 0 0.75rem;
+  font-family: 'Geomanist', sans-serif;
+  font-size: var(--fs-600);
+  line-height: 1.1;
+  letter-spacing: -0.03rem;
+  color: var(--clr-neutral-100);
+
+  @include min-media-query(md) { font-size: var(--fs-700); }
+}
+
 .blog-post__meta {
   display: flex;
   flex-wrap: wrap;

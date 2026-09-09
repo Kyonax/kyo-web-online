@@ -10,10 +10,13 @@ const props = defineProps({
   tag: { type: String, required: true },
   title: { type: String, required: true },
   subtitle: { type: String, default: '' },
+  /* '1' exists for the blog archive's masthead: the band shape IS the page
+     head there, so it renders the document's only <h1> rather than a second
+     hand-rolled title that would drift from this one. */
   level: {
     type: String,
     default: '2',
-    validator: (l) => ['2', '3', '4'].includes(l),
+    validator: (l) => ['1', '2', '3', '4'].includes(l),
   },
 });
 

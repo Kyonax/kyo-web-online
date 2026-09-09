@@ -7,6 +7,7 @@
 import useCursorTooltip from '@composables/use-cursor-tooltip';
 import usePageKind from '@composables/use-page-kind';
 import { CV_URL } from '@data/data';
+import { BLOG_INDEX_URLS } from '@seo/blog-routes';
 import AppIcon from '@ui/app-icon.vue';
 import UiButton from '@ui/button.vue';
 import CursorTooltip from '@ui/cursor-tooltip.vue';
@@ -18,7 +19,7 @@ import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n();
 
 /*
- * The nav has three modes, one per page kind:
+ * The nav has four modes, one per page kind:
  *   landing  — section links, skip link and the mobile drawer.
  *   resume   — stripped: the section links anchor into the landing and would
  *              dead-link here, so only the brand (back to landing), the CV
@@ -26,10 +27,16 @@ const { t, locale } = useI18n();
  *   privacy  — the same stripped nav WITHOUT the CV download. A policy page is
  *              not a place to offer a résumé, and the button is icon-only, so
  *              its meaning depends entirely on being on the CV page.
- * The brand is the way back for both document kinds.
+ *   blog     — NOT stripped. The archive and the articles are a destination a
+ *              reader arrives at from search, not a document someone opened
+ *              from the landing, so they need a way out: Home and Blog, both
+ *              real routes rather than the landing's in-page anchors. The
+ *              landing nav carries a BLOG item for the same reason in reverse.
+ * The brand is the way back for every document kind.
  */
-const { isLanding, isResume, isDocument } = usePageKind();
+const { isLanding, isResume, isBlog, isDocument } = usePageKind();
 const landing_href = computed(() => (locale.value === 'es' ? '/es' : '/'));
+const blog_href = computed(() => BLOG_INDEX_URLS[locale.value] || BLOG_INDEX_URLS.en);
 /* On a document page the brand is the way back; on the landing it is the
    scroll-to-top anchor. */
 const brand_href = computed(() => (isDocument.value ? landing_href.value : '#hero'));
@@ -37,6 +44,11 @@ const cv_href = computed(() => (locale.value === 'es' ? CV_URL.es : CV_URL.en));
 const cv_filename = computed(() =>
   `Cristian-Moreno-Senior-Software-Engineer-${locale.value === 'es' ? 'ES' : 'EN'}.pdf`);
 
+/*
+ * `id` is an in-page anchor and takes part in the active-section algorithm;
+ * `route` is a real URL and does not. BLOG is the only `route` entry — it
+ * leaves the landing, so there is no section for it to ever be "at".
+ */
 const NAV_LINKS = [
   { id: 'hero',       key: 'kyo-web.landing.nav.hero' },
   { id: 'experience', key: 'kyo-web.landing.nav.experience' },
@@ -44,12 +56,39 @@ const NAV_LINKS = [
   { id: 'skills',     key: 'kyo-web.landing.nav.skills' },
   { id: 'faq',        key: 'kyo-web.landing.nav.faq' },
   { id: 'contact',    key: 'kyo-web.landing.nav.contact' },
+  /* The breadcrumb label, uppercased here rather than duplicated into the nav
+     catalogue — the eager catalogue is main-bundle bytes for every visitor,
+     and this row is the same word twice. */
+  { id: 'blog',       key: 'kyo-web.blog.breadcrumb', route: true },
 ];
+
+/*
+ * ONE list, resolved per page kind, and ONE loop in the template. The blog
+ * branch started as a second <a> beside the landing's and cost 275 B gzipped
+ * in the MAIN bundle — which sits ~150 B under an enforced 180 KB ceiling, so
+ * a duplicated element is not a style question here.
+ *
+ * `aria` is undefined on the blog links on purpose: the landing's are anchors
+ * whose one-word text needs expanding, these are routes whose text already
+ * says where they go, and Vue omits the attribute for undefined.
+ *
+ * The blog hrefs come from the same helpers the archive and the blog footer
+ * use, so the three can never point at different URLs.
+ */
+const nav_links = computed(() => (isLanding.value
+  ? NAV_LINKS
+  : [
+    { id: 'home', href: landing_href.value, label: t('kyo-web.breadcrumb.home') },
+    { id: 'blog', href: blog_href.value,    label: t('kyo-web.blog.breadcrumb') },
+  ]));
 
 /* Sections that exist in the DOM but have no nav link — mapped to the
  * nearest nav parent so the active-state algorithm doesn't skip them. */
 const SECTION_NAV_MAP = { testimonials: 'hero' };
-const _TRACKED_IDS    = [...NAV_LINKS.map(l => l.id), ...Object.keys(SECTION_NAV_MAP)];
+const _TRACKED_IDS    = [
+  ...NAV_LINKS.filter(l => !l.route).map(l => l.id),
+  ...Object.keys(SECTION_NAV_MAP),
+];
 
 const GITHUB_URL   = 'https://github.com/Kyonax';
 const LINKEDIN_URL = 'https://www.linkedin.com/in/kyonax/';
@@ -209,7 +248,11 @@ onBeforeUnmount(() => {
     :class="{ 'hud-nav--scrolled': scrolled, 'hud-nav--open': mobile_open }"
     role="banner"
   >
-    <a v-if="isLanding" class="hud-nav__skip-link" href="#hero">{{ t('kyo-web.landing.nav.skip-to-content') }}</a>
+    <a
+      v-if="isLanding || isBlog"
+      class="hud-nav__skip-link"
+      :href="isLanding ? '#hero' : '#main'"
+    >{{ t('kyo-web.landing.nav.skip-to-content') }}</a>
 
     <div class="hud-nav__bar">
       <a
@@ -222,23 +265,27 @@ onBeforeUnmount(() => {
       </a>
 
       <nav
-        v-if="isLanding"
+        v-if="isLanding || isBlog"
         id="hud-nav-menu"
         class="hud-nav__links"
         :class="{ 'is-open': mobile_open }"
-        :aria-label="t('kyo-web.landing.nav.menu')"
+        :aria-label="isLanding ? t('kyo-web.landing.nav.menu') : t('kyo-web.blog.nav-aria')"
       >
+        <!-- `label` present = a resolved route link (blog chrome, and the
+             landing's own BLOG item); `key` present = a landing anchor that
+             takes part in the active-section algorithm and carries an
+             expanded aria label its one-word text does not give. -->
         <a
-          v-for="link in NAV_LINKS"
+          v-for="link in nav_links"
           :key="link.id"
-          :href="`#${link.id}`"
+          :href="link.href || (link.route ? blog_href : `#${link.id}`)"
           class="hud-nav__link"
-          :class="{ 'is-active': active_section === link.id }"
-          :aria-label="t(`kyo-web.landing.nav.aria.${link.id}`)"
-          :aria-current="active_section === link.id ? 'location' : undefined"
+          :class="{ 'is-active': !link.route && active_section === link.id }"
+          :aria-label="link.key && !link.route ? t(`kyo-web.landing.nav.aria.${link.id}`) : undefined"
+          :aria-current="!link.route && active_section === link.id ? 'location' : undefined"
           @click="onAnchorClick"
         >
-          {{ t(link.key) }}
+          {{ link.label || t(link.key) }}
         </a>
       </nav>
 
@@ -286,7 +333,7 @@ onBeforeUnmount(() => {
           </a>
         </div>
         <UiButton
-          v-if="isLanding"
+          v-if="isLanding || isBlog"
           variant="ghost"
           size="md"
           class="hud-nav__menu-toggle"
@@ -424,6 +471,12 @@ onBeforeUnmount(() => {
     text-decoration: none;
     font-size: var(--fs-300);
     letter-spacing: 0.08em;
+    /* The casing is a property of the NAV, not of the copy. Every landing
+       label was already capitalised in the catalogue; the blog links reuse
+       the breadcrumb strings, which are title case because a breadcrumb is,
+       and a second all-caps copy of "Blog" in the eager catalogue is main
+       bundle bytes for every visitor to buy the same word twice. */
+    text-transform: uppercase;
     padding: 0.4rem 0.2rem;
     transition: color 0.2s ease;
 

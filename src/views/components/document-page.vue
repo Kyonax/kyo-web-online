@@ -50,11 +50,16 @@ defineProps({
    *   `font-size` are declared on the SAME element so `ch` resolves against
    *   the size the text actually renders at, and the cap therefore steps with
    *   the type scale for free.
+   * `index` — a BOARD, not a document. The blog archive is a list of entries,
+   *   and inside the 58rem sheet it read as a page of writing instead. This is
+   *   the same 1280px band `.kyo-section` gives every landing section and
+   *   `hud-nav__bar` gives the nav, so the archive lines up with the chrome
+   *   above it rather than floating narrower than the site it belongs to.
    */
   width: {
     type: String,
     default: 'prose',
-    validator: (v) => ['sheet', 'prose'].includes(v),
+    validator: (v) => ['sheet', 'prose', 'index'].includes(v),
   },
   /* Header + sign-off alignment. The CV centres its masthead like the printed
      document; a policy page is not a CV and reads flush left throughout. */
@@ -134,7 +139,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main :id="id" class="doc">
+  <main :id="id" class="doc" :class="`doc--${width}`">
     <article ref="sheet_ref" class="doc__sheet" :class="`doc__sheet--${width}`">
       <UiBreadcrumbs :items="crumbs" :label="crumbsLabel" class="doc__crumbs" />
 
@@ -182,6 +187,30 @@ onBeforeUnmount(() => {
     &--prose {
       font-size: var(--fs-300);
       max-width: var(--kyo-measure);
+    }
+
+    /* The board. `position: relative` is what anchors the HUD deco the archive
+       places in its corners — the same requirement every landing section has. */
+    &--index {
+      position: relative;
+      max-width: 1280px;
+      /* Clips the HUD chrome to the board, the same way `.kyo-section` clips
+         every landing section's watermark. Without it an oversized watermark
+         widens the page and the whole document scrolls sideways. */
+      overflow: hidden;
+    }
+  }
+
+  /* The board carries the landing's own gutter at md+, so its edges sit on the
+     same vertical lines as the nav bar and every landing section. The document
+     widths keep the tighter reading gutter they were tuned with. */
+  &--index {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    @include min-media-query(md) {
+      padding-left: 2rem;
+      padding-right: 2rem;
     }
   }
 
@@ -301,6 +330,24 @@ onBeforeUnmount(() => {
  * pasted syntax-highlight theme would bring.
  */
 :deep(.blog-rich) {
+  /*
+   * THE ENGINE'S OWN ARTICLE HEADER IS SUPPRESSED, and this is the right layer
+   * to do it in.
+   *
+   * org2html emits `<header class="org-article-header">` carrying the title,
+   * the date and the category, because a standalone HTML document it converts
+   * has nothing else to carry them. Rendered inside this shell it is a SECOND
+   * masthead: the article showed its title twice, its date twice (formatted
+   * once and ISO once) and its category as a bare orphan line above the lead.
+   *
+   * Site chrome is WEBSITE scope [D-22]. The view's header slot already
+   * renders the title as the page's only <h1>, the date, and the reading time
+   * the engine does not publish here; the category is in the breadcrumb. So
+   * nothing is lost — the duplicate goes, and the engine keeps emitting the
+   * header for the consumers that need it.
+   */
+  .org-article-header { display: none; }
+
   h2, h3, h4 {
     margin: 2.25rem 0 0.75rem;
     line-height: 1.25;

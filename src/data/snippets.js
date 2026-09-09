@@ -37,10 +37,6 @@ export const TRANSLATIONS = {
         'prev-post': 'Previous article',
         'next-post': 'Next article',
         'related': 'Related reading',
-        'comments': 'Replies',
-        'comments-none': 'No replies yet.',
-        'comments-source': 'Replies come from the announcement post on X.',
-        'signoff': 'Cristian D. Moreno - Blog',
         'not-found': 'That article does not exist.',
         'back-to-index': 'Back to the blog',
         'meta': {
@@ -632,10 +628,6 @@ export const TRANSLATIONS = {
         'prev-post': 'Artículo anterior',
         'next-post': 'Artículo siguiente',
         'related': 'Lecturas relacionadas',
-        'comments': 'Respuestas',
-        'comments-none': 'Todavía no hay respuestas.',
-        'comments-source': 'Las respuestas vienen de la publicación de anuncio en X.',
-        'signoff': 'Cristian D. Moreno - Blog',
         'not-found': 'Ese artículo no existe.',
         'back-to-index': 'Volver al blog',
         'meta': {
