@@ -96,15 +96,18 @@ export const buildBlogJsonLd = ({ locale = 'en', post = null } = {}) => {
         buildBreadcrumbJsonLd({
           id: crumbId,
           locale,
-          currentKey: 'blog.breadcrumb',
+          currentName: post.title,
+          parent: { key: 'blog.breadcrumb', url: indexUrl(locale) },
         }),
       ],
     };
   }
 
-  /* ------------------------------------------------------- the archive ---- */
+  /* ------------------------------------------------------- the archive ----
+   * NO BreadcrumbList. The archive is the top of its own section and renders no
+   * visible trail, and a one-item list naming the page you are already on is
+   * the half-answer this repo refuses to publish. */
   const url = indexUrl(locale);
-  const crumbId = `${url}#breadcrumb`;
 
   return {
     '@context': 'https://schema.org',
@@ -121,13 +124,7 @@ export const buildBlogJsonLd = ({ locale = 'en', post = null } = {}) => {
         isPartOf: { '@id': WEBSITE_ID },
         author: { '@id': PERSON_ID },
         publisher: { '@id': PERSON_ID },
-        breadcrumb: { '@id': crumbId },
       },
-      buildBreadcrumbJsonLd({
-        id: crumbId,
-        locale,
-        currentKey: 'blog.breadcrumb',
-      }),
     ],
   };
 };

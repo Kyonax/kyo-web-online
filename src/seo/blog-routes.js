@@ -40,6 +40,30 @@ const prefixFor = (locale) =>
 
 const indexUrlFor = (locale) => `${prefixFor(locale)}${BLOG_BASE}`;
 
+/*
+ * An ENGINE url -> a SITE route.
+ *
+ * relations.json is data, not navigation [P-00]: the engine writes every url in
+ * it ROOT-RELATIVE to its own corpus (`/engineering/2026-05-01-x`), because it
+ * does not know where the host mounts the blog or how the host spells a locale.
+ * Rendering one of those straight into an `href` produces a path this router has
+ * no route for, and the 404 surface sends the reader to the landing page — which
+ * is exactly what previous/next, related reading and every series item did.
+ *
+ * So the base path and the locale prefix are added HERE, once, in the same shape
+ * `indexUrlFor` already uses. Idempotent: a url that already carries the prefix
+ * is returned untouched, so running it twice cannot double it.
+ */
+export const blogSiteUrl = (engineUrl, locale) => {
+  if (!engineUrl || typeof engineUrl !== 'string' || !engineUrl.startsWith('/')) {
+    return engineUrl;
+  }
+  const prefix = `${prefixFor(locale)}${BLOG_BASE}`;
+  return engineUrl.startsWith(`${prefix}/`) || engineUrl === prefix
+    ? engineUrl
+    : `${prefix}${engineUrl}`;
+};
+
 /* Trailing slash is optional in the served URLs (Apache DirectorySlash
    Off), so every comparison accepts both — the rule routes.js applies to
    its own families. */
@@ -62,6 +86,12 @@ for (const [locale, pages] of Object.entries(PAGES)) {
 
 export const blogPostAt = (path) => BY_URL.get(strip(path)) || null;
 export const blogPageAt = (path) => PAGE_URLS.get(strip(path)) || null;
+
+/* Every archive page for a locale, in order. The pagination renders NUMBERED
+   links, so it needs the siblings and not just prev/next — and this reads the
+   ROUTING manifest, which routes.js already imports eagerly, so it costs the
+   bundle nothing over what is loaded on every page anyway. */
+export const blogPagesFor = (locale) => PAGES[locale] || [];
 
 export const BLOG_INDEX_URLS = Object.freeze(
   Object.fromEntries(BLOG_LOCALES.map((l) => [l, indexUrlFor(l)])),
