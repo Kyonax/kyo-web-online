@@ -4,6 +4,7 @@
  * Distributed under the terms of GPL-2.0-only — see LICENSE.
  */
 
+import useActiveSection from '@composables/use-active-section';
 import useCursorTooltip from '@composables/use-cursor-tooltip';
 import usePageKind from '@composables/use-page-kind';
 import { CV_URL } from '@data/data';
@@ -79,7 +80,18 @@ const nav_links = computed(() => (isLanding.value
   ? NAV_LINKS
   : [
     { id: 'home', href: landing_href.value, label: t('kyo-web.breadcrumb.home') },
-    { id: 'blog', href: blog_href.value,    label: t('kyo-web.blog.breadcrumb') },
+    {
+      id: 'blog',
+      href: blog_href.value,
+      label: t('kyo-web.blog.breadcrumb'),
+      /* Standing state, not scroll state. The landing's active link is
+         whichever SECTION fills the screen; on the blog you are simply IN the
+         blog for the whole visit, on the archive and on every article alike,
+         so BLOG is marked from the moment the page loads. Without this the
+         menu rendered two links that looked identical and neither of which
+         said where you were. */
+      current: true,
+    },
   ]));
 
 /* Sections that exist in the DOM but have no nav link — mapped to the
@@ -109,58 +121,29 @@ const {
 
 const scrolled = ref(false);
 const mobile_open = ref(false);
-const active_section = ref('hero');
 const header_ref = ref(null);
 
-let _scroll_frame = 0;
-let _last_scroll_run = 0;
+/*
+ * "Which section am I in?" now has ONE implementation, in
+ * @composables/use-active-section — the algorithm that used to live here, moved
+ * out unchanged when the section rail needed the same answer. Two copies would
+ * have meant the nav highlighting one section while the rail highlighted its
+ * neighbour, which is worse than either being slightly wrong alone.
+ *
+ * Every in-page link shows at every width, so this drives the bar's highlight on
+ * desktop and the drawer's on mobile alike.
+ */
+const { active: active_section } = useActiveSection(_TRACKED_IDS, {
+  aliases: SECTION_NAV_MAP,
+  topId: 'hero',
+});
 
+/* Standing state of the BAR itself, which is not a section question — kept
+   here, and deliberately not folded into the composable. */
+let _scroll_frame = 0;
 const _read_scroll = () => {
   _scroll_frame = 0;
-  const now = Date.now();
-  if (now - _last_scroll_run < 100) {
-    return;
-  }
-  _last_scroll_run = now;
-
   scrolled.value = window.scrollY > 24;
-
-  if (window.scrollY < 80) {
-    active_section.value = 'hero';
-    return;
-  }
-
-  /*
-   * "Last section whose top has crossed above 50% of the viewport."
-   * Sorting candidates by their current top position (page order) and
-   * iterating in that order means the LAST one that passes the threshold
-   * is the section actually filling the screen — producing natural,
-   * non-premature active-state transitions.
-   *
-   * Contrast with the previous min-distance approach: that activated the
-   * next section when it was merely "closer to 40% vh" than the current
-   * one, which fired far too early (next section still well below center).
-   */
-  const threshold = window.innerHeight * 0.5;
-
-  const candidates = _TRACKED_IDS
-    .map((id) => {
-      const el = document.querySelector(`#${id}`);
-      return el ? { id, top: el.getBoundingClientRect().top } : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.top - b.top); // ensure page-order regardless of _TRACKED_IDS order
-
-  let winner = null;
-  for (const { id, top } of candidates) {
-    if (top <= threshold) {
-      winner = id;
-    }
-  }
-
-  if (winner) {
-    active_section.value = SECTION_NAV_MAP[winner] ?? winner;
-  }
 };
 
 const onScroll = () => {
@@ -280,9 +263,12 @@ onBeforeUnmount(() => {
           :key="link.id"
           :href="link.href || (link.route ? blog_href : `#${link.id}`)"
           class="hud-nav__link"
-          :class="{ 'is-active': !link.route && active_section === link.id }"
+          :class="{
+            'is-active': link.current || (!link.route && active_section === link.id),
+            'hud-nav__link--section': Boolean(link.key) && !link.route && link.id !== 'hero',
+          }"
           :aria-label="link.key && !link.route ? t(`kyo-web.landing.nav.aria.${link.id}`) : undefined"
-          :aria-current="!link.route && active_section === link.id ? 'location' : undefined"
+          :aria-current="link.current ? 'page' : (!link.route && active_section === link.id ? 'location' : undefined)"
           @click="onAnchorClick"
         >
           {{ link.label || t(link.key) }}
@@ -618,7 +604,23 @@ onBeforeUnmount(() => {
     }
   }
 
-  
+
+  /*
+   * THE SECTION ANCHORS MOVE TO THE CHIP ON DESKTOP — but HOME stays.
+   *
+   * The chip owns navigating BETWEEN sections; the bar keeps the one link that
+   * is a destination rather than a position, so there is always a way back to
+   * the top that does not require opening anything. `hero` is therefore excluded
+   * from the rule while the other five are hidden.
+   *
+   * HIDDEN, NOT REMOVED, and only above `md`: below that the chip is the only
+   * control and the drawer is still how you move around, so the markup has to
+   * survive. Deleting it would take the sections off mobile entirely.
+   */
+  .hud-nav__link--section {
+    @include min-media-query(md) { display: none; }
+  }
+
   &--open .hud-nav__links {
     @include max-media-query(md) {
       display: flex;

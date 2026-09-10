@@ -26,10 +26,16 @@
  */
 
 import useSeoHead from '@composables/use-seo-head';
+import { TRANSLATIONS_PRIVACY } from '@data/snippets-privacy';
+import { useMessageSlice } from '@i18n/use-message-slice';
 import { PRIVACY_HREFLANG_ALTERNATES, PRIVACY_URL, ROUTE_BY_LOCALE } from '@seo/routes';
 import DocumentPage from '@views/components/document-page.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+/* The privacy page's body copy is not in the main bundle — it rides in this
+   view's own chunk and is merged in before anything reads a key from it. */
+useMessageSlice(TRANSLATIONS_PRIVACY);
 
 const { t, tm, rt, locale } = useI18n();
 
@@ -64,13 +70,17 @@ const sections = computed(() => tm('kyo-web.privacy.sections')
     :signoff="t('kyo-web.privacy.signoff')"
   >
     <template #header>
-      <h1 class="privacy__title">{{ t('kyo-web.privacy.title') }}</h1>
+      <h1 class="privacy__title">
+        {{ t('kyo-web.privacy.title') }}
+      </h1>
     </template>
 
     <p class="doc-prose kyo-prose privacy__lead" v-html="t('kyo-web.privacy.lead')" />
 
     <section v-for="section in sections" :key="section.title" class="doc-block">
-      <h2 class="doc-block__title">{{ section.title }}</h2>
+      <h2 class="doc-block__title">
+        {{ section.title }}
+      </h2>
       <div class="doc-rich kyo-prose" v-html="section.body" />
     </section>
   </DocumentPage>

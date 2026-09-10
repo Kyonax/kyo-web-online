@@ -25,6 +25,7 @@ import {
   BLOG_MANIFEST,
   blogPageAt,
   blogPostAt,
+  blogSiteUrl,
 } from '@seo/blog-routes';
 
 /* The RICH half of the corpus — titles, descriptions, card images, per-page
@@ -63,6 +64,41 @@ const bodyLoaderFor = (post) => {
   return key ? BODIES[key] : null;
 };
 
+/*
+ * RELATIONS ARE DATA; ROUTES ARE THE HOST'S JOB [P-00].
+ *
+ * Every url the engine writes into relations.json is relative to the CORPUS
+ * root (`/engineering/2026-05-01-x`), not to where this site mounts the blog.
+ * Bound straight to an `href` they resolve to a path the router does not know,
+ * and the 404 surface lands the reader on the landing page — which is what
+ * previous/next, related reading and every series item were doing, in both
+ * locales (Spanish lost `/es` as well as `/blog`).
+ *
+ * They are rewritten ONCE, here, so every component that renders navigation
+ * stays dumb and no future component has to remember the rule.
+ */
+const siteRelations = (relations, locale) => {
+  if (!relations) {
+    return relations;
+  }
+  const link = (item) =>
+    (item && item.url ? { ...item, url: blogSiteUrl(item.url, locale) } : item);
+  return {
+    ...relations,
+    prev: link(relations.prev),
+    next: link(relations.next),
+    related: Array.isArray(relations.related) ? relations.related.map(link) : relations.related,
+    series: relations.series
+      ? {
+        ...relations.series,
+        items: Array.isArray(relations.series.items)
+          ? relations.series.items.map(link)
+          : relations.series.items,
+      }
+      : relations.series,
+  };
+};
+
 /**
  * The full post at a path: metadata from the manifest, body + head + relations
  * from its own chunk. Returns null for a path that is not a post, so the view
@@ -76,7 +112,27 @@ export const loadBlogPost = async (path) => {
   }
   const mod = await loader();
   const body = mod.default || mod;
-  return { ...post, ...body };
+  /*
+   * `description` is LIFTED OUT OF THE `seo` SIDECAR, and that is a real fix.
+   *
+   * The routing manifest carries url/locale/key and nothing else — the rich
+   * index holds the descriptions and the archive view is the only thing that
+   * loads it. So `post.description` was ALWAYS undefined here, and blog-post's
+   * `useSeoHead({ description: post.description })` fell through to the
+   * catalogue default: every article in both locales published the ARCHIVE's
+   * meta description as its own, which is a duplicate-snippet defect across
+   * the whole blog.
+   *
+   * The engine already emits the per-post one at `seo.description`, in the
+   * body chunk this function has just loaded — so the fix costs no bytes and
+   * no extra request.
+   */
+  return {
+    ...post,
+    ...body,
+    description: body.description || body.seo?.description || '',
+    relations: siteRelations(body.relations, post.locale),
+  };
 };
 
 /* Resolve URLs against the rich index, order preserved. */

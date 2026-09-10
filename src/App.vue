@@ -13,7 +13,7 @@ import HeroSection from '@sections/hero.vue';
 import SiteFooter from '@sections/site-footer.vue';
 import IconSprite from '@ui/icon-sprite.vue';
 import HudNav from '@widgets/hud-nav.vue';
-import { defineAsyncComponent, watch } from 'vue';
+import { computed, defineAsyncComponent, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 /* The document views (resume, privacy) are async for the same reason the
@@ -28,6 +28,24 @@ const ResumeView = defineAsyncComponent(() => {
 const PrivacyView = defineAsyncComponent(() => {
   return import('@views/privacy.vue');
 });
+
+/*
+ * The section rail — the landing's in-page navigation, now that the nav bar has
+ * handed those six destinations over on desktop. Async and shared with the
+ * article route, so both pages fetch the same chunk and neither carries it in
+ * the bundle.
+ */
+const SectionRail = defineAsyncComponent(() => import('@widgets/section-rail.vue'));
+
+/*
+ * The same ids the nav anchors used, with the same labels — the rail replaced
+ * those links, so it has to be able to reach everything they reached. `hero` is
+ * the top of the page, which is why it is also the section marked before any
+ * scrolling has happened.
+ */
+const LANDING_SECTIONS = [
+  'hero', 'experience', 'projects', 'skills', 'faq', 'contact',
+];
 
 /* The blog splits in two: an archive page and an article. Both are async and
    both are wrapped in <Suspense> below, which is what makes vite-ssg await
@@ -65,7 +83,12 @@ const ContactSection = defineAsyncComponent(() => {
   return import('@sections/contact-section.vue');
 });
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
+
+const landing_sections = computed(() => LANDING_SECTIONS.map((id) => ({
+  id,
+  label: t(`kyo-web.landing.nav.${id}`),
+})));
 
 /* App is the shell for every prerendered route. The landing sections render on
    / and /es; the secondary routes render their own document view instead. Each
@@ -93,6 +116,15 @@ watch(locale, (next) => {
   <IconSprite />
 
   <HudNav />
+
+  <!-- Fixed overlay, so it changes no page's layout. On the landing it is the
+       primary in-page navigation above `md`; below that the nav drawer is. -->
+  <SectionRail
+    v-if="isLanding"
+    :sections="landing_sections"
+    :label="t('kyo-web.landing.nav.on-this-page')"
+    top-id="hero"
+  />
 
   <main v-if="isLanding" id="main" class="landing">
     <HeroSection />

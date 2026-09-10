@@ -20,19 +20,35 @@
  * therefore UPGRADES each image in place — tabindex, role, an aria-label and
  * Enter/Space — rather than relying on a mouse-only click handler.
  *
- * The engine's own runtime (o2h.js) ships a lightbox that would do this too,
- * but it is deliberately never loaded on these routes: it sets inline cursor
- * styles, mutates documentElement.style.overflow, and appends a back-to-top
- * button and a read-progress bar to <body> that are never removed on an SPA
- * route change.
+ * THE ENGINE'S RUNTIME IS NOW LOADED ON THESE ROUTES, and it ships a lightbox
+ * of its own — so this composable has to claim the images or the reader gets
+ * TWO overlays on one click. o2h.js guards every enhancement with a dataset
+ * flag and skips anything already marked, so `upgrade()` sets o2h's OWN flag
+ * (`data-o2h-init-light`) before o2h boots. That is the runtime's documented
+ * idempotence contract used as an opt-out: no patching, no monkey-patching,
+ * and every other o2h enhancement (embed click-to-play, copy buttons, the
+ * carousel, back-to-top) is left alone.
+ *
+ * The ordering holds because the script tag is `defer`: it cannot execute
+ * before the document has parsed, while this directive runs during hydration.
+ * `upgrade()` is also called from `updated`, which is the belt to that brace
+ * for images that arrive later.
  */
 
 import { warmImageViewer } from '@composables/use-warm-modal';
 import { ref } from 'vue';
 
 /* Images the engine emits for content. .org-hero-image is excluded: the hero
-   is already presented at full width and is not a detail to zoom into. */
-const SELECTOR = '.org-figure img, .org-image:not(.org-hero-image)';
+   is already presented at full width and is not a detail to zoom into.
+   Carousel and gallery tiles are included because o2h's lightbox used to be
+   the only thing offering them a zoom; taking that away without picking them
+   up here would be a silent regression. */
+const SELECTOR = [
+  '.org-figure img',
+  '.org-image:not(.org-hero-image)',
+  '.org-carousel-strip img',
+  '[data-component="gallery"] img',
+].join(', ');
 
 const pictureFrom = (el) => {
   const src = el.currentSrc || el.getAttribute('src') || '';
@@ -77,6 +93,10 @@ const upgrade = (host, label) => {
       continue;
     }
     img.dataset.blogLightbox = 'on';
+    /* o2h's `once(img, "Light")` returns false when this flag is already set,
+       so its lightbox skips the image entirely — no second overlay, and no
+       inline `cursor: zoom-in` fighting this one's. */
+    img.dataset.o2hInitLight = '1';
     img.setAttribute('tabindex', '0');
     img.setAttribute('role', 'button');
     if (!img.getAttribute('aria-label')) {

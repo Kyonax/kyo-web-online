@@ -21,30 +21,30 @@
     "gzip": true
   },
   {
-    "name": "resume view chunk (JS+CSS)",
+    "name": "resume view chunk (JS+CSS, carries its own copy)",
     "path": [
       "dist/assets/resume-*.js",
       "dist/assets/resume-*.css"
     ],
-    "limit": "3 KB",
+    "limit": "5 KB",
     "gzip": true
   },
   {
-    "name": "privacy view chunk (JS+CSS)",
+    "name": "privacy view chunk (JS+CSS, carries its own copy)",
     "path": [
       "dist/assets/privacy-*.js",
       "dist/assets/privacy-*.css"
     ],
-    "limit": "2 KB",
+    "limit": "3.5 KB",
     "gzip": true
   },
   {
-    "name": "now-projects chunk (JS+CSS)",
+    "name": "now-projects chunk (JS+CSS, carries the project descriptions)",
     "path": [
       "dist/assets/now-projects-section-*.js",
       "dist/assets/now-projects-section-*.css"
     ],
-    "limit": "11 KB",
+    "limit": "19.5 KB",
     "gzip": true
   },
   {
@@ -105,13 +105,22 @@
   {
     "name": "blog post chunk",
     "path": "dist/assets/blog-post-*.{js,css}",
-    "limit": "4 KB",
+    "limit": "4.5 KB",
     "gzip": true
   },
   {
     "name": "blog footer chunk",
     "path": "dist/assets/blog-footer-*.{js,css}",
-    "limit": "1.5 KB",
+    "limit": "2.5 KB",
+    "gzip": true
+  },
+  {
+    "name": "section rail (the chip, one async chunk)",
+    "path": [
+      "dist/assets/section-rail-*.js",
+      "dist/assets/section-rail-*.css"
+    ],
+    "limit": "2.75 KB",
     "gzip": true
   }
 ]

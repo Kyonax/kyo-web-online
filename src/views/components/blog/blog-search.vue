@@ -18,9 +18,9 @@
  * input never appears and the archive is untouched, which is why the control
  * is rendered only after the index has loaded.
  *
- * THE SHAPE is the landing's framed panel, not a rounded form control: a `//`
- * label, a bordered field with a monospace `/` prefix, and results that reuse
- * the archive's own hairline row — so a search result and an archive entry
+ * THE SHAPE is a framed panel, not a rounded form control: a monospace label,
+ * a bordered field with a `/` prefix, and results that reuse the archive's own
+ * hairline row — so a search result and an archive entry
  * read as the same object rather than two different lists of links. The prefix
  * is plain ASCII on purpose; a Nerd Font glyph here would depend on the icon
  * subset actually reaching the browser, and a cached older copy renders tofu.
@@ -69,8 +69,11 @@ const results = computed(() => {
 
 <template>
   <div v-if="index" class="blog-search">
-    <label class="blog-search__label" for="blog-search-input">
-      {{ `// ${t('kyo-web.blog.search-label')}` }}
+    <!-- The label is the PLACEHOLDER now, not a caption stacked above the
+         field. It stays in the DOM as an sr-only <label> because a placeholder
+         is not an accessible name — it disappears the moment anyone types. -->
+    <label class="sr-only" for="blog-search-input">
+      {{ t('kyo-web.blog.search-label') }}
     </label>
 
     <div class="blog-search__field">
@@ -87,11 +90,11 @@ const results = computed(() => {
 
     <div v-if="results" class="blog-search__results" role="status">
       <p v-if="results.length === 0" class="blog-search__empty">
-        {{ `// ${t('kyo-web.blog.search-empty')}` }}
+        {{ t('kyo-web.blog.search-empty') }}
       </p>
       <template v-else>
         <p class="blog-search__count">
-          {{ `// ${results.length} ${t('kyo-web.blog.search-results')}` }}
+          {{ `${results.length} ${t('kyo-web.blog.search-results')}` }}
         </p>
         <ul class="blog-search__list">
           <li v-for="row in results" :key="row.url" class="blog-search__row">
@@ -107,29 +110,28 @@ const results = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.blog-search { margin-bottom: 2rem; }
-
-.blog-search__label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--clr-primary-100);
-  font-family: 'SpaceMono', monospace;
-  font-size: var(--fs-100);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
+/* Sits with the "All posts" heading, not a band away from it. */
+.blog-search { margin-bottom: 1.5rem; }
 
 /* The frame, not the input, carries the border and the focus ring — so the
-   prefix and the field read as one control the way the landing's framed
-   panels do, instead of a glyph parked beside a form element. */
+   prefix and the field read as one control instead of a glyph parked beside a
+   form element. */
 .blog-search__field {
   display: flex;
   gap: 0.65rem;
   align-items: center;
-  padding: 0.7rem 0.9rem;
+  /* The field sits on the SAME measure as the results beneath it — which is
+     now true because BOTH keep their padding and neither pulls it back out
+     with a negative margin. The bleed the two used to share put their text on
+     the sheet edge and was then clipped by the sheet's own `overflow: hidden`,
+     so it cost a gutter and bought nothing. */
+  padding: 0.7rem 1.25rem;
   border: 1px solid var(--clr-border-100);
   transition: border-color 0.2s ease;
 
+  &:hover { border-color: var(--clr-border-400); }
+
+  /* Focus is a STATE, and state is what the accent is for. */
   &:focus-within {
     border-color: var(--clr-primary-100);
     outline: 1px solid var(--clr-primary-100);
@@ -186,19 +188,26 @@ const results = computed(() => {
 
 .blog-search__row + .blog-search__row { border-top: 1px solid var(--clr-border-100); }
 
-/* The archive row, at search scale — same hairline, same accent on hover, so
-   a result and an entry are visibly the same kind of thing. */
+/* The archive row, at search scale — same hairline, same hover, so a result
+   and an entry are visibly the same kind of thing.
+   THE NUMBERS NOW MATCH THAT CLAIM. At 0.7rem/0.75rem they did not: the fill
+   bled 9px past the column while the text sat flush against its own edge, so a
+   result read as a grey band with the title jammed into the corner rather than
+   as a row. These are blog.vue's own values, scaled only on the block axis
+   because a result is one line where an archive entry is three. */
 .blog-search__link {
   display: flex;
   gap: 1rem;
   align-items: baseline;
   justify-content: space-between;
-  padding: 0.7rem 0;
+  padding: 1rem 1.25rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
   text-decoration: none;
   color: inherit;
 
   &:hover,
   &:focus-visible {
+    background-color: color-mix(in srgb, var(--clr-neutral-100) 6%, transparent);
     color: var(--clr-primary-100);
 
     .blog-search__arrow { transform: translateX(0.2rem); }
@@ -209,7 +218,9 @@ const results = computed(() => {
 
 .blog-search__arrow {
   flex: 0 0 auto;
+  display: inline-block;
   font-family: 'SpaceMono', monospace;
+  line-height: 1;
   transition: transform 0.2s ease;
 }
 </style>

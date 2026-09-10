@@ -7,31 +7,23 @@
 /*
  * The blog archive (/blog, /blog/page/N, and their /es twins).
  *
- * IT IS A BOARD, NOT A DOCUMENT. It used to render inside DocumentPage's 58rem
- * printed-CV sheet with bare <h2> rules, so an INDEX read as a page of writing.
- * It is assembled from the LANDING's vocabulary instead — the only design
- * reference this site has — and from the landing's own components, not copies:
- * UiSectionHeader opens each band with an ordinal, a display heading and a
- * one-line deck; UiHudDeco puts the chrome in the corners; BlogCard is the
- * project card with a date where the status chip goes.
+ * THREE MOVEMENTS, NO SECTION FURNITURE BETWEEN THEM:
+ *   the LEAD article, given the page's full width and no card around it
+ *   THREE more recent articles, a bare card row with no heading of its own
+ *   ALL POSTS — the only labelled band: heading, search, list, pagination
  *
- * Three bands, in the order a reader scans them:
- *   // 01 the FEATURED post — the newest article, as one panel
- *   // 02 RECENT articles — the card row
- *   // 03 ALL POSTS — search, a dense dated list, pagination
+ * IT SPENDS NO ACCENT. The archive carried monospace ordinals, a corner tag and
+ * a watermark, all in #f9cd26; the owner cut every one of them. The accent is
+ * still the site's, and the ARTICLE still gets it from the engine's Style Book
+ * — but an index of links is not a composition that needs a highlight.
  *
- * THE BANDS CARRY NO DECK, and that is a budget decision, not an oversight.
- * `UiSectionHeader`'s subtitle is optional; three one-line decks cost 118 B
- * gzipped in the eager i18n catalogue, which every visitor to every page
- * downloads, against ~130 B of headroom under an enforced 180 KB ceiling. The
- * ordinal and the display heading are the shape; the deck was filler.
+ * IT HAS EXACTLY TWO RULES, and that is a deliberate budget: one under the
+ * page description, one under "All posts". A rule per band turned a list of
+ * five links into five sections.
  *
- * EACH BAND EARNS ITS PLACE OR DOES NOT RENDER, and the ordinals COUNT THE
- * BANDS THAT DID. The featured slot and the card row are both page-1-only —
- * on a later page every post is an ordinary row, or the archive repeats
- * itself — and the card row additionally needs two cards, because one card in
- * a four-column grid is not a short row, it is a broken one. Page 2 therefore
- * renders a single band, and it is numbered `// 01`, not `// 03`.
+ * NO BREADCRUMB. The archive is the top of its own section, so a trail here
+ * says only "you are here" — the crumbs live on the articles, and they start
+ * at Blog rather than at Home.
  *
  * PAGINATION IS PRERENDERED, not client-side. vite-ssg prerenders only what
  * router.getRoutes() enumerates and skips anything carrying a :param, so every
@@ -40,16 +32,13 @@
  * reason this blog renders through the site instead of shipping as static
  * HTML beside it.
  *
- * The featured slot only exists on page 1 — on later pages every post is an
+ * The lead slot only exists on page 1 — on later pages every post is an
  * ordinary row, or the newest article would repeat down the archive.
  */
-
 import { loadBlogIndex } from '@composables/use-blog';
 import useSeoHead from '@composables/use-seo-head';
 import { BLOG_INDEX_URLS, blogAlternatesFor, blogUrlsFor } from '@seo/blog-routes';
 import { buildBlogJsonLd } from '@seo/json-ld';
-import { ROUTE_BY_LOCALE } from '@seo/routes';
-import UiHudDeco from '@ui/hud-deco.vue';
 import UiSectionHeader from '@ui/section-header.vue';
 import { useHead } from '@unhead/vue';
 import BlogCard from '@views/components/blog/blog-card.vue';
@@ -66,26 +55,6 @@ const route = useRoute();
 /* Top-level await — <Suspense> in App.vue makes vite-ssg wait for it, so the
    archive ships as HTML rather than appearing after hydration. */
 const page = await loadBlogIndex(route.path);
-
-const landing_href = computed(() => ROUTE_BY_LOCALE[locale.value] || ROUTE_BY_LOCALE.en);
-const blog_href = computed(() => BLOG_INDEX_URLS[locale.value] || BLOG_INDEX_URLS.en);
-
-const crumbs = computed(() => {
-  const trail = [
-    { label: t('kyo-web.breadcrumb.home'), href: landing_href.value },
-    { label: t('kyo-web.blog.breadcrumb'), href: blog_href.value },
-  ];
-  /* Page 1 IS the blog, so it must not appear twice in its own trail —
-     UiBreadcrumbs requires every item but the last to carry an href. */
-  if (page && page.number > 1) {
-    return [
-      { label: t('kyo-web.breadcrumb.home'), href: landing_href.value },
-      { label: t('kyo-web.blog.breadcrumb'), href: blog_href.value },
-      { label: `${t('kyo-web.blog.pagination-page')} ${page.number}` },
-    ];
-  }
-  return trail;
-});
 
 useSeoHead({
   keyPrefix: 'kyo-web.blog.meta',
@@ -115,143 +84,94 @@ const date_fmt = (iso) => {
   );
 };
 
-/* The card row shows the handful after the featured post; the dense list below
-   carries the same page in full, which is what the reference layout does — the
-   archive holds every post on the page, the newest one included.
+/* Three, not four: the row is what comes AFTER the lead, and the owner sized
+   it against the reference. Page 1 only, and only from two up — `rest` is the
+   whole page once there is no lead slot, so on page 2 the row would restate
+   the list beneath it, and one card in a three-column grid reads as broken
+   rather than short. */
+const recent = computed(() => (page ? page.rest.slice(0, 3) : []));
+const has_lead = computed(() => Boolean(page && page.featured));
+const has_recent = computed(() => has_lead.value && recent.value.length >= 2);
 
-   PAGE 1 ONLY, and only from two cards up. `rest` is the whole page once there
-   is no featured slot, so on page 2 the row would restate the list beneath it
-   in full; and a single card in a four-column grid reads as broken rather than
-   short. */
-const recent = computed(() => (page ? page.rest.slice(0, 4) : []));
-const has_featured = computed(() => Boolean(page && page.featured));
-const has_recent = computed(() => has_featured.value && recent.value.length >= 2);
+/* The lead's two columns are opt-in and depend on media actually existing. THE
+   DEFECT THIS FIXES: the grid was declared at md+ unconditionally while the
+   media column rendered only for a post carrying `cardImage` — and no post
+   carries one, because the engine ranks that image from #+COVER_IMAGE / a
+   `:main` figure / #+OG_IMAGE and #+HERO_IMAGE is deliberately not in the
+   chain. The result was ~700px of void beside a 300px ribbon of text. */
+const lead_has_media = computed(() => Boolean(page && page.featured && page.featured.cardImage));
 
-/* The band ordinals number what is ACTUALLY on the page. Hard-coded, page 2
-   opened at `// 02` and read as a page missing its first section. */
-const band_tag = (n) => `// ${String(n).padStart(2, '0')}`;
-const all_posts_band = computed(
-  () => 1 + (has_featured.value ? 1 : 0) + (has_recent.value ? 1 : 0),
-);
 
-/* The featured band only splits into two columns when there is something to
-   put in the second one. THE DEFECT THIS FIXES: the grid was declared at md+
-   unconditionally while the media column rendered only for a post carrying
-   `cardImage` — and no post carries one, because the engine ranks that image
-   from #+COVER_IMAGE / a `:main` figure / #+OG_IMAGE and #+HERO_IMAGE is
-   deliberately not in the chain. The result was ~700px of void beside a
-   300px ribbon of text. */
-const featured_has_media = computed(() => Boolean(page && page.featured && page.featured.cardImage));
-
-const featured_category = computed(() => {
-  const first = page && page.featured ? (page.featured.categories || [])[0] : null;
-  return first ? `// ${String(first).toUpperCase()}` : '';
-});
 </script>
 
 <template>
-  <DocumentPage
-    id="main"
-    width="index"
-    align="left"
-    :crumbs="crumbs"
-    :crumbs-label="t('kyo-web.breadcrumb.aria')"
-  >
+  <DocumentPage id="main" width="index" align="left">
     <template #header>
-      <!-- The landing's band header, at h1. One <h1> on the page, which is
-           what seo-audit expects and what the archive had before. -->
+      <!-- The page head, and the archive's ONLY heading furniture besides
+           "All posts". No ordinal: the tag is the band's accent mark and this
+           page spends none. -->
       <UiSectionHeader
         level="1"
         class="blog-archive__masthead"
-        tag="// BLOG"
         :title="t('kyo-web.blog.title')"
         :subtitle="t('kyo-web.blog.meta.description')"
       />
     </template>
-
-    <!--
-      Chrome, and only where chrome fits. The landing can drop a watermark in
-      any section because `.kyo-section` clips it and its cards sit on a solid
-      panel; an archive is text at full width all the way down, so a watermark
-      parked low landed ON the entries and a bottom-left tag landed on a row.
-      Both are anchored to the masthead's empty right half instead, and the
-      sheet clips them.
-    -->
-    <UiHudDeco variant="tr" text="// ARCHIVE :: OPEN" />
-    <UiHudDeco variant="watermark" text="記録" class="blog-archive__watermark" />
 
     <p v-if="!page || page.posts.length === 0" class="doc-rich blog-archive__empty">
       {{ t('kyo-web.blog.empty') }}
     </p>
 
     <template v-else>
-      <!-- // 01 Featured ---------------------------------------------------
-           One panel. The media column exists only when the post actually has
-           a card image; otherwise this is a single full-width column at every
-           breakpoint, which is what closes the void. -->
-      <section v-if="has_featured" class="blog-band" :aria-label="t('kyo-web.blog.featured')">
-        <UiSectionHeader
-          :tag="band_tag(1)"
-          :title="t('kyo-web.blog.featured')"
+      <!-- The LEAD article. Not a card: a card is a thing in a row of things,
+           and this is the one piece the page is built around. -->
+      <article
+        v-if="has_lead"
+        class="blog-lead"
+        :class="{ 'blog-lead--media': lead_has_media }"
+      >
+        <div class="blog-lead__body">
+          <time class="blog-lead__date" :datetime="page.featured.date">
+            {{ date_fmt(page.featured.date) }}
+          </time>
+          <!-- NOT a link. The lead offers exactly one target, and it is the
+               CTA below — a headline that is also a link gives the same
+               destination two different affordances and neither reads as the
+               action. -->
+          <h2 class="blog-lead__title">
+            {{ page.featured.title }}
+          </h2>
+          <p class="blog-lead__excerpt">
+            {{ page.featured.description }}
+          </p>
+          <a
+            class="blog-lead__cta"
+            :href="page.featured.url"
+            :aria-label="`${t('kyo-web.blog.read-more')}: ${page.featured.title}`"
+          >
+            {{ t('kyo-web.blog.read-more') }}
+            <span class="blog-lead__arrow" data-text="›" aria-hidden="true" />
+          </a>
+        </div>
+
+        <BlogCard
+          v-if="lead_has_media"
+          class="blog-lead__media"
+          :post="page.featured"
+          media-only
         />
+      </article>
 
-        <article
-          class="blog-featured"
-          :class="{ 'blog-featured--media': featured_has_media }"
-        >
-          <div class="blog-featured__body">
-            <header class="blog-featured__head">
-              <time class="blog-featured__date" :datetime="page.featured.date">
-                {{ date_fmt(page.featured.date) }}
-              </time>
-              <span class="blog-featured__ordinal" data-text="#01" aria-hidden="true" />
-            </header>
+      <!-- Three more. No heading — they read as what follows the lead. -->
+      <ul v-if="has_recent" class="blog-recent" role="list">
+        <li v-for="post in recent" :key="post.url" class="blog-recent__item">
+          <BlogCard :post="post" />
+        </li>
+      </ul>
 
-            <h3 class="blog-featured__title">
-              <a :href="page.featured.url">{{ page.featured.title }}</a>
-            </h3>
-            <p v-if="featured_category" class="blog-featured__category">
-              {{ featured_category }}
-            </p>
-
-            <p class="blog-featured__excerpt">
-              {{ page.featured.description }}
-            </p>
-
-            <a class="blog-featured__cta" :href="page.featured.url">
-              <span class="blog-featured__cta-text">{{ t('kyo-web.blog.read-more') }}</span>
-              <span class="blog-featured__arrow" data-text="›" aria-hidden="true" />
-            </a>
-          </div>
-
-          <BlogCard
-            v-if="featured_has_media"
-            class="blog-featured__media"
-            :post="page.featured"
-            media-only
-          />
-        </article>
-      </section>
-
-      <!-- // 02 Recent ------------------------------------------------------ -->
-      <section v-if="has_recent" class="blog-band" :aria-label="t('kyo-web.blog.recent')">
-        <UiSectionHeader
-          :tag="band_tag(2)"
-          :title="t('kyo-web.blog.recent')"
-        />
-        <ul class="blog-recent__grid" role="list">
-          <li v-for="(post, idx) in recent" :key="post.url" class="blog-recent__item">
-            <BlogCard :post="post" :index="idx + 1" />
-          </li>
-        </ul>
-      </section>
-
-      <!-- // 03 All posts --------------------------------------------------- -->
-      <section class="blog-band" :aria-label="t('kyo-web.blog.all-posts')">
-        <UiSectionHeader
-          :tag="band_tag(all_posts_band)"
-          :title="t('kyo-web.blog.all-posts')"
-        />
+      <!-- The one labelled band. -->
+      <section class="blog-all" :aria-label="t('kyo-web.blog.all-posts')">
+        <UiSectionHeader :title="t('kyo-web.blog.all-posts')" />
 
         <BlogSearch :locale="locale" />
 
@@ -275,207 +195,239 @@ const featured_category = computed(() => {
 
 <style lang="scss" scoped>
 /*
- * The band rhythm, matching the landing: UiSectionHeader already carries its
- * own hairline rule and bottom margin, so a band only has to space itself
- * from the one above it.
+ * TWO RULES ON THE WHOLE PAGE. UiSectionHeader draws one under whatever it
+ * heads, and the archive heads exactly two things — the page itself and "All
+ * posts". Everything between them is spacing, which is why the lead and the
+ * card row carry no header component at all.
  */
-.blog-band + .blog-band { margin-top: 4rem; }
 
 .blog-archive__empty { margin-top: 1rem; }
 
-/*
- * WIDE LAYOUTS ONLY. The HUD chrome needs a column the content is not using,
- * and below `md` the archive is one column edge to edge — the watermark landed
- * across the title and the corner tag sat on the breadcrumb. The landing gets
- * away with it because its sections are taller than their copy; an index is
- * not.
- */
-:deep(.hud-deco) { display: none; }
-
-@include min-media-query(md) {
-  :deep(.hud-deco) { display: block; }
-}
-
-/* The masthead's right half is the one region of an archive that is reliably
-   empty at every post count, which is why the watermark lives there and not
-   where the landing puts it. */
-.blog-archive__watermark {
-  top: 3.5rem;
-  right: 1rem;
-  bottom: auto;
-  line-height: 0.8;
-}
-
-/* The page title outranks the band titles. UiSectionHeader emits one size for
-   every level, which is correct on the landing — every band there is a peer —
-   and wrong here, where the masthead is the document's <h1> and the three
-   bands sit under it. */
+/* The page title outranks the band title. UiSectionHeader emits one size for
+   every level, which is right on the landing where every band is a peer and
+   wrong here, where the masthead is the document's <h1>. */
 .blog-archive__masthead {
   :deep(.ui-section-header__title) {
     @include min-media-query(md) { font-size: var(--fs-800); }
   }
 }
 
-/* --- // 01 featured ----------------------------------------------------- */
+/* --- the lead article --------------------------------------------------- */
 
 /*
- * ONE COLUMN BY DEFAULT — the two-column split is opt-in and depends on media
- * actually existing. The previous rule declared the split unconditionally,
- * which is the whole ~700px void.
+ * ONE COLUMN BY DEFAULT — the split is opt-in and depends on media actually
+ * existing. No border, no padding, no panel: the lead is type on the page.
  */
-.blog-featured {
+.blog-lead {
   display: grid;
   gap: 1.5rem;
-  align-items: start;
-  padding: 1.4rem;
-  border: 1px solid var(--clr-border-100);
+  align-items: center;
+  margin-bottom: 4rem;
 
   &--media {
     @include min-media-query(md) {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-      gap: 2.5rem;
-      align-items: center;
+      gap: 3rem;
     }
   }
 }
 
-.blog-featured__body {
+/*
+ * THE COVER LEADS ON A PHONE.
+ *
+ * Below `md` the lead is a one-column grid, and auto-placement follows DOM
+ * order — body first, media second — so the image landed under the CTA, which
+ * is the last thing a reader should meet. Nothing in the markup said "text
+ * first"; it was simply the order the elements were written in.
+ *
+ * The reset at `md` is NOT optional: above it the grid has explicit columns, and
+ * a lingering `order: -1` would auto-place the media into column one and flip
+ * the desktop layout. With the reset, the wide arrangement is unchanged.
+ *
+ * Safe to reorder visually: the media node is already `aria-hidden` with
+ * `tabindex="-1"`, so there is no DOM-order versus focus-order mismatch to
+ * introduce.
+ */
+.blog-lead__media {
+  order: -1;
+
+  @include min-media-query(md) { order: 0; }
+}
+
+.blog-lead__body {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.75rem;
+  justify-items: start;
   min-width: 0;
 }
 
-.blog-featured__head {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
+/*
+ * A DATE IS CONTENT, NOT A FOOTNOTE.
+ *
+ * Both of these sat at `--fs-100` — 10.5px, the smallest step in the entire
+ * scale — the lead's directly under a 72px title, which read as a caption
+ * that had lost its picture. They step up: the lead's date answers a headline
+ * and gets `--fs-300`, the row dates get `--fs-200`. Both stay well below
+ * their own titles, which is the only relationship that has to hold.
+ */
+.blog-lead__date {
+  margin: 0;
+  color: var(--clr-neutral-200);
+  font-family: "SpaceMono", monospace;
+  font-size: var(--fs-300);
 }
 
-.blog-featured__date,
-.blog-featured__ordinal,
 .blog-all__date {
   margin: 0;
   color: var(--clr-neutral-200);
-  font-family: 'SpaceMono', monospace;
-  font-size: var(--fs-100);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: "SpaceMono", monospace;
+  font-size: var(--fs-200);
 }
 
-.blog-featured__ordinal { color: var(--clr-neutral-300); }
-
-.blog-featured__title {
+.blog-lead__title {
   margin: 0;
-  font-family: 'Geomanist', sans-serif;
-  font-size: var(--fs-600);
-  line-height: 1.15;
+  font-family: "Geomanist", sans-serif;
+  font-size: var(--fs-700);
+  line-height: 1.1;
   letter-spacing: -0.04rem;
 
-  a {
-    color: var(--clr-neutral-100);
-    text-decoration: none;
+  color: var(--clr-neutral-100);
 
-    &:hover,
-    &:focus-visible { color: var(--clr-primary-100); }
-  }
+  @include min-media-query(md) { font-size: var(--fs-800); }
 }
 
-.blog-featured__category {
+/* The measure caps the PARAGRAPH, not the column: without media the lead is
+   the full board, and a deck running 1280px is unreadable. */
+.blog-lead__excerpt {
   margin: 0;
-  color: var(--clr-primary-100);
-  font-family: 'SpaceMono', monospace;
-  font-size: var(--fs-100);
-  letter-spacing: 0.08em;
-}
-
-/* The measure applies to the PARAGRAPH, not the panel: without media the panel
-   is the full board and a deck running its whole width would be unreadable. */
-.blog-featured__excerpt {
-  margin: 0.4rem 0 0.5rem;
   max-width: var(--kyo-measure);
   color: var(--clr-neutral-50);
 }
 
-.blog-featured__cta {
+/* A REAL CTA, not a text link. It is the lead's only target now, so it has to
+   read as the thing you press: a bordered target on the accent, filling on
+   hover. Accent on a STATE and on exactly one mark per composition is the
+   book's own one-accent law. */
+.blog-lead__cta {
   display: inline-flex;
   gap: 0.5rem;
   align-items: center;
-  justify-self: start;
-  padding-top: 0.9rem;
-  border-top: 1px dashed var(--clr-border-100);
-  width: 100%;
-  justify-content: space-between;
+  margin-top: 1rem;
+  padding: 0.75rem 1.4rem;
+  border: 1px solid var(--clr-primary-100);
+  color: var(--clr-primary-100);
   text-decoration: none;
-  color: var(--clr-neutral-50);
-  font-family: 'SpaceMono', monospace;
-  font-size: var(--fs-100);
-  letter-spacing: 0.08em;
+  font-family: "SpaceMono", monospace;
+  font-size: var(--fs-200);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  transition: background-color 0.2s ease, color 0.2s ease;
 
   &:hover,
   &:focus-visible {
-    color: var(--clr-primary-100);
+    background-color: var(--clr-primary-100);
+    color: var(--clr-neutral-500);
 
-    .blog-featured__arrow { transform: translateX(0.2rem); }
+    .blog-lead__arrow { transform: translateX(0.25rem); }
+  }
+
+  /* The nudge is decoration; a reader who asked for less motion gets none. */
+  @media (prefers-reduced-motion: reduce) {
+    .blog-lead__arrow { transition: none; }
   }
 }
 
-.blog-featured__arrow { transition: transform 0.2s ease; }
+/* inline-block is what makes the nudge horizontal. `transform` does not apply
+   to a non-replaced INLINE box, so the browser was resolving the translate
+   against the glyph's own baseline box and the arrow drifted vertically as
+   well as across. */
+.blog-lead__arrow {
+  display: inline-block;
+  font-family: "SpaceMono", monospace;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
 
-/* --- // 02 recent ------------------------------------------------------- */
+/* --- the three that follow ---------------------------------------------- */
 
-.blog-recent__grid {
+.blog-recent {
   display: grid;
-  gap: 1.25rem;
+  gap: 2rem;
   grid-template-columns: 1fr;
-  margin: 0;
+  margin: 0 0 4rem;
   padding: 0;
   list-style: none;
 
   @include min-media-query(sm) { grid-template-columns: repeat(2, 1fr); }
-  @include min-media-query(lg) { grid-template-columns: repeat(4, 1fr); }
+  @include min-media-query(md) { grid-template-columns: repeat(3, 1fr); }
 }
 
 .blog-recent__item { display: flex; }
 
-/* --- // 03 all posts ---------------------------------------------------- */
+/* --- all posts ----------------------------------------------------------- */
+
+/* UiSectionHeader's own 3rem gap put the search a full band away from the
+   heading it belongs to. The heading, the field and the list are one control
+   surface and they sit together. */
+.blog-all :deep(.ui-section-header) { margin-bottom: 1.5rem; }
 
 .blog-all__list {
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--clr-border-100);
 }
 
-.blog-all__row { border-bottom: 1px solid var(--clr-border-100); }
+.blog-all__row + .blog-all__row { border-top: 1px solid var(--clr-border-100); }
 
+/*
+ * THE WHOLE ROW IS THE TARGET, AND IT SAYS SO. The row only tinted its title
+ * before, which is a very small signal on a very wide hit area — you could not
+ * IT USED TO CARRY A NEGATIVE INLINE MARGIN so the fill could bleed past the
+ * text column. That bought nothing and cost the entire gutter: the margin was
+ * equal and opposite to the padding, so the row's own text inset was exactly
+ * ZERO, and `.doc__sheet--index` has `overflow: hidden`, so the bleed it paid
+ * for was clipped at the sheet edge anyway. Measured at 1440px before it was
+ * removed: sheet edge at x=80, row text also at x=80. The padding is the
+ * gutter now, and the fill still covers the whole row because the link is a
+ * block that fills its own row box.
+ */
 .blog-all__link {
   display: flex;
-  gap: 1rem;
-  align-items: baseline;
+  gap: 1.5rem;
+  /* Centred, not baseline-aligned: the date is one line against a two-line
+     text column, and on a baseline it sat pinned to the title while the
+     excerpt hung below it. */
+  align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 0;
+  padding: 1.75rem 1.25rem;
   text-decoration: none;
   color: inherit;
+  transition: background-color 0.15s ease;
 
-  &:hover .blog-all__title,
-  &:focus-visible .blog-all__title { color: var(--clr-primary-100); }
+  /* A LIFT, NOT A SLAB. At 6% the fill read as a grey block dropped behind the
+     text; the row only has to separate itself from its neighbours, and the
+     generous padding is doing most of that work. */
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--clr-neutral-100) 3%, transparent);
+
+    .blog-all__title { color: var(--clr-primary-100); }
+  }
 }
 
 .blog-all__text {
   display: grid;
   gap: 0.3rem;
   min-width: 0;
-  /* The rows are the width of the BOARD, and a full-width line of body text at
-     1280px is unreadable. The measure caps the text, not the row. */
+  /* The rows are the width of the BOARD; the measure caps the text, not the
+     row, so the date stays pinned to the far edge. */
   max-width: var(--kyo-measure);
 }
 
 .blog-all__title {
-  font-family: 'Geomanist', sans-serif;
-  font-size: var(--fs-400);
-  color: var(--clr-neutral-100);
+  font-family: "Geomanist", sans-serif;
+  font-size: var(--fs-300);
+  color: var(--clr-neutral-50);
   transition: color 0.2s ease;
 }
 
@@ -490,5 +442,9 @@ const featured_category = computed(() => {
   overflow: hidden;
 }
 
-.blog-all__date { flex: 0 0 auto; white-space: nowrap; }
+.blog-all__date {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
 </style>

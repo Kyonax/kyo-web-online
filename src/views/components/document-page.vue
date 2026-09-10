@@ -37,10 +37,12 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 defineProps({
   /* Anchor id for the <main> landmark. */
   id: { type: String, required: true },
-  /* Ordered root -> current; see ui/breadcrumbs.vue for the contract. */
-  crumbs: { type: Array, required: true },
+  /* Ordered root -> current; see ui/breadcrumbs.vue for the contract.
+     OPTIONAL: the blog archive is the top of its own section, so a trail
+     there would say only "you are here", and it renders none. */
+  crumbs: { type: Array, default: () => [] },
   /* Localised aria-label for the breadcrumb <nav>. */
-  crumbsLabel: { type: String, required: true },
+  crumbsLabel: { type: String, default: '' },
   /*
    * `sheet` — the 58rem printed-CV sheet. The resume's line length is SIGNED
    *   AS IS (89 chars at 696px, owner ruling 2026-08-19): the measure token
@@ -59,7 +61,7 @@ defineProps({
   width: {
     type: String,
     default: 'prose',
-    validator: (v) => ['sheet', 'prose', 'index'].includes(v),
+    validator: (v) => ['sheet', 'prose', 'article', 'index'].includes(v),
   },
   /* Header + sign-off alignment. The CV centres its masthead like the printed
      document; a policy page is not a CV and reads flush left throughout. */
@@ -141,7 +143,12 @@ onBeforeUnmount(() => {
 <template>
   <main :id="id" class="doc" :class="`doc--${width}`">
     <article ref="sheet_ref" class="doc__sheet" :class="`doc__sheet--${width}`">
-      <UiBreadcrumbs :items="crumbs" :label="crumbsLabel" class="doc__crumbs" />
+      <UiBreadcrumbs
+        v-if="crumbs.length"
+        :items="crumbs"
+        :label="crumbsLabel"
+        class="doc__crumbs"
+      />
 
       <header class="doc__head" :class="`doc__head--${align}`">
         <slot name="header" />
@@ -164,7 +171,22 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .doc {
+  /*
+   * THE PAGE GUTTER, AND IT STEPS.
+   *
+   * This used to be one flat 1.25rem (15px on a 12px root) at every width from
+   * a 320px phone to a 1440px laptop, which is generous on the phone and
+   * cramped on the laptop. It steps now: 15px below `sm`, 24px from `sm`, 30px
+   * from `md`. Nothing else on the article surface contributes a gutter —
+   * `.doc__sheet--article` sets a measure, not padding — so whatever this
+   * declares is the entire distance between the words and the edge of the
+   * screen, and an e2e test asserts it (tests/e2e/layout.spec.js).
+   */
   padding: 3.5rem 1.25rem 4rem;
+
+  @include min-media-query(sm) { padding-inline: 2rem; }
+
+  @include min-media-query(md) { padding-inline: 2.5rem; }
 
   &__sheet {
     margin: 0 auto;
@@ -189,6 +211,35 @@ onBeforeUnmount(() => {
       max-width: var(--kyo-measure);
     }
 
+    /*
+     * THE ARTICLE MEASURE — `prose`, but coupled to the face it is actually
+     * measuring.
+     *
+     * `--prose` above declares `font-size` and `max-width` together so that
+     * `ch` resolves against this element's own type, which is exactly right.
+     * It just resolves against the WRONG type here: this shell inherits
+     * SpaceMono from `body`, while an article's prose renders in Geomanist
+     * inside `.org-root`. SpaceMono's "0" is 9.18px at 15px against
+     * Geomanist's 8.30px, so a cap written as 68 characters was delivering
+     * 85 — the line was a fifth longer than the number said, which is why the
+     * column read as cramped despite being "correct".
+     *
+     * So the shell declares the reading face as well, and the cap becomes
+     * honest at every tier: 69ch is 688px at the large tier's 18px and 573px
+     * at the 15px tiers, ~79 prose characters either way. That also removes an
+     * inversion the fixed token had, where the tablet tier (562px) came out
+     * NARROWER than mobile (574px).
+     *
+     * Declaring the face is free: `.doc__title`, `.doc__meta` and the crumbs
+     * all set their own font-family, so nothing inherits this but the `ch`
+     * calculation it exists for.
+     */
+    &--article {
+      font-family: "Geomanist", sans-serif;
+      font-size: var(--fs-400);
+      max-width: 69ch;
+    }
+
     /* The board. `position: relative` is what anchors the HUD deco the archive
        places in its corners — the same requirement every landing section has. */
     &--index {
@@ -204,14 +255,20 @@ onBeforeUnmount(() => {
   /* The board carries the landing's own gutter at md+, so its edges sit on the
      same vertical lines as the nav bar and every landing section. The document
      widths keep the tighter reading gutter they were tuned with. */
+  /*
+   * THE BOARD KEEPS A WIDER GUTTER THAN THE READING SURFACES.
+   *
+   * Its rows carry their own padding on top of this, which is what actually
+   * insets the row text — they used to cancel it with an equal and opposite
+   * negative margin, so the text landed exactly on the sheet edge and this
+   * padding was the ONLY thing between the words and the screen. That margin
+   * is gone (see blog.vue), so this is a page gutter again rather than the
+   * last line of defence, and it can stay a step ahead of the base.
+   */
   &--index {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-inline: 2rem;
 
-    @include min-media-query(md) {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
+    @include min-media-query(md) { padding-inline: 3rem; }
   }
 
   /* Chrome above the document, always flush left against the sheet edge even
@@ -317,17 +374,24 @@ onBeforeUnmount(() => {
 }
 
 /*
- * .blog-rich — the article vocabulary.
+ * .blog-rich — the article surface, and it is DELIBERATELY ALMOST EMPTY NOW.
  *
- * .doc-rich above styles bare p/ul/li because the tags arrive from an i18n
- * string and cannot carry classes. A blog article is the same situation with a
- * much wider vocabulary: the markup comes from org2html, so every element has
- * to be reachable by tag rather than by class.
+ * IT USED TO BE A HAND-ROLLED COPY OF A STYLESHEET THAT ALREADY EXISTS. This
+ * block re-declared headings, lists, quotes, code wells, figures, tables,
+ * footnotes and drawers for the markup org2html emits — a second, drifting
+ * answer to a question the engine had already answered. The result looked
+ * nothing like the engine's own output, which is the defect the owner named.
  *
- * The org-* hooks the engine emits are addressed directly where a bare tag is
- * not specific enough. Colours are tokens only — check-color-usage.mjs hard
- * fails on a hex literal in any .vue <style> block, which is exactly what a
- * pasted syntax-highlight theme would bring.
+ * THE ENGINE SHIPS ITS DEFAULT STYLE BOOK (`kwo`) as `styles.css` beside every
+ * build. sync-blog.mjs minifies it to `public/blog/style-book.css` (95 KB ->
+ * 16 KB gzipped) and blog-post.vue links it on article routes only. 837 of its
+ * rules are scoped under `.org-root`, which the post body carries, so it
+ * cannot leak into the rest of the site — and the book reads every value
+ * through `var(--host-*, <default>)`, so the site's palette and faces are
+ * mapped onto those tokens in blog-post.vue rather than fought with overrides.
+ *
+ * WHAT IS LEFT HERE is the one thing the book cannot know: that this SITE
+ * already rendered the masthead.
  */
 :deep(.blog-rich) {
   /*
@@ -335,118 +399,20 @@ onBeforeUnmount(() => {
    * to do it in.
    *
    * org2html emits `<header class="org-article-header">` carrying the title,
-   * the date and the category, because a standalone HTML document it converts
+   * the date and the taxonomy, because a standalone HTML document it converts
    * has nothing else to carry them. Rendered inside this shell it is a SECOND
-   * masthead: the article showed its title twice, its date twice (formatted
-   * once and ISO once) and its category as a bare orphan line above the lead.
+   * masthead: the article showed its title twice and its date twice, once
+   * formatted and once ISO.
    *
    * Site chrome is WEBSITE scope [D-22]. The view's header slot already
    * renders the title as the page's only <h1>, the date, and the reading time
-   * the engine does not publish here; the category is in the breadcrumb. So
-   * nothing is lost — the duplicate goes, and the engine keeps emitting the
-   * header for the consumers that need it.
+   * the engine does not publish here; the category is in the breadcrumb.
    */
   .org-article-header { display: none; }
 
-  h2, h3, h4 {
-    margin: 2.25rem 0 0.75rem;
-    line-height: 1.25;
-    letter-spacing: -0.03rem;
-  }
-
-  h2 { font-size: var(--fs-500); }
-  h3 { font-size: var(--fs-400); }
-  h4 { font-size: var(--fs-300); }
-
-  ol {
-    margin: 0 0 1rem;
-    padding-left: 1.25rem;
-  }
-
-  li + li { margin-top: 0.35rem; }
-
-  blockquote {
-    margin: 1.5rem 0;
-    padding: 0.25rem 0 0.25rem 1rem;
-    border-left: 2px solid var(--clr-primary-100);
-    color: var(--clr-neutral-100);
-  }
-
-  pre {
-    overflow-x: auto;
-    margin: 1.5rem 0;
-    padding: 1rem;
-    border: 1px solid var(--clr-border-100);
-    border-radius: 6px;
-    background-color: var(--clr-neutral-400);
-    font-size: var(--fs-200);
-  }
-
-  code {
-    font-family: 'SpaceMono', monospace;
-    font-size: 0.95em;
-  }
-
-  :not(pre) > code {
-    padding: 0.1em 0.35em;
-    border-radius: 4px;
-    background-color: var(--clr-neutral-400);
-  }
-
-  figure {
-    margin: 1.75rem 0;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
-  }
-
-  /* Upgraded to a real hit area by v-blog-lightbox. */
-  .org-image[role='button'] { cursor: zoom-in; }
-
-  figcaption {
-    margin-top: 0.5rem;
-    color: var(--clr-neutral-200);
-    font-size: var(--fs-200);
-  }
-
-  hr {
-    margin: 2.5rem 0;
-    border: 0;
-    border-top: 1px solid var(--clr-border-100);
-  }
-
-  /* Wide content scrolls inside its own box; the page never scrolls sideways. */
+  /* Wide content scrolls inside its own box; the page never scrolls sideways.
+     Declared here rather than left to the book because it is a property of
+     THIS shell's width, not of the article. */
   .org-table-scroll { overflow-x: auto; }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--fs-200);
-  }
-
-  th, td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--clr-border-100);
-    text-align: left;
-  }
-
-  th { color: var(--clr-neutral-200); }
-
-  .org-footnotes {
-    margin-top: 2.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--clr-border-100);
-    font-size: var(--fs-200);
-  }
-
-  .org-drawer {
-    margin: 1.5rem 0;
-    padding: 0.75rem 1rem;
-    border: 1px dashed var(--clr-border-100);
-    border-radius: 6px;
-  }
 }
 </style>
