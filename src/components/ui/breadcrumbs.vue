@@ -62,11 +62,24 @@ const warm = (href) => warmRoute(href);
    reads as site furniture above the page's own typography. Sentence case, so
    no tracking — the 0.06em that suits the uppercase nav labels reads as
    spaced-out here. */
+/*
+ * ONE LINE, ALWAYS — the last step gives way, not the trail.
+ *
+ * It wrapped. Each separator lives inside the item it precedes, so when a long
+ * article title no longer fit, the whole item dropped to a second row and that
+ * row OPENED with a bare "/" — on a phone the trail read "Blog" and then, under
+ * it, "/ Matemáticas en Tiempo de Compilación", which looks like a rendering
+ * fault. Now nothing wraps: the ancestors keep their width, and only the
+ * current page shrinks, ending in an ellipsis. Nothing is lost — that same
+ * title is the page's <h1> immediately below, and the text is still whole in
+ * the accessibility tree; only its painting is clipped.
+ */
 .ui-crumbs {
   &__list {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: baseline;
+    min-width: 0;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -78,7 +91,14 @@ const warm = (href) => warmRoute(href);
 
   &__item {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: baseline;
+    white-space: nowrap;
+
+    &:last-child {
+      flex: 0 1 auto;
+      min-width: 0;
+    }
   }
 
   &__sep {
@@ -97,6 +117,11 @@ const warm = (href) => warmRoute(href);
 
   /* The current page is the only step that is not a link, so it carries the
      brighter neutral to mark where the trail ends. */
-  &__current { color: var(--clr-neutral-100); }
+  &__current {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--clr-neutral-100);
+  }
 }
 </style>

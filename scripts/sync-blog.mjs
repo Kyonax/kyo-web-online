@@ -27,6 +27,9 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
+import { transformSync } from 'esbuild';
+import { transform } from 'lightningcss';
+
 import { head, line, ok, REPO_ROOT, warn } from './_lib.mjs';
 
 const SRC = resolve(process.env.BLOG_DIST || join(REPO_ROOT, '..', 'kyo-blog', 'dist'));
@@ -41,10 +44,72 @@ const DEST_POSTS = join(DEST_DATA, 'posts');
    against the main-bundle budget. */
 const DEST_SEARCH = join(REPO_ROOT, 'public/blog-search');
 
+/*
+ * THE ENGINE'S DEFAULT STYLE BOOK, served rather than bundled.
+ *
+ * org2html writes `styles.css` beside every build — the `kwo` book that dresses
+ * the `.org-*` hooks its renderer emits. The site used to hand-roll a partial
+ * copy of it in document-page.vue, which drifted and looked nothing like the
+ * engine's own output. Now the book itself is the article stylesheet.
+ *
+ * MINIFIED ON THE WAY IN: the shipped file is 199 KB of heavily commented
+ * source (50 KB gzipped, and those comments are the book's design record, so
+ * they belong in the package, not on the wire). lightningcss takes it to
+ * ~95 KB / ~16 KB gzipped. It is `public/`, so it never counts against the
+ * main-bundle budget and only an article route ever requests it.
+ */
+const DEST_BOOK_DIR = join(REPO_ROOT, 'public/blog');
+const DEST_BOOK = join(DEST_BOOK_DIR, 'style-book.css');
+
+/*
+ * THE ENGINE'S INTERACTIVE RUNTIME, served on the same terms as the book.
+ *
+ * `o2h.js` is org2html's dependency-free progressive-enhancement layer, and it is
+ * what turns the YouTube and X embeds from a poster plus a link into a real
+ * click-to-play swap. The site deliberately did not load it, so every embed in an
+ * article degraded to a plain link — correct, but not a player.
+ *
+ * NOTHING THIRD-PARTY LOADS UNTIL THE READER CLICKS. The runtime only swaps the
+ * facade for the provider's frame on demand, so `nothing the reader pays for`
+ * survives: an article whose embed is never clicked costs the reader nothing
+ * beyond this one file.
+ *
+ * MINIFIED ON THE WAY IN, for the reason the book is: the shipped file is 51 KB of
+ * hand-authored, heavily commented ES2019 (15.4 KB gzipped) and those comments are
+ * the runtime's design record, so they belong in the package rather than on the
+ * wire. esbuild takes it to ~21 KB / ~7.5 KB gzipped. It is `public/`, so it never
+ * counts against the main-bundle budget and only an article route requests it.
+ */
+const DEST_RUNTIME = join(DEST_BOOK_DIR, 'o2h.js');
+
+/* Minification drops the source header, and this is GPL-3.0-only code we redistribute
+   to every reader — the notice travels with the file. */
+const O2H_BANNER =
+  '/*! o2h.js - (c) 2026 Cristian D. Moreno (@Kyonax) - GPL-3.0-only - @kyonax/org2html'
+  + ' - https://github.com/Kyonax/org2html */';
+
 /* Blog images join the site's own image pipeline, so convert-images.mjs emits their
    AVIF/WebP siblings and records intrinsic dimensions — which is what keeps the
    card grid inside the CLS <= 0.1 Lighthouse assertion. */
 const DEST_MEDIA = join(REPO_ROOT, 'src/assets/blog');
+
+/*
+ * THE SAME IMAGES AGAIN, SERVED AT THE PATH THE DOCUMENTS ACTUALLY WROTE.
+ *
+ * The pipeline copy above is for the CARD: use-blog-images.js resolves a post's
+ * `cardImage` by basename against a glob of `src/assets/blog`, so the archive gets
+ * an AVIF/WebP with known dimensions. A picture INSIDE an article body is a
+ * different problem — org2html does not copy content images and `--asset-base`
+ * does not rewrite their URLs, so the body HTML carries the literal deployed path
+ * the author typed: `/blog/media/<file>`. Nothing was serving that, so the first
+ * article to embed a figure would have shipped a 404.
+ *
+ * So the media is ALSO copied verbatim into `public/blog/`, where that exact URL
+ * resolves. The trade is stated rather than hidden: these body images skip the
+ * AVIF/WebP conversion, because optimising them would mean rewriting URLs inside
+ * rendered HTML, and a wrong rewrite is worse than an unoptimised PNG.
+ */
+const DEST_BODY_MEDIA = join(DEST_BOOK_DIR, 'media');
 
 const EMPTY = {
   generatedFrom: null,
@@ -112,9 +177,41 @@ for (const locale of m.locales) {
   }
 }
 
+/*
+ * A MISSING BOOK IS A WARNING, NOT A FAILURE — the same contract the rest of
+ * this script keeps. It only reaches the wire on an article route, and with no
+ * corpus there are no article routes.
+ */
+const bookSrc = join(SRC, 'blog', 'styles.css');
+if (existsSync(bookSrc)) {
+  const raw = readFileSync(bookSrc);
+  const { code } = transform({ filename: 'style-book.css', code: raw, minify: true });
+  mkdirSync(DEST_BOOK_DIR, { recursive: true });
+  writeFileSync(DEST_BOOK, code);
+  line(`style book ${(raw.length / 1024).toFixed(0)} KB -> ${(code.length / 1024).toFixed(0)} KB minified`);
+} else {
+  warn('no styles.css in the blog build — articles will render unstyled');
+}
+
+/* A MISSING RUNTIME IS A WARNING, NOT A FAILURE — the same contract the book keeps.
+   With no corpus there are no article routes, so there is nothing to enhance. */
+const runtimeSrc = join(SRC, 'blog', 'o2h.js');
+if (existsSync(runtimeSrc)) {
+  const raw = readFileSync(runtimeSrc, 'utf8');
+  const { code } = transformSync(raw, { loader: 'js', minify: true, target: 'es2019' });
+  mkdirSync(DEST_BOOK_DIR, { recursive: true });
+  writeFileSync(DEST_RUNTIME, `${O2H_BANNER}\n${code}`);
+  line(`runtime ${(raw.length / 1024).toFixed(0)} KB -> ${(code.length / 1024).toFixed(0)} KB minified`);
+} else {
+  warn('no o2h.js in the blog build — article embeds will not click to play');
+}
+
 if (existsSync(join(SRC, 'blog', 'media'))) {
   mkdirSync(DEST_MEDIA, { recursive: true });
   cpSync(join(SRC, 'blog', 'media'), DEST_MEDIA, { recursive: true });
+  /* …and again, unconverted, at the URL the article bodies reference. */
+  mkdirSync(DEST_BODY_MEDIA, { recursive: true });
+  cpSync(join(SRC, 'blog', 'media'), DEST_BODY_MEDIA, { recursive: true });
 }
 
 ok(`synced ${m.counts.posts} post(s) from ${SRC}`);

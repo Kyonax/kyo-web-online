@@ -10,6 +10,9 @@ const ZOOM_STEP     = 2;     // double-tap / double-click target scale
 const DOUBLE_TAP_MS = 300;
 const DOUBLE_TAP_PX = 30;
 const WHEEL_FACTOR  = 1.15;
+/* How long after a finger lifts a `dblclick` is taken to be the browser's echo
+   of that touch rather than a mouse. Comfortably longer than DOUBLE_TAP_MS. */
+const TOUCH_ECHO_MS = 700;
 
 /*
  * Pinch-zoom, double-tap (and double-click) zoom, and drag-to-pan for a single
@@ -54,6 +57,7 @@ export default function useImageZoom(containerRef, selector) {
   let last_tap_x = 0;
   let last_tap_y = 0;
   let moved = false;
+  let last_touch_end = 0; // when a finger last lifted — see on_dblclick
 
   let mode = 'idle';      // 'idle' | 'pinch' | 'pan'
   let dragging = false;   // mouse drag
@@ -181,6 +185,7 @@ export default function useImageZoom(containerRef, selector) {
   }
 
   function on_touch_end(event) {
+    last_touch_end = Date.now();
     /* Clean, non-moving single tap → double-tap detection. */
     if (!moved && mode === 'idle' && event.changedTouches.length === 1) {
       const t = event.changedTouches[0];
@@ -219,7 +224,22 @@ export default function useImageZoom(containerRef, selector) {
   }
 
   /* ---------- desktop ---------- */
+
+  /*
+   * A DOUBLE TAP IS ALSO A DOUBLE CLICK, AND IT CANCELLED ITSELF.
+   *
+   * Mobile browsers synthesize mouse events after touch ones, `dblclick`
+   * included. So a double tap zoomed in on its second touchend (above) and the
+   * `dblclick` that followed, seeing a zoomed image, reset it: on a phone the
+   * gesture flashed and did nothing. Traced event by event: touchstart,
+   * touchend, click, touchstart, touchend, click, dblclick. A `dblclick` that
+   * lands within TOUCH_ECHO_MS of a lifted finger is that echo, and the touch
+   * path has already handled the gesture. A real mouse never lifts a finger.
+   */
   function on_dblclick(event) {
+    if (Date.now() - last_touch_end < TOUCH_ECHO_MS) {
+      return;
+    }
     el = _target();
     if (!el) {
       return;

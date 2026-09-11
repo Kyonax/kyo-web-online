@@ -25,6 +25,7 @@ import {
   BLOG_MANIFEST,
   blogPageAt,
   blogPostAt,
+  blogSiteUrl,
 } from '@seo/blog-routes';
 
 /* The RICH half of the corpus — titles, descriptions, card images, per-page
@@ -63,6 +64,41 @@ const bodyLoaderFor = (post) => {
   return key ? BODIES[key] : null;
 };
 
+/*
+ * RELATIONS ARE DATA; ROUTES ARE THE HOST'S JOB [P-00].
+ *
+ * Every url the engine writes into relations.json is relative to the CORPUS
+ * root (`/engineering/2026-05-01-x`), not to where this site mounts the blog.
+ * Bound straight to an `href` they resolve to a path the router does not know,
+ * and the 404 surface lands the reader on the landing page — which is what
+ * previous/next, related reading and every series item were doing, in both
+ * locales (Spanish lost `/es` as well as `/blog`).
+ *
+ * They are rewritten ONCE, here, so every component that renders navigation
+ * stays dumb and no future component has to remember the rule.
+ */
+const siteRelations = (relations, locale) => {
+  if (!relations) {
+    return relations;
+  }
+  const link = (item) =>
+    (item && item.url ? { ...item, url: blogSiteUrl(item.url, locale) } : item);
+  return {
+    ...relations,
+    prev: link(relations.prev),
+    next: link(relations.next),
+    related: Array.isArray(relations.related) ? relations.related.map(link) : relations.related,
+    series: relations.series
+      ? {
+        ...relations.series,
+        items: Array.isArray(relations.series.items)
+          ? relations.series.items.map(link)
+          : relations.series.items,
+      }
+      : relations.series,
+  };
+};
+
 /**
  * The full post at a path: metadata from the manifest, body + head + relations
  * from its own chunk. Returns null for a path that is not a post, so the view
@@ -76,7 +112,75 @@ export const loadBlogPost = async (path) => {
   }
   const mod = await loader();
   const body = mod.default || mod;
-  return { ...post, ...body };
+  /*
+   * `description` is LIFTED OUT OF THE `seo` SIDECAR, and that is a real fix.
+   *
+   * The routing manifest carries url/locale/key and nothing else — the rich
+   * index holds the descriptions and the archive view is the only thing that
+   * loads it. So `post.description` was ALWAYS undefined here, and blog-post's
+   * `useSeoHead({ description: post.description })` fell through to the
+   * catalogue default: every article in both locales published the ARCHIVE's
+   * meta description as its own, which is a duplicate-snippet defect across
+   * the whole blog.
+   *
+   * The engine already emits the per-post one at `seo.description`, in the
+   * body chunk this function has just loaded — so the fix costs no bytes and
+   * no extra request.
+   */
+  /* `author` comes out of the same sidecar for the same reason: every article
+     declares `#+AUTHOR:` and the engine carries it to `seo.author` for the
+     BlogPosting graph, but nothing lifted it to where the view could show it. */
+  return {
+    ...post,
+    ...body,
+    description: body.description || body.seo?.description || '',
+    author: body.author || body.seo?.author || '',
+    relations: siteRelations(body.relations, post.locale),
+  };
+};
+
+/*
+ * THE TABLE OF CONTENTS, IN THE ARTICLE'S OWN LANGUAGE — and counted.
+ *
+ * org2html writes "Table of Contents" as both the heading and the nav's
+ * aria-label whatever the document's `#+LANGUAGE:` says (src/plugins/toc.ts
+ * hard-codes it), so every Spanish article opened its contents in English.
+ * UPSTREAM CANDIDATE: the engine should localise it itself; this is the host
+ * doing it until then, left out of the engine while its v1.2.0 is in flight.
+ *
+ * It rewrites only the opening of the TOC — the nav tag and its title — and
+ * stamps `data-count` with the number of TOP-LEVEL entries, which the designs
+ * show in the TOC's header. Done on the HTML string, so the server render and
+ * the hydrated page are byte-identical; if the engine ever changes that markup
+ * the pattern simply does not match and the English title stands.
+ */
+const TOC_HEAD = /^<nav class="org-toc" aria-label="[^"]*">\s*<h2 class="org-toc-title">[^<]*<\/h2>/;
+const escapeHtml = (s) => String(s)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;');
+
+export const dressBlogToc = (html, label) => {
+  const start = html ? html.indexOf('<nav class="org-toc"') : -1;
+  const end = start < 0 ? -1 : html.indexOf('</nav>', start);
+  if (end < 0) {
+    return html;
+  }
+  const nav = html.slice(start, end);
+  let depth = 0;
+  let count = 0;
+  for (const [, close, tag] of nav.matchAll(/<(\/?)(ul|li)\b/g)) {
+    if (tag === 'ul') {
+      depth += close ? -1 : 1;
+    } else if (!close && depth === 1) {
+      count += 1;
+    }
+  }
+  const safe = escapeHtml(label);
+  const head = `<nav class="org-toc" aria-label="${safe}" data-count="${String(count).padStart(2, '0')}">`
+    + `<h2 class="org-toc-title">${safe}</h2>`;
+  return html.slice(0, start) + nav.replace(TOC_HEAD, head) + html.slice(end);
 };
 
 /* Resolve URLs against the rich index, order preserved. */
@@ -111,4 +215,4 @@ export const loadBlogIndex = async (path) => {
 
 export const blogLocales = () => BLOG_MANIFEST.locales || [];
 
-export default { loadBlogPost, loadBlogIndex, blogLocales };
+export default { loadBlogPost, loadBlogIndex, blogLocales, dressBlogToc };

@@ -23,7 +23,9 @@ import {
   getShowcaseMap,
   PROJECT_STATUS,
 } from '@data/projects';
+import { TRANSLATIONS_PROJECTS } from '@data/snippets-projects';
 import { normaliseMediaEntry } from '@data/youtube';
+import { useMessageSlice } from '@i18n/use-message-slice';
 import BrandIcon from '@ui/brand-icon.vue';
 import UiHudDeco from '@ui/hud-deco.vue';
 import ModalLoading from '@ui/modal-loading.vue';
@@ -48,6 +50,10 @@ const UiImageViewer = defineAsyncComponent({
   delay: 0,
 });
 const YoutubeFacade = defineAsyncComponent(() => import('@ui/youtube-facade.vue'));
+
+/* The long project descriptions the modal shows is not in the main bundle — it rides in this
+   view's own chunk and is merged in before anything reads a key from it. */
+useMessageSlice(TRANSLATIONS_PROJECTS);
 
 const { t, te, locale } = useI18n();
 

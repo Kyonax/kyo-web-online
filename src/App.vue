@@ -13,8 +13,9 @@ import HeroSection from '@sections/hero.vue';
 import SiteFooter from '@sections/site-footer.vue';
 import IconSprite from '@ui/icon-sprite.vue';
 import HudNav from '@widgets/hud-nav.vue';
-import { defineAsyncComponent, watch } from 'vue';
+import { computed, defineAsyncComponent, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
 /* The document views (resume, privacy) are async for the same reason the
    below-fold sections are, plus one of their own: ResumeView used to be a
@@ -28,6 +29,24 @@ const ResumeView = defineAsyncComponent(() => {
 const PrivacyView = defineAsyncComponent(() => {
   return import('@views/privacy.vue');
 });
+
+/*
+ * The section rail — the landing's in-page navigation, now that the nav bar has
+ * handed those six destinations over on desktop. Async and shared with the
+ * article route, so both pages fetch the same chunk and neither carries it in
+ * the bundle.
+ */
+const SectionRail = defineAsyncComponent(() => import('@widgets/section-rail.vue'));
+
+/*
+ * The same ids the nav anchors used, with the same labels — the rail replaced
+ * those links, so it has to be able to reach everything they reached. `hero` is
+ * the top of the page, which is why it is also the section marked before any
+ * scrolling has happened.
+ */
+const LANDING_SECTIONS = [
+  'hero', 'experience', 'projects', 'skills', 'faq', 'contact',
+];
 
 /* The blog splits in two: an archive page and an article. Both are async and
    both are wrapped in <Suspense> below, which is what makes vite-ssg await
@@ -65,7 +84,13 @@ const ContactSection = defineAsyncComponent(() => {
   return import('@sections/contact-section.vue');
 });
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
+const route = useRoute();
+
+const landing_sections = computed(() => LANDING_SECTIONS.map((id) => ({
+  id,
+  label: t(`kyo-web.landing.nav.${id}`),
+})));
 
 /* App is the shell for every prerendered route. The landing sections render on
    / and /es; the secondary routes render their own document view instead. Each
@@ -93,6 +118,16 @@ watch(locale, (next) => {
   <IconSprite />
 
   <HudNav />
+
+  <!-- Fixed overlay, so it changes no page's layout. On the landing it is the
+       primary in-page navigation above `nav` (700px); below that the nav
+       drawer is. -->
+  <SectionRail
+    v-if="isLanding"
+    :sections="landing_sections"
+    :label="t('kyo-web.landing.nav.on-this-page')"
+    top-id="hero"
+  />
 
   <main v-if="isLanding" id="main" class="landing">
     <HeroSection />
@@ -141,13 +176,23 @@ watch(locale, (next) => {
 
   <!-- A post renders the article; anything else under /blog is an archive
        page, including a path the manifest does not name, which then renders
-       the archive's own empty state rather than landing chrome. -->
+       the archive's own empty state rather than landing chrome.
+       KEYED BY PATH because the article awaits its post ONCE, in setup. The
+       language toggle is a client-side push from one article to its twin, and
+       without a key Vue patched the same instance: the URL, <html lang> and the
+       date went Spanish while the title and body stayed English. A new key is
+       a new instance, so Suspense holds the old article until the new one has
+       loaded, then swaps — head, JSON-LD and rail included. -->
   <Suspense v-else-if="isBlogPost">
-    <BlogPostView />
+    <BlogPostView :key="route.path" />
   </Suspense>
 
+  <!-- KEYED FOR THE SAME REASON AS THE ARTICLE ABOVE, and it took a second
+       report to find: the archive awaits its page ONCE, in setup, so the
+       toggle's client-side move from /blog to /es/blog swapped the i18n strings
+       and left the lead, its cover, the cards and every row in English. -->
   <Suspense v-else-if="isBlog">
-    <BlogView />
+    <BlogView :key="route.path" />
   </Suspense>
 
   <SiteFooter v-if="isLanding" />

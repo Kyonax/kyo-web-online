@@ -104,6 +104,42 @@ jobs:
           path: dist/
           retention-days: 7
 
+  layout-e2e:
+    # THE GUTTER GATE. Every other check in this file reads source or built
+    # HTML as text; horizontal space is a layout fact, so it needs a browser
+    # that actually performs layout. This asserts no page scrolls sideways and
+    # that blog text keeps a real distance from the screen edge, at seven
+    # widths from 320px up — the defect it exists for was reported, fixed and
+    # reported again twice before it was measured.
+    name: Layout (e2e)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+      # Playwright ships its own browser rather than hoping for a system one;
+      # no other job here installs a browser, so this step is not optional.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Upload failure traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.sha }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
   size-limit:
     name: Size Limit
     needs: build

@@ -180,9 +180,9 @@ export default [
     rules: ccsBaseRules,
   },
 
-  // ── Node-only files (scripts/, vite.config.js) ──────────
+  // ── Node-only files (scripts/, vite.config.js, playwright.config.js) ────
   {
-    files: ['scripts/**/*.{js,mjs}', 'vite.config.js'],
+    files: ['scripts/**/*.{js,mjs}', 'vite.config.js', 'playwright.config.js'],
     languageOptions: {
       globals: {
         ...globals.node,
