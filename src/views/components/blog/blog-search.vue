@@ -205,22 +205,37 @@ const results = computed(() => {
   text-decoration: none;
   color: inherit;
 
+  /* 3%, the same lift as the archive rows — it was 6%, the slab the owner
+     turned down there. */
   &:hover,
   &:focus-visible {
-    background-color: color-mix(in srgb, var(--clr-neutral-100) 6%, transparent);
+    background-color: color-mix(in srgb, var(--clr-neutral-100) 3%, transparent);
     color: var(--clr-primary-100);
 
+    .blog-search__title { color: var(--clr-primary-100); }
     .blog-search__arrow { transform: translateX(0.2rem); }
   }
 }
 
-.blog-search__title { font-size: var(--fs-300); }
+/* The archive row's title, so a result reads as the same kind of thing. */
+.blog-search__title {
+  font-family: "Geomanist", sans-serif;
+  font-size: var(--fs-400);
+  line-height: 1.3;
+  color: var(--clr-neutral-100);
+  transition: color 0.2s ease;
+}
 
+/* Transformed at rest as well — the CTA's fix in blog.vue: Firefox rasterises
+   a glyph on a fractional pixel differently once a transform applies, and the
+   arrow hopped vertically at both ends of a sideways nudge. */
 .blog-search__arrow {
   flex: 0 0 auto;
   display: inline-block;
   font-family: 'SpaceMono', monospace;
   line-height: 1;
+  transform: translateX(0);
+  will-change: transform;
   transition: transform 0.2s ease;
 }
 </style>

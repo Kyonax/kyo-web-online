@@ -22,21 +22,7 @@
 
 import { expect, test } from '@playwright/test';
 
-/*
- * 320 is the narrowest phone still worth supporting and the width the owner
- * asked about; 390 is a current iPhone; 768/1024/1200 are this site's own
- * breakpoints (`sm`/`md`/`lg` in _variables.scss, which resolve against the
- * UA's 16px root, NOT the page's 12px one); 1440 is the common laptop.
- */
-const WIDTHS = [320, 360, 390, 768, 1024, 1280, 1440];
-
-const ROUTES = [
-  { name: 'landing', path: '/' },
-  { name: 'archive EN', path: '/blog/' },
-  { name: 'archive ES', path: '/es/blog/' },
-  { name: 'article EN', path: '/blog/engineering/2026-08-14-shipping-a-static-site-that-stays-fast' },
-  { name: 'article ES', path: '/es/blog/engineering/2026-08-14-publicar-un-sitio-estatico-que-siga-rapido' },
-];
+import { ROUTES, settle, WIDTHS } from './viewports.js';
 
 /*
  * The gutter the site promises. `.doc` steps 1.25rem → 2rem → 2.5rem across
@@ -51,13 +37,6 @@ const TEXT_SELECTORS = {
   '/blog/': ['.blog-all__title', '.blog-all__excerpt', '.blog-search__field'],
   '/es/blog/': ['.blog-all__title', '.blog-all__excerpt', '.blog-search__field'],
   article: ['.blog-post-nav__list a', '.doc__title', '.org-root .org-paragraph'],
-};
-
-const settle = async (page) => {
-  await page.waitForLoadState('networkidle');
-  /* The rail and the scroll-spy mount after hydration; without this the rail
-     assertions race a component that has not rendered yet. */
-  await page.waitForTimeout(350);
 };
 
 for (const width of WIDTHS) {

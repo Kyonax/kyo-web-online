@@ -169,7 +169,9 @@ const setItemRef = (el, idx) => {
     white-space: nowrap;
 
     
-    @include max-media-query(md) {
+    /* The phone tap target, for as long as the nav is in its phone mode —
+       which ends at the `nav` fold, not at `md`. */
+    @include max-media-query(nav) {
       height: 44px;
       min-height: 44px;
     }

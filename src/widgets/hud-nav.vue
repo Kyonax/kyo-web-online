@@ -436,12 +436,22 @@ onBeforeUnmount(() => {
     transform: translateY(0.1em);
   }
 
+  /*
+   * THE BAR FOLDS INTO THE DRAWER AT `nav` (700px), NOT AT `md`.
+   *
+   * It used to fold at 1024px, so every tablet and every laptop window under
+   * that width got a phone's hamburger over a bar with room to spare — the only
+   * links it has to hold above the fold are HOME and BLOG, since the chip owns
+   * the landing's sections. The owner moved it. Every rule in this file that
+   * switches between the bar and the drawer keys off the same `nav` breakpoint,
+   * and nav.spec.js asserts both sides of the line.
+   */
   &__links {
     display: none;
     gap: 1.25rem;
     justify-content: flex-start;
 
-    @include min-media-query(md) {
+    @include min-media-query(nav) {
       display: inline-flex;
       padding-left: 2rem;
     }
@@ -503,7 +513,7 @@ onBeforeUnmount(() => {
     gap: 0.5rem;
     justify-self: end;
 
-    @include min-media-query(md) {
+    @include min-media-query(nav) {
       gap: 0.75rem;
     }
   }
@@ -514,7 +524,7 @@ onBeforeUnmount(() => {
     height: 1.1rem;
     background: var(--clr-border-100);
 
-    @include min-media-query(md) {
+    @include min-media-query(nav) {
       display: block;
     }
   }
@@ -522,7 +532,7 @@ onBeforeUnmount(() => {
   &__social-group {
     display: none;
 
-    @include min-media-query(md) {
+    @include min-media-query(nav) {
       display: inline-flex;
       gap: 0.15rem;
     }
@@ -534,7 +544,7 @@ onBeforeUnmount(() => {
     text-decoration: none;
     transition: border-color 0.2s ease, color 0.2s ease;
 
-    @include min-media-query(md) {
+    @include min-media-query(nav) {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -566,7 +576,7 @@ onBeforeUnmount(() => {
     padding-left: 0.55rem;
     padding-right: 0.55rem;
 
-    @include max-media-query(md) {
+    @include max-media-query(nav) {
       height: 44px;
       min-height: 44px;
     }
@@ -586,11 +596,11 @@ onBeforeUnmount(() => {
 
   
   &__menu-toggle {
-    @include min-media-query(md) {
+    @include min-media-query(nav) {
       display: none;
     }
 
-    @include max-media-query(md) {
+    @include max-media-query(nav) {
       width: 44px;
       height: 44px;
       padding: 0;
@@ -613,16 +623,16 @@ onBeforeUnmount(() => {
    * the top that does not require opening anything. `hero` is therefore excluded
    * from the rule while the other five are hidden.
    *
-   * HIDDEN, NOT REMOVED, and only above `md`: below that the chip is the only
-   * control and the drawer is still how you move around, so the markup has to
-   * survive. Deleting it would take the sections off mobile entirely.
+   * HIDDEN, NOT REMOVED, and only above `nav`: below that the drawer is still
+   * how you move around, so the markup has to survive. Deleting it would take
+   * the sections off mobile entirely.
    */
   .hud-nav__link--section {
-    @include min-media-query(md) { display: none; }
+    @include min-media-query(nav) { display: none; }
   }
 
   &--open .hud-nav__links {
-    @include max-media-query(md) {
+    @include max-media-query(nav) {
       display: flex;
       flex-direction: column;
       gap: 0;

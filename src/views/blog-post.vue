@@ -37,17 +37,18 @@
  * way back, which a sign-off line does not.
  */
 
-import { loadBlogPost } from '@composables/use-blog';
+import { dressBlogToc, loadBlogPost } from '@composables/use-blog';
 import { useBlogLightbox, vBlogLightbox } from '@composables/use-blog-lightbox';
 import useSeoHead from '@composables/use-seo-head';
 import { BLOG_INDEX_URLS, blogAlternatesFor, blogUrlsFor } from '@seo/blog-routes';
 import { buildBlogJsonLd } from '@seo/json-ld';
+import { ROUTE_BY_LOCALE } from '@seo/routes';
 import ModalLoading from '@ui/modal-loading.vue';
 import { useHead } from '@unhead/vue';
 import BlogPostNav from '@views/components/blog/blog-post-nav.vue';
 import BlogSeries from '@views/components/blog/blog-series.vue';
 import DocumentPage from '@views/components/document-page.vue';
-import { computed, defineAsyncComponent, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -82,9 +83,10 @@ const post = await loadBlogPost(route.path);
  * the rail reads the rendered document rather than being handed a second list
  * that could disagree with the headings on screen.
  *
- * Collected after the DOM exists, and again whenever the route changes, because
- * `v-html` content is not reactive and a client-side navigation between two
- * articles reuses this component.
+ * Collected once, after the DOM exists. App.vue keys this view by path, so a
+ * client-side move to another article (the language toggle is one) mounts a
+ * fresh instance rather than patching this one — `post` above is awaited once
+ * and could never follow a route change.
  */
 /*
  * ASYNC ON PURPOSE. The rail is shared with the landing page, so welding it into
@@ -110,9 +112,32 @@ const collectSections = async () => {
 };
 
 onMounted(collectSections);
-watch(() => route.path, collectSections);
+
+/*
+ * TEMPORARY — the table-of-contents comparison. `?toc-lab` on any article
+ * opens a switcher between three designs and remembers it until closed; see
+ * @widgets/toc-lab.vue, which carries designs B and C in its own chunk. This
+ * hook goes, with that file, when the owner has picked.
+ */
+const TocLab = defineAsyncComponent(() => import('@widgets/toc-lab.vue'));
+const toc_lab = ref(false);
+
+onMounted(() => {
+  let remembered = false;
+  try {
+    remembered = window.localStorage.getItem('kyo:toc-lab') === '1';
+  } catch {
+    /* private mode */
+  }
+  toc_lab.value = remembered || new URLSearchParams(window.location.search).has('toc-lab');
+});
 
 const blog_href = computed(() => BLOG_INDEX_URLS[locale.value] || BLOG_INDEX_URLS.en);
+const home_href = computed(() => ROUTE_BY_LOCALE[locale.value] || ROUTE_BY_LOCALE.en);
+
+/* The engine's HTML with its table of contents in the article's language and
+   counted — see dressBlogToc in use-blog.js. */
+const body_html = computed(() => (post ? dressBlogToc(post.html, t('kyo-web.blog.toc')) : ''));
 
 /* The trail starts at BLOG, not at Home. An article's parent is the archive;
    Home is the site, not a step on the way here, and the row was long enough
@@ -241,6 +266,21 @@ const formatted_date = computed(() => {
         {{ post ? post.title : t('kyo-web.blog.not-found') }}
       </h1>
       <p v-if="post" class="blog-post__meta">
+        <!-- WHO WROTE IT, FIRST. Every article declares `#+AUTHOR:`, and the
+             line under the headline said when and how long but never who. The
+             name links home with rel="author": the landing is the author's own
+             page, and a reader arriving from search has no other way to it
+             from here but the nav. -->
+        <span v-if="post.author" class="blog-post__author">
+          {{ t('kyo-web.blog.by') }}
+          <a :href="home_href" rel="author" class="blog-post__author-name">{{ post.author }}</a>
+        </span>
+        <span
+          v-if="post.author"
+          class="blog-post__dot"
+          aria-hidden="true"
+          data-text="·"
+        />
         <time :datetime="post.date">{{ formatted_date }}</time>
         <span
           v-if="post.readingTime"
@@ -277,7 +317,8 @@ const formatted_date = computed(() => {
         ref="prose_ref"
         v-blog-lightbox="open_viewer"
         class="blog-rich"
-        v-html="post.html"
+        :data-chart-zoom-label="t('kyo-web.blog.chart-zoom')"
+        v-html="body_html"
       />
 
       <!-- An OVERLAY, not a column: it is fixed, so the article's measure is
@@ -288,6 +329,8 @@ const formatted_date = computed(() => {
         :sections="sections"
         :label="t('kyo-web.landing.nav.on-this-page')"
       />
+
+      <TocLab v-if="toc_lab" @close="toc_lab = false" />
 
       <!--
         THE CLOSING ORDER IS THE OWNER'S, AND IT READS OUTWARD.
@@ -396,6 +439,39 @@ const formatted_date = computed(() => {
    * every breakpoint instead of being right at one and wrong at the others.
    */
   --host-fs-body: var(--fs-400);
+
+  /*
+   * THE HEADING SCALE, HANDED OVER THE SAME WAY — AND THIS IS WHAT FIXES PHONES.
+   *
+   * Left unset, the book falls back to fixed pixels: 54px, 36px and 24px for its
+   * three heading levels at EVERY width. Measured on a phone, each section
+   * heading was then more than twice the size of the article's own 24px title,
+   * and at 1024px a 54px section still sat under a 36px title.
+   *
+   * The book's fallbacks are exactly the site's LARGE tier — `--fs-700`,
+   * `--fs-600`, `--fs-500`, `--fs-800` are 54/36/24/72px at `lg` — so binding
+   * them to the tokens changes nothing on a desktop, which the owner signed off,
+   * and lets the site's own tiers scale them below it (28.5/24/19.5px on a
+   * phone). Same law as `--host-fs-body`: parameterised in, never overridden.
+   */
+  --host-fs-display: var(--fs-800);
+  --host-fs-h1: var(--fs-700);
+  --host-fs-h2: var(--fs-600);
+  --host-fs-h3: var(--fs-500);
+
+  /*
+   * THE MIDDLE TIER, FOR THE BOOK AS WELL. document-page.vue gives the blog the
+   * medium tier's display steps from `sm`, but it does so on the article shell,
+   * and the book resolves these on :root — above that shell — so they would
+   * never see it. The same band is restated here, from the same scale, so the
+   * engine's headings step up on a tablet in lockstep with the site's own.
+   */
+  @include between-media-query(sm, md) {
+    --host-fs-display: #{fs-step(medium, 800)};
+    --host-fs-h1: #{fs-step(medium, 700)};
+    --host-fs-h2: #{fs-step(medium, 600)};
+    --host-fs-h3: #{fs-step(medium, 500)};
+  }
 }
 
 /*
@@ -468,22 +544,271 @@ const formatted_date = computed(() => {
  * claim (the hero, a facade poster) correctly keeps its own cursor.
  */
 .org-root img[data-blog-lightbox="on"] { cursor: zoom-in; }
+
+/*
+ * A CHART USES ITS WHOLE COLUMN — and opens in the viewer.
+ *
+ * `figure` carries the browser's own `margin: 1em 40px`, and the book resets
+ * only the block half, so every chart sat 40px in from BOTH edges of the column:
+ * 210px inside a 290px column on a phone, labels painted at about 4px. The
+ * inline half is reset here. UPSTREAM CANDIDATE: this is a defect in kwo.css,
+ * left there on purpose while the engine's v1.2.0 release is in flight; the
+ * line goes when kwo resets `margin-inline` on `.org-chart` itself.
+ *
+ * Even full width, a portrait phone cannot make 720 SVG units legible, so the
+ * lightbox directive gives each chart a button that opens it in the site's own
+ * zooming viewer (see use-blog-lightbox.js). The button is square, one hairline,
+ * no radius, and sits in the figure's top corner where the plot is empty.
+ */
+.org-root figure.org-chart {
+  position: relative;
+  margin-inline: 0;
+}
+
+.org-root .org-chart-svg { cursor: zoom-in; }
+
+.org-root .blog-chart-zoom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: var(--o2h-border);
+  background: var(--o2h-bg);
+  color: var(--o2h-slate);
+  cursor: zoom-in;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--o2h-accent);
+    color: var(--o2h-accent);
+  }
+}
+
+/*
+ * THE TABLE OF CONTENTS — THREE DESIGNS ON TRIAL, AND THIS IS THE DEFAULT.
+ *
+ * The owner turned down the hairline-rows version and asked for three to choose
+ * between, the same way the section rail was chosen. What is shared lives here:
+ * a reset that takes the book's box, stripe and indents off, so each design
+ * starts from nothing rather than fighting the last one. Then design A, which is
+ * what every reader sees until a choice is made.
+ *
+ * B and C are NOT in this chunk. They ship with the comparison switcher
+ * (@widgets/toc-lab.vue), which only loads behind `?toc-lab`, so a reader who is
+ * not comparing downloads one design, not three. When the owner picks, the
+ * winner moves here, the other two and the switcher are deleted in one change,
+ * and the `html[data-toc]` scoping below goes with them.
+ *
+ * All three keep the site's law: square, hairlines, no radius, mono for
+ * furniture and the editorial face for the words, and accent on state — plus
+ * the one mark the landing's section headers also carry.
+ */
+.org-root nav.org-toc {
+  --blog-toc-lift: color-mix(in srgb, var(--clr-neutral-100) 3%, transparent);
+
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .org-toc-title {
+    margin: 0;
+    color: var(--o2h-mute);
+    font-family: var(--o2h-font-mono);
+    font-size: var(--o2h-label-size);
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .org-toc-link {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--o2h-ink);
+    font-family: var(--o2h-font-editorial);
+    font-size: var(--o2h-fs-body);
+    font-weight: 400;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  }
+
+  ul ul .org-toc-link {
+    color: var(--o2h-slate);
+    font-size: var(--fs-300);
+  }
+}
+
+/*
+ * A — LEDGER. The contents as a numbered index, in the voice of the landing's
+ * section headers: a `// CONTENTS` label in the index accent, the count of
+ * sections set against it on the right, and every entry hung off a mono number
+ * column so the titles form one clean edge. Subsections take their parent's
+ * number (03.1, 03.2) at a step down in size and tone. Open — no box — with a
+ * hairline above and below, like a ruled page.
+ */
+:is(html:not([data-toc]), html[data-toc="a"]) .org-root nav.org-toc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 1rem;
+  padding: 1.25rem 0 1.5rem;
+  border-block: var(--o2h-border);
+  counter-reset: toc;
+
+  .org-toc-title {
+    color: var(--o2h-accent);
+
+    &::before { content: "// " / ""; }
+  }
+
+  &::after {
+    grid-row: 1;
+    grid-column: 2;
+    color: var(--o2h-mute);
+    font-family: var(--o2h-font-mono);
+    font-size: var(--o2h-label-size);
+    letter-spacing: 0.14em;
+    content: attr(data-count);
+  }
+
+  > ul {
+    grid-column: 1 / -1;
+    margin-top: 1rem;
+  }
+
+  > ul > li {
+    counter-increment: toc;
+    counter-reset: toc-sub;
+  }
+
+  .org-toc-link {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: baseline;
+    padding: 0.45rem 0;
+
+    &::before {
+      color: var(--o2h-mute);
+      font-family: var(--o2h-font-mono);
+      font-size: var(--o2h-label-size);
+      letter-spacing: 0.08em;
+      transition: color 0.15s ease;
+      content: counter(toc, decimal-leading-zero);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--blog-toc-lift);
+      box-shadow:
+        -0.75rem 0 0 var(--blog-toc-lift),
+        0.75rem 0 0 var(--blog-toc-lift);
+      color: var(--o2h-accent);
+
+      &::before { color: var(--o2h-accent); }
+    }
+  }
+
+  ul ul {
+    margin: -0.1rem 0 0.35rem 2.5rem;
+
+    > li { counter-increment: toc-sub; }
+  }
+
+  ul ul .org-toc-link {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    padding: 0.25rem 0;
+
+    &::before { content: counter(toc, decimal-leading-zero) "." counter(toc-sub); }
+  }
+}
+
+/*
+ * A FOOTNOTE'S WAY BACK IS A BUTTON-SIZED TARGET, NOT ONE GLYPH.
+ *
+ * The back-link was the bare `↩` — measured 8×20px, well under WCAG 2.5.8's
+ * 24px floor, and on most systems it painted as a colour emoji. It is a square
+ * now, one hairline and no radius like every control on the site, 27px (33px
+ * under a coarse pointer), and it hangs in its own column so the note's text
+ * keeps a clean left edge instead of flowing around it. `font-variant-emoji`
+ * asks for the text presentation of the arrow. UPSTREAM CANDIDATE, for the same
+ * reason as the chart margin above.
+ */
+.org-root .org-footnote {
+  position: relative;
+  min-height: 2.25rem;
+  padding-left: 3rem;
+}
+
+.org-root .org-footnote-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0;
+  border: var(--o2h-border);
+  color: var(--o2h-slate);
+  font-variant-emoji: text;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--o2h-accent);
+    color: var(--o2h-accent);
+  }
+
+  @media (pointer: coarse) {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .org-root .org-footnote {
+    min-height: 2.75rem;
+    padding-left: 3.5rem;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
 /* The masthead carried no styling of its own — it was a bare <h1> inheriting
    the mono body face, and it read as a caption rather than a title. It is the
    display face at the archive's own scale now, one step down from the archive
-   masthead because an article sits under it. */
+   masthead because an article sits under it.
+
+   ONE TOKEN AT EVERY WIDTH. It used to drop a further step below `md`, to
+   `--fs-600` (24px), while the article's section headings are `--fs-700` — so
+   on a phone every section outranked the page. The token's own tiers already
+   shrink it (54 → 36 → 28.5px); a second, hand-made step on top broke the
+   hierarchy the tiers were built to keep. */
 .doc__title {
   margin: 0 0 0.75rem;
   font-family: 'Geomanist', sans-serif;
-  font-size: var(--fs-600);
+  font-size: var(--fs-700);
   line-height: 1.1;
   letter-spacing: -0.03rem;
   color: var(--clr-neutral-100);
-
-  @include min-media-query(md) { font-size: var(--fs-700); }
 }
 
 .blog-post__meta {
@@ -501,5 +826,16 @@ const formatted_date = computed(() => {
 .blog-post__dot::before {
   content: attr(data-text);
   color: var(--clr-neutral-300);
+}
+
+/* "By" is furniture and stays muted; the name is content and takes the ink.
+   Accent only on the link's hover, as everywhere. */
+.blog-post__author-name {
+  color: var(--clr-neutral-100);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &:focus-visible { color: var(--clr-primary-100); }
 }
 </style>

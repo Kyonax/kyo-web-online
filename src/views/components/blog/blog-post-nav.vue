@@ -165,12 +165,25 @@ const { t } = useI18n();
  * question a reader actually has. It is a fixed-width monospace cell so the
  * dates line up as a column.
  *
- * NO NEGATIVE MARGIN. It used to carry `margin: 0 -1.25rem` copied from the
- * archive rows, which cancelled its own padding and put the text hard on the
- * page edge — measured at 0px from the viewport at every width below 1440.
- * The padding is the gutter.
+ * THE TEXT SITS ON THE COLUMN EDGE; ONLY THE HOVER FILL HANGS PAST IT.
+ *
+ * The rows used to be inset by a 1.25rem padding, which is what gave the hover
+ * lift room to breathe — and it put every date 15px in from the "Related
+ * reading" label and the article text above it, at every width. The owner read
+ * that as the dates not lining up with the rest of the text, which is what it
+ * was. So the row has no inline padding at all now, and the lift is painted
+ * past the box by two offset `box-shadow`s the same colour as the fill.
+ *
+ * NOT A NEGATIVE MARGIN, and that is the point. A shadow is INK overflow: it
+ * takes no layout space and never counts toward scroll width, so it cannot
+ * cancel the page gutter or make a phone scroll sideways the way the old
+ * `margin: 0 -1.25rem` did (text at 0px from the viewport below 1440). Outer
+ * shadows are clipped to outside the border box, so the two strips meet the
+ * fill edge to edge with no double-tinted seam.
  */
 .blog-post-nav__list {
+  --blog-post-nav-lift: color-mix(in srgb, var(--clr-neutral-100) 3%, transparent);
+
   margin: 0;
   padding: 0;
   list-style: none;
@@ -181,14 +194,17 @@ const { t } = useI18n();
     display: flex;
     gap: 0.6rem;
     align-items: baseline;
-    padding: 0.9rem 1.25rem;
+    padding: 0.9rem 0;
     color: var(--o2h-ink, var(--clr-neutral-100));
     text-decoration: none;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 
     &:hover,
     &:focus-visible {
-      background-color: color-mix(in srgb, var(--clr-neutral-100) 3%, transparent);
+      background-color: var(--blog-post-nav-lift);
+      box-shadow:
+        -1.25rem 0 0 var(--blog-post-nav-lift),
+        1.25rem 0 0 var(--blog-post-nav-lift);
       color: var(--o2h-accent, var(--clr-primary-100));
 
       .blog-post-nav__date { color: var(--o2h-accent, var(--clr-primary-100)); }
@@ -197,12 +213,18 @@ const { t } = useI18n();
 }
 
 /* `flex: 0 0 auto` and a tabular face, so ten rows of dates form a true
-   column instead of a ragged edge that shifts with the digits. */
+   column instead of a ragged edge that shifts with the digits.
+
+   A DATE IS CONTENT, the archive's rule: it sat at `--fs-100`, the smallest step
+   in the scale (10.5px against an 18px title), and read as a footnote to the
+   link rather than part of it. One token under the title now — the same gap the
+   archive keeps between its row titles and their dates — and on the title's
+   baseline, so the two read as one line. */
 .blog-post-nav__date {
   flex: 0 0 auto;
   color: var(--o2h-mute, var(--clr-neutral-200));
   font-family: "SpaceMono", monospace;
-  font-size: var(--fs-100);
+  font-size: var(--fs-300);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
   transition: color 0.15s ease;

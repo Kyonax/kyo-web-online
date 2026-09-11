@@ -50,6 +50,30 @@ const SELECTOR = [
   '[data-component="gallery"] img',
 ].join(', ');
 
+/*
+ * CHARTS OPEN IN THE SAME VIEWER — the fix for a chart nobody could read on a
+ * phone.
+ *
+ * The engine draws a bar chart as an inline SVG sized to its column, with its
+ * labels set in SVG units, so a 720-unit chart in a 360px column paints them at
+ * half size — about 7px — however the page is styled. No width fixes that on a
+ * portrait phone. The viewer does: it already pinch-zooms, double-tap-zooms and
+ * pans, so the chart is handed to it as an image and the reader enlarges
+ * exactly the part they want.
+ *
+ * The SVG is aria-hidden (the engine ships the chart's source table beside it
+ * for screen readers), so it cannot itself be the control. Each chart gets a
+ * real <button> instead, in its corner; a tap anywhere on the chart does the
+ * same, since that is where a reader's thumb goes first.
+ */
+const CHART = '.org-chart';
+const ZOOM_GLYPH = '\uF065'; /* Symbols Nerd Font — expand */
+
+/* The serializer is its own chunk (see chart-picture.js): fetched the first
+   time a reader reaches for a chart, warmed on hover, never paid for by a
+   reader who does not. */
+const loadChartPicture = () => import('@composables/chart-picture');
+
 const pictureFrom = (el) => {
   const src = el.currentSrc || el.getAttribute('src') || '';
   const name = src.split('/').pop() || 'image';
@@ -103,6 +127,23 @@ const upgrade = (host, label) => {
       img.setAttribute('aria-label', img.getAttribute('alt') || label);
     }
   }
+
+  for (const figure of host.querySelectorAll(CHART)) {
+    if (figure.dataset.blogLightbox === 'on' || !figure.querySelector('svg')) {
+      continue;
+    }
+    figure.dataset.blogLightbox = 'on';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'blog-chart-zoom';
+    button.setAttribute('aria-label', host.dataset.chartZoomLabel || 'Enlarge chart');
+    const glyph = document.createElement('span');
+    glyph.className = 'icon-glyph';
+    glyph.dataset.text = ZOOM_GLYPH;
+    glyph.setAttribute('aria-hidden', 'true');
+    button.append(glyph);
+    figure.append(button);
+  }
 };
 
 const handlerFor = (el) => {
@@ -113,6 +154,13 @@ const handlerFor = (el) => {
 const activate = (el, target) => {
   const open = handlerFor(el);
   if (!open || !target) {
+    return;
+  }
+  if (target.matches(CHART)) {
+    const caption = target.querySelector('figcaption');
+    loadChartPicture().then(({ chartPictureFrom }) => {
+      open({ picture: chartPictureFrom(target), alt: caption ? caption.textContent.trim() : '' });
+    });
     return;
   }
   open({ picture: pictureFrom(target), alt: target.getAttribute('alt') || '' });
@@ -130,9 +178,9 @@ export const vBlogLightbox = {
     el._blogLightboxLabel = 'Open image';
 
     el._blogLightboxClick = (e) => {
-      const img = e.target.closest(SELECTOR);
-      if (img && el.contains(img)) {
-        activate(el, img);
+      const target = e.target.closest(`${SELECTOR}, ${CHART}`);
+      if (target && el.contains(target)) {
+        activate(el, target);
       }
     };
 
@@ -150,8 +198,11 @@ export const vBlogLightbox = {
     /* Warm the async viewer chunk before it is needed, the same way the hero
        portrait and the project carousel do. */
     el._blogLightboxWarm = (e) => {
-      if (e.target.closest(SELECTOR)) {
+      if (e.target.closest(`${SELECTOR}, ${CHART}`)) {
         warmImageViewer();
+      }
+      if (e.target.closest(CHART)) {
+        loadChartPicture();
       }
     };
 

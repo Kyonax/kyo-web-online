@@ -205,11 +205,14 @@ const lead_has_media = computed(() => Boolean(page && page.featured && page.feat
 
 /* The page title outranks the band title. UiSectionHeader emits one size for
    every level, which is right on the landing where every band is a peer and
-   wrong here, where the masthead is the document's <h1>. */
+   wrong here, where the masthead is the document's <h1>.
+
+   AT EVERY WIDTH, not only from `md`. Gated at `md`, the promise held on a
+   desktop and broke on every phone: below 1024px the title fell back to the
+   band's own `--fs-700` and the two were the same 28.5px. `--fs-800` already
+   steps down by itself (72 → 48 → 37.5px), so it needs no breakpoint. */
 .blog-archive__masthead {
-  :deep(.ui-section-header__title) {
-    @include min-media-query(md) { font-size: var(--fs-800); }
-  }
+  :deep(.ui-section-header__title) { font-size: var(--fs-800); }
 }
 
 /* --- the lead article --------------------------------------------------- */
@@ -279,21 +282,21 @@ const lead_has_media = computed(() => Boolean(page && page.featured && page.feat
 
 .blog-all__date {
   margin: 0;
-  color: var(--clr-neutral-200);
+  color: var(--clr-neutral-300);
   font-family: "SpaceMono", monospace;
   font-size: var(--fs-200);
 }
 
+/* The lead headline matches the page title at every width, as it does on a
+   desktop — the same one-token rule as the masthead above. */
 .blog-lead__title {
   margin: 0;
   font-family: "Geomanist", sans-serif;
-  font-size: var(--fs-700);
+  font-size: var(--fs-800);
   line-height: 1.1;
   letter-spacing: -0.04rem;
 
   color: var(--clr-neutral-100);
-
-  @include min-media-query(md) { font-size: var(--fs-800); }
 }
 
 /* The measure caps the PARAGRAPH, not the column: without media the lead is
@@ -337,14 +340,28 @@ const lead_has_media = computed(() => Boolean(page && page.featured && page.feat
   }
 }
 
-/* inline-block is what makes the nudge horizontal. `transform` does not apply
-   to a non-replaced INLINE box, so the browser was resolving the translate
-   against the glyph's own baseline box and the arrow drifted vertically as
-   well as across. */
+/*
+ * THE NUDGE IS HORIZONTAL, AND NOW IT LOOKS HORIZONTAL TOO.
+ *
+ * inline-block is what makes the translate apply at all — `transform` does not
+ * apply to a non-replaced INLINE box. But the owner still saw the arrow move up
+ * and down, and the box never did: sampled through the whole transition its
+ * `top` held at 492.85px. The movement was in the PAINT. The arrow sits on a
+ * fractional pixel, and Firefox rasterises a glyph differently once a transform
+ * applies to it — measured in that browser, the glyph's vertical ink profile
+ * moved a row the instant the hover began and moved back the instant it ended,
+ * which reads as a vertical hop at both ends of a sideways nudge.
+ *
+ * So the arrow is transformed AT REST as well: `will-change` keeps it on the same
+ * rendering path in both states, and the resting profile then already matches
+ * the hovered one — measured, identical. Only X is left to change.
+ */
 .blog-lead__arrow {
   display: inline-block;
   font-family: "SpaceMono", monospace;
   line-height: 1;
+  transform: translateX(0);
+  will-change: transform;
   transition: transform 0.2s ease;
 }
 
@@ -417,23 +434,41 @@ const lead_has_media = computed(() => Boolean(page && page.featured && page.feat
 
 .blog-all__text {
   display: grid;
-  gap: 0.3rem;
+  gap: 0.4rem;
   min-width: 0;
   /* The rows are the width of the BOARD; the measure caps the text, not the
      row, so the date stays pinned to the far edge. */
   max-width: var(--kyo-measure);
 }
 
+/*
+ * THE ROW READS TITLE FIRST, THEN DESCRIPTION — it read the other way round.
+ *
+ * Measured: the title was neutral-50 (76% lightness) at `--fs-300`, and the
+ * excerpt under it neutral-200 — 78%, BRIGHTER — in SpaceMono, whose wide
+ * monospace carries more ink per line than the title's proportional face. So
+ * the eye landed on the description and had to hunt back up for what the post
+ * was called. The owner's reference is the plain hierarchy every news list
+ * uses: a bright title, and a quieter description under it.
+ *
+ * So the title steps up a size and takes the brightest ink; the excerpt drops to
+ * the muted tone and into the same proportional face, so the two differ by rank
+ * rather than by typeface. Geomanist ships Regular and Bold only, and Bold at
+ * this size shouts, so the lead is carried by size and brightness.
+ */
 .blog-all__title {
   font-family: "Geomanist", sans-serif;
-  font-size: var(--fs-300);
-  color: var(--clr-neutral-50);
+  font-size: var(--fs-400);
+  line-height: 1.3;
+  color: var(--clr-neutral-100);
   transition: color 0.2s ease;
 }
 
 .blog-all__excerpt {
-  color: var(--clr-neutral-200);
-  font-size: var(--fs-200);
+  font-family: "Geomanist", sans-serif;
+  line-height: 1.5;
+  color: var(--clr-neutral-300);
+  font-size: var(--fs-300);
   /* Two lines, then ellipsis — the rows stay scannable however long an
      excerpt is. */
   display: -webkit-box;

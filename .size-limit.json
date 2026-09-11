@@ -103,15 +103,30 @@
     "gzip": true
   },
   {
-    "name": "blog post chunk",
+    "name": "blog post chunk (JS+CSS: host styles for the TOC, charts, footnotes; the author line; the TOC comparison hook)",
     "path": "dist/assets/blog-post-*.{js,css}",
-    "limit": "4.5 KB",
+    "limit": "6 KB",
+    "gzip": true
+  },
+  {
+    "name": "chart picture (turns a chart into a zoomable image; fetched on first tap)",
+    "path": "dist/assets/chart-picture-*.js",
+    "limit": "1 KB",
     "gzip": true
   },
   {
     "name": "blog footer chunk",
     "path": "dist/assets/blog-footer-*.{js,css}",
     "limit": "2.5 KB",
+    "gzip": true
+  },
+  {
+    "name": "toc lab (TEMPORARY: the table-of-contents comparison, ?toc-lab only; delete with it)",
+    "path": [
+      "dist/assets/toc-lab-*.js",
+      "dist/assets/toc-lab-*.css"
+    ],
+    "limit": "3 KB",
     "gzip": true
   },
   {

@@ -271,6 +271,27 @@ onBeforeUnmount(() => {
     @include min-media-query(md) { padding-inline: 3rem; }
   }
 
+  /*
+   * THE BLOG READS IN THREE TIERS, NOT TWO.
+   *
+   * The site's scale has a medium tier, but it starts at `md` — so from 768 to
+   * 1023px, every tablet and every narrow laptop window, the archive and the
+   * articles read at a phone's sizes, and then jumped straight to the desktop
+   * ones. The owner saw "just two versions". These two widths are the blog's
+   * (`index` is the archive, `article` a post; nothing else uses either), and
+   * they take the medium tier's display steps from `sm` instead: a phone keeps
+   * its sizes, a desktop keeps its sizes, and the middle gets its own.
+   *
+   * Only the display steps move (see the mixin) — body text and captions stay
+   * on the tier the rest of the page is on. The article's engine headings read
+   * the same values through `--host-fs-*` in blog-post.vue, and type.spec.js
+   * asserts a tablet lands strictly between the other two.
+   */
+  &--index,
+  &--article {
+    @include between-media-query(sm, md) { @include fs-display-tier(medium); }
+  }
+
   /* Chrome above the document, always flush left against the sheet edge even
      when the head below is centred, so it reads as furniture rather than as
      part of the document. */
